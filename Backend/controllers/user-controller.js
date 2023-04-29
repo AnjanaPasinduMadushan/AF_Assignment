@@ -18,14 +18,14 @@ const signUp = async (req, res, next) => {
     const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
     //validation for all the input fields
     if (!name ||!age ||!NIC ||!mobile || !email || !password) {
-      res.status(422).json({message:"All feilds should be filled"})
+      return res.status(422).json({message:"All feilds should be filled"})
     }
  
   
     let existingUser;
     //chaecking whether user already sign up or not based on the email
     try {
-      existingUser = await User.findOne({ email : email });
+      existingUser = await User.findOne({ NIC : NIC });
     } catch (err) {
       console.log(err);
     }
@@ -54,10 +54,10 @@ const signUp = async (req, res, next) => {
     try {
       await user.save();//saving document(a new user to) into DB
   
-      res.status(201).json({ message: "Your Account Creation Request is sent to the authorities", User:user })//sending the new user details with token as a message for the response
+      return res.status(201).json({ message: "Your Account Creation Request is sent to the authorities", User:user })//sending the new user details with token as a message for the response
     } catch (err) {
       console.log(err);
-      res.status(400).json({message:"Error in saving user in DB"})
+      return res.status(400).json({message:"Error in saving user in DB"})
     }
   
   }
@@ -70,7 +70,7 @@ const signUp = async (req, res, next) => {
 
     //checking whether pasword and login fields are filled or not 
     if (!email || !password) {
-        res.status(422).json({message:"All feilds should be filled"})
+      return res.status(422).json({message:"All feilds should be filled"})
     }
 
     let loggedUser;
@@ -82,12 +82,12 @@ const signUp = async (req, res, next) => {
     }
 
     if(!loggedUser){
-        res.status(404).json({message:"User is not found. Sign Up instead"})
+      return res.status(404).json({message:"User is not found. Sign Up instead"})
     }
 
     else{
         if(!loggedUser.checkingIn){
-            res.status(401).json({message:"You do not have permission to login"})
+          return res.status(401).json({message:"You do not have permission to login"})
         }
         else{
             const token = createToken(loggedUser._id, loggedUser.role)
@@ -114,16 +114,21 @@ const signUp = async (req, res, next) => {
     const userId = req.params.id;
 
     try{
-         await User.findByIdAndUpdate(userId, {
+        const user =  await User.findByIdAndUpdate(userId, {
             $set:{checkingIn:req.body.checkingIn}
         }, {new:true}
         )
 
-        res.status(200).json({message:'User is verified'})
+        if(!user){
+          return res.status(404).json({message:'User is not found'})
+        }
+
+        return res.status(200).json({message:'User is verified'})
        
     }catch(err){
-        res.status(500).json("error in update checking in")
-        console.log(err)
+      console.log(err)
+      return res.status(500).json("error in update checking in")
+        
     }
 
   }
@@ -133,17 +138,107 @@ const signUp = async (req, res, next) => {
     const userId = req.params.id;
 
     try{
-        await User.findByIdAndDelete(userId)
-        res.status(200).json({message:"Account unverified successfull!!!"})
+        const user =await User.findByIdAndDelete(userId)
+
+        if(!user){
+          return res.status(404).json({message:'User is not found'})
+        }
+        return res.status(200).json({message:"Account unverified successfull!!!"})
     }catch(err){
-        res.status(200).json({message:"Error in unveried user"})
-        console.log(err)
+      console.log(err)
+      return res.status(500).json({message:"Error in unveried user"})
+        
     }
   }
 
+  const getOwnAcc = async(req, res, next) => {
+
+    const userId = req.userId;
+
+    try{
+
+      const user = await User.findById(userId, "-password")
+      
+      res.status(200).json(user)
+
+      if(!user){
+        return res.status(404).json({message:"User is not found"})
+      }
+    }catch(err){
+      console.log(err)
+      return res.status(500).json({message:"Error in getting your Account"})
+      
+    }
+  }
+
+  const deleteAcc = async(req, res, next)=>{
+
+    const userId = req.userId;
+
+    try{
+      const user = await User.findByIdAndDelete(userId)
+      res.clearCookie(`${req.userId}`);
+      req.cookies[`${req.userId}`] = "";
+      if(!user){
+        return res.status(404).json({message:"User is not found"})
+      }
+
+      return res.status(200).json({message:"User is deleted"})
+    }catch(err){
+      return res.status(500).json({message:"Error in getting your Account"})
+      console.log(err)
+    }
+  }
+
+  const updateAcc = async(req, res, next)=>{
+
+    const userId = req.userId;
+
+    let user;
+
+    const { name, age, mobile, email } = req.body;
+    //validation for all the input fields
+    if (!name ||!age ||!mobile || !email) {
+      return res.status(422).json({message:"All feilds should be filled"})
+    }
+    let existingUser;
+        try{
+            existingUser = await User.findOne({email: email});
+        }catch(err){
+            console.log(err);
+        }
+        
+        if(existingUser){
+            return res.status(400).json({message:"This email is already exists. use a different email. "})
+        }
+      try {
+       user = await User.findByIdAndUpdate(userId, {
+        name,
+        age,  
+        mobile, 
+        email
+      },{new:true});
+
+        if(!user){
+          return res.status(404).json({message:"User is not found!!!"})
+        }
+
+        await user.save();
+
+
+      }catch(err){
+        console.log(err)
+        return res.status(500).json({message:"Error in updating user"})
+      }
+
+      return res.status(200).json({message:"User is successfully updated!", user})
+
+  }
 
   exports.signUp = signUp;
   exports.login = login;
   exports.updateCheckingIn = updateCheckingIn;
   exports.unverifiedUser = unverifiedUser;
-  
+  exports.getOwnAcc = getOwnAcc;
+  exports.deleteAcc = deleteAcc;
+  exports.updateAcc = updateAcc;

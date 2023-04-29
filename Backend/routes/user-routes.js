@@ -10,10 +10,12 @@ router.post("/login", userController.login);
 // router.get("/users", requireAuth, requireRoleAdmin, getUsers);
 
 // //anyone can access
-// router.get("/profile", requireAuth, getUser);
+router.get("/profile", middlware.checkToken, userController.getOwnAcc);
 // router.post("/logout", requireAuth, logout);
 router.delete("/UnverifyUser/:id", middlware.checkToken, middlware.AdminRole, userController.unverifiedUser)
 router.patch("/verifyUser/:id", middlware.checkToken, middlware.AdminRole, userController.updateCheckingIn)
+router.delete("/deleteAcc", middlware.checkToken, userController.deleteAcc)
+router.patch("/updateProfile", middlware.checkToken, userController.updateAcc)
 // router.patch("/update/pwd", requireAuth, updatePassword)
 
 

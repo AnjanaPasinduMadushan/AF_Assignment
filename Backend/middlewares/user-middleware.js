@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken")
 
 
 let decode;
-let roleIs;
 
 //checking user has a valid token
 //decoding id, role from the token
@@ -12,9 +11,9 @@ const checkToken = async(req, res, next) =>{
         const cookies = req.headers.cookie;
 
         console.log(cookies)
-        // if(!cookies){
-        //     return res.status(403).json({message:"Login first"})
-        // }
+        if(!cookies){
+            return res.status(403).json({message:"Login first"})
+        }
     
         
             const token = cookies.split("=")[1];
