@@ -4,15 +4,24 @@ const cors = require("cors")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const app = express();
+const cookieParser = require("cookie-parser")
 
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
-//routes are declared here
-
-
+app.use(cookieParser())
 app.use(cors())
 app.use(bodyParser.json());
+
+//Routes file paths
+const user_router = require("./routes/user-routes") 
+
+//routes are declared here\
+app.use('/User', user_router)
+
+
+
+
 //connect mongoDB
 mongoose.connect(process.env.link, {
     useNewUrlParser: true,
