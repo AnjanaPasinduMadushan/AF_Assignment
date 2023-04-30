@@ -1,33 +1,76 @@
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const bodyParser = require("body-parser")
-const mongoose = require("mongoose")
+// Load env variables
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
+// Import dependencies
+const express = require("express");
+const cors = require("cors");
+const complaintsController = require("./controllers/complaintsController");
+
+
+// Create an express app
 const app = express();
 
-//declare PORT
-const PORT = process.env.PORT || 8070;
+// Configure express app
+app.use(express.json());
+// app.use(cookieParser());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
-//routes are declared here
+// Connect to database
+const mongoose = require("mongoose");
+
+async function connectToDb() {
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    console.log("Connected to database");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// module.exports = connectToDb;
+
+connectToDb();
+
+// Routing
+
+app.get("/complaints", complaintsController.fetchComplaints);
+app.get("/complaints/:id", complaintsController.fetchComplaint);
+app.post("/complaints", complaintsController.createComplaint);
+app.put("/complaints/:id", complaintsController.updateComplaint);
+app.delete("/complaints/:id", complaintsController.deleteComplaint);
+
+const PORT = process.env.PORT;
+// Start our server
+app.listen(process.env.PORT);
+console.log(PORT)
 
 
-app.use(cors())
-app.use(bodyParser.json());
-//connect mongoDB
-mongoose.connect(process.env.link, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
- });
-
- 
- const connection = mongoose.connection;
- connection.once("open", () => {
-     console.log("MongoDB Connection Success!");
- });
-
-app.listen(PORT, ()=>{
-    console.log(`The server is running on PORT ${PORT}`)
-})
 
 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.use(cors());
+
+
+
+
+
+
