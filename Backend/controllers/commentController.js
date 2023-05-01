@@ -1,4 +1,5 @@
 const Comment = require("../model/comment");
+const router = require("../routes/comment-routes");
 
 //add products
 const addComment = async (req, res, next) => {
@@ -89,101 +90,44 @@ const getByUser = async (req, res) => {
 exports.getByUser = getByUser;
 
 
-/*
+// Update comment
+const updateComment = async (req, res) => {
+  const commentId = req.params.commentId;
+  const newText = req.body.commentText;
+  const time = Date.now();
 
+  const newData = {commentText: newText, commentDateTime: time};
 
-//search products using name, or supplier, brand
-const getSearch = async (req, res, next) => {
+  try {
+    const comment = await Comment.findById(commentId);
+    if (!comment)
+      return res.status(404).send({ message: "Comment not found" });
 
-  const { search } = req.query;
-  let products;
-
-  if (search) {
-    products = await Comment.aggregate(
-      [
-        {
-          '$search': {
-            'index': 'product',
-            'autocomplete': {
-              'query': search,
-              'path': 'name'
-            }
-          }
-        }, {
-          '$project': {
-            'name': 1,
-            'brand': 1,
-            'price': 1,
-            'image': 1,
-            'brand': 1,
-            'weight': 1
-          }
-        }
-      ]
-    )
-  } else {
-    return res.status(400).json({ message: "Check the input" })
+    Object.assign(comment, newData);
+    await comment.save();
+    return res.status(200).send({message: "Comment updated!", comment: comment});
+  } catch (e) {
+    console.error(e);
+    return res.status(500).send({ message: "Error in updating message", error: e });
   }
-
-  if (products.length === 0) {
-    return res.status(200).json({ message: 'nothing to show', data: { products } })
-  }
-  else {
-    return res.status(200).json({ message: 'Fetched products', data: { products } });
-  }
-
-
-
 }
+exports.updateComment = updateComment;
 
 
-//update products
-const updateProduct = async (req, res, next) => {
-  const id = req.params.id;
-  const { name, brand, price, weight, upload_date, description, image } = req.body;
-  let product;
-  try {
-    product = await Comment.findByIdAndUpdate(id, {
-      name,
-      brand,
-      price,
-      weight,
-      upload_date,
-      description,
-      image
-    });
-    product = await product.save();
-  } catch (err) {
-    console.log(err);
+// Delete Comment
+const deleteComment = async (req, res) => {
+  const commentId = req.params.commentId;
+
+  let comment;
+  try{
+    comment = await Comment.findByIdAndDelete(commentId)
+    if(!comment || comment.length < 1)
+      return res.status(404).send({message: "comment not found!"});
+
+    return res.status(200).send({message: "Succesfully deleted!", comment: comment});
+  }catch(err){
+    console.error(err);
+    return res.status(500).send({message: "Delete comment failed!", error: err});
   }
-  if (!product) {
-    return res.status(404).json({ message: "Unable to Update by id" });
-  }
-  return res.status(200).json({ product });
-};
-
-//delete products
-const deleteProduct = async (req, res, next) => {
-  const id = req.params.id;
-  let product;
-  try {
-    product = await Comment.findByIdAndRemove(id);
-  } catch (err) {
-    console.log(err);
-  }
-  if (!product) {
-    return res.status(404).json({ message: "Unable to Delete by id" });
-  }
-  return res.status(200).json({ message: "Product Successfully Deleted" });
-};
-
-
-exports.getAllProducts = getAllProducts;
-exports.getById = getById;
-exports.updateProduct = updateProduct;
-exports.deleteProduct = deleteProduct;
-exports.getSearch = getSearch;
-exports.getBySellerId = getBySellerId
-
-
-*/
+}
+exports.deleteComment = deleteComment;
