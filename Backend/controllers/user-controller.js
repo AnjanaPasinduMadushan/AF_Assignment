@@ -17,9 +17,9 @@ const signUp = async (req, res, next) => {
 
     const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
     //validation for all the input fields
-    if (!name ||!age ||!NIC ||!mobile || !email || !password) {
-      return res.status(422).json({message:"All feilds should be filled"})
-    }
+    // if (!name ||!age ||!NIC ||!mobile || !email || !password) {
+    //   return res.status(422).json({message:"All feilds should be filled"})
+    // }
  
   
     let existingUser;

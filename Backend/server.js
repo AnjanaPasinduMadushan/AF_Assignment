@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser")
 const PORT = process.env.PORT || 8070;
 
 app.use(cookieParser())
-app.use(cors())
+app.use(cors({credentials: true, origin: "http://127.0.0.1:3000"}));
 app.use(bodyParser.json());
 
 //Routes file paths
