@@ -8,11 +8,13 @@ const app = express();
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
-//routes are declared here
-
-
 app.use(cors())
 app.use(bodyParser.json());
+
+//routes are declared here
+const commentRouter = require("./routes/comment-routes");
+app.use("/comment", commentRouter);;
+
 //connect mongoDB
 mongoose.connect(process.env.link, {
     useNewUrlParser: true,
