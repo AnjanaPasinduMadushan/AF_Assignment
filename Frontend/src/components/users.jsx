@@ -45,7 +45,20 @@ const Users = () => {
         try{
 
             const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`)
-            setUsers(res.data.users)
+            
+            const newUpdateUser = res.data;
+
+            setUsers((prevUsers) => {
+              const newUsers = [...prevUsers];
+      
+              const arrIndex = newUsers.findIndex(
+                (user) => user._id === newUpdateUser._id
+              );
+              newUsers[arrIndex] = newUpdateUser;
+      
+              console.log(newUsers)
+              return newUsers;
+            })
 
         }catch(err){
             console.log(err)
@@ -71,10 +84,10 @@ const Users = () => {
             {users.map((user, key)=>(
             <tr  key={key}>
                 <td>{user.NIC}</td>
-                <th>{user.name}</th>
-                <th>{user.email}</th>
-                <th>{user.mobile}</th>
-                <th><button onClick={()=>hanldeVerifying(user._id)}>Verify</button >
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.mobile}</td>
+                <th><button onClick={()=>hanldeVerifying(user._id)}>Verify</button>
                 <button onClick={()=>handleUnverify(user._id)}>Unverify</button></th>
             </tr>
             ))}
