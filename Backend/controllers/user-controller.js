@@ -2,6 +2,7 @@ const User = require('../model/user');
 
 //importing bcrypt
 const bcrypt = require("bcrypt");
+const email = require('./email-controller')
 
 //importing jsonwebtoken
 const jwt = require('jsonwebtoken');
@@ -123,6 +124,15 @@ const signUp = async (req, res, next) => {
           return res.status(404).json({message:'User is not found'})
         }
 
+        let msgs = 'Your account request is verified. Login to your account using your creditials'
+          email.sendVerificationEmail(user.email, msgs, function(err, msg){
+            if(err){
+            console.log(err)
+            }else{
+              console.log(msg);
+            }
+          })
+          
         return res.status(200).json({message:'User is verified'})
        
     }catch(err){
@@ -143,6 +153,14 @@ const signUp = async (req, res, next) => {
         if(!user){
           return res.status(404).json({message:'User is not found'})
         }
+        let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
+          email.sendVerificationEmail(user.email, msgs, function(err, msg){
+            if(err){
+            console.log(err)
+            }else{
+              console.log(msg);
+            }
+          })
         return res.status(200).json({message:"Account unverified successfull!!!"})
     }catch(err){
       console.log(err)

@@ -15,9 +15,11 @@ app.use(bodyParser.json());
 
 //Routes file paths
 const user_router = require("./routes/user-routes") 
+const email_router = require("./routes/email-routes")
 
-//routes are declared here\
+//routes are declared here
 app.use('/User', user_router)
+//app.use('/email', email_router)
 
 
 
