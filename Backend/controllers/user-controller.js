@@ -151,6 +151,47 @@ const signUp = async (req, res, next) => {
     }
   }
 
+  const getNewUsers = async(req, res, next)=>{
+
+
+    let users;
+    try{
+        users =  await User.find({checkingIn:false})
+      }catch(err){
+        console.log(err)
+        return res.status(500).json("error in fetching users")   
+      }
+
+        if(!users){
+          return res.status(404).json({message:'Users are not found'})
+        }
+        else{
+          return res.status(200).json({users})
+        }
+
+  }
+
+  const getOldUsers = async(req, res, next)=>{
+
+    const userId = req.params.id;
+
+    let users;
+    try{
+        users =  await User.find({checkingIn:true})
+      }catch(err){
+        console.log(err)
+        return res.status(500).json("error in fetching users")   
+      }
+
+        if(!users){
+          return res.status(404).json({message:'Users are not found'})
+        }
+        else{
+          return res.status(200).json({users})
+        }
+
+  }
+
   const getOwnAcc = async(req, res, next) => {
 
     const userId = req.userId;
@@ -242,3 +283,5 @@ const signUp = async (req, res, next) => {
   exports.getOwnAcc = getOwnAcc;
   exports.deleteAcc = deleteAcc;
   exports.updateAcc = updateAcc;
+  exports.getNewUsers = getNewUsers;
+  exports.getOldUsers = getOldUsers;

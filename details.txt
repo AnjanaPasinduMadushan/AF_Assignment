@@ -27,3 +27,13 @@
     "password":"madushan34123",
      "role":"citizen"
 }
+
+{
+    "name":"Anjana",
+    "age":23,
+    "NIC":211019601250,
+    "mobile":771111111,
+    "email":"pasindu465@gmail.com",
+    "password":"madushan46",
+     "role":"citizen"
+}

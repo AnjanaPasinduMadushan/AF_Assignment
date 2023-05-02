@@ -14,8 +14,6 @@ const checkToken = async(req, res, next) =>{
         if(!cookies){
             return res.status(403).json({message:"Login first"})
         }
-    
-        
             const token = cookies.split("=")[1];
     
             if(!token){
