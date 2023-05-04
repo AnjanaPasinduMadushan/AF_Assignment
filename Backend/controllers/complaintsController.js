@@ -21,12 +21,13 @@ const fetchComplaint = async (req, res) => {
 
 const createComplaint = async (req, res) => {
   // Get the sent in data off request body
-  const { title, body } = req.body;
+  const { title, body, date } = req.body;
 
   // Create a complaint with it
   const complaint = await Complaint.create({
     title,
     body,
+    date,
   });
 
   // respond with the new complaint
@@ -38,12 +39,13 @@ const updateComplaint = async (req, res) => {
   const complaintId = req.params.id;
 
   // Get the data off the req body
-  const { title, body } = req.body;
+  const { title, body, date } = req.body;
 
   // Find and update the record
   await Complaint.findByIdAndUpdate(complaintId, {
     title,
     body,
+    date,
   });
 
   // Find updated complaint
