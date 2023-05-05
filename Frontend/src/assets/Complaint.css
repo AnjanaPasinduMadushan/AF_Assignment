@@ -1,0 +1,61 @@
+.complaintCard{
+  width: 60%;
+  border: 3px solid #920d37;
+  background-color: #e6e6e6;
+}
+
+.complaintBody{
+  margin: 8px;
+}
+
+.complaintDate{
+  color: #808080;
+  font-size: smaller;
+}
+
+.complaintTitle{
+  margin-bottom: 8px;
+}
+
+.complaintMedia{
+  border-radius: 6px;
+}
+
+.complaintDescription, .noImageComplaintDescription {
+  text-align: justify;
+}
+
+.complaintDescription:hover{
+  cursor: pointer;
+}
+
+.complaintFeedback{
+  text-align: justify;
+}
+
+.positiveComplaintVote{
+  color: green;
+}
+
+.negativeComplaintVote{
+  color: red;
+}
+
+.complaintAddComment{
+  background-color: #cccccc;
+  padding: 8px;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.commentInput{
+  border-radius: 50px;
+}
+
+.commentInputBtn{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
