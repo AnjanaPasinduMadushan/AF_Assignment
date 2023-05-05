@@ -43,8 +43,15 @@ mongoose.connect(process.env.link, {
 
  app.post('/upload', upload.single('file'), (req, res) => {
    // do something with the file
+   
    res.send('File uploaded successfully');
  });
+
+
+
+
+
+
 
 
  const connection = mongoose.connection;

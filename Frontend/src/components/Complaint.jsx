@@ -33,7 +33,7 @@ export default function Complaint({ complaint }) {
 
   return (
     <div className="div2" key={complaint._id}>
-      <h2>Title</h2>
+      <h2>Complaint Heading</h2>
       <h3>{complaint.title}</h3>
       <h2>Description</h2>
       <h3>{complaint.body}</h3>

@@ -6,6 +6,7 @@ import Complaints from "./components/Complaints";
 import UpdateForm from "./components/UpdateForm";
 import CreateForm from "./components/CreateForm";
 import Upload from "./components/Upload";
+import Navbar from "./components/Navbar";
 // import Upload from "./Upload";
 
 function App() {
@@ -30,13 +31,15 @@ function App() {
 
 <button onClick={handleClick}>Go to Another Page</button>
 
+<Navbar/>
 
       <CreateForm />
       <Upload/>
       <Complaints />
       <UpdateForm />
      
-      
+    
+    
 
     
     </div>
