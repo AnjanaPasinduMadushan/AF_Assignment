@@ -64,7 +64,7 @@ const Header = () => {
               </li>
                 <li className="header__item">
               {isLogged && (
-                <Link className="logout">
+                <Link className="profile" to="./profile">
                   Profile
                 </Link>
               )}
@@ -73,45 +73,7 @@ const Header = () => {
 
         </>
 
-            {/* {!isLoggedIn && (
-              <>
-                <li className="header__item">
-                  <Link className="login" to="./login">
-                    Login
-                  </Link>
-                </li>
 
-                <li className="header__item">
-                  <Link className="register" to="./signUp">
-                    Sign Up
-                  </Link>
-                </li>
-              </>
-            )} */}
-            {/* <li className="header__item">
-              {isLoggedIn && (
-                <Link onClick={handleLogout} className="logout" to="./login">
-                  Log Out
-                </Link>
-              )}
-
-              <Link to="./cart">
-                {isLoggedIn && role === 'buyer' &&(
-                  <div>
-                    <span className="badge bg-primary">{quantity}</span>
-                    <i className="bi bi-cart-fill"></i>
-                  </div>
-                )}
-              </Link>
-
-              {isLoggedIn && role === 'buyer' && (
-                <Link className="orderHistory" to="./getOrders">
-                  Order Hisory
-                </Link>
-              )}
-              <br />
-              <span>{isLoggedIn && role === 'buyer' && <Link to="./profile">Profile</Link>}</span>
-            </li> */}
           </ul>
         </nav>
       </header></div>

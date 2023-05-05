@@ -225,10 +225,13 @@ const signUp = async (req, res, next) => {
 
       const user = await User.findById(userId, "-password")
       
-      res.status(200).json(user)
-
+      
       if(!user){
         return res.status(404).json({message:"User is not found"})
+      }
+      else{
+        res.status(200).json({user})
+
       }
     }catch(err){
       console.log(err)
@@ -263,19 +266,17 @@ const signUp = async (req, res, next) => {
     let user;
 
     const { name, age, mobile, email } = req.body;
-    //validation for all the input fields
-    if (!name ||!age ||!mobile || !email) {
-      return res.status(422).json({message:"All feilds should be filled"})
-    }
+  
     let existingUser;
         try{
-            existingUser = await User.findOne({email: email});
+            existingUser = await User.findOne({ $or:[{email:email}, {mobile:mobile}]});
         }catch(err){
             console.log(err);
         }
         
-        if(existingUser){
-            return res.status(400).json({message:"This email is already exists. use a different email. "})
+   
+        if(existingUser && existingUser._id.toString() !== userId){
+          return res.status(400).json({message:"This email or mobile is already exists. use a different mobile or email "})
         }
       try {
        user = await User.findByIdAndUpdate(userId, {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 
 
@@ -7,6 +8,7 @@ const Users = () => {
 
 
     const [users, setUsers] = useState([])
+    const history = useNavigate()
 
     useEffect(()=>{
         const getUsers=async()=>{
@@ -71,6 +73,8 @@ const Users = () => {
 
   return (
     <div>
+
+        <button onClick={(()=>history(`/currentUsers`))}>Current Users</button>
         <div>
         {users && users.length>0 ? (
             <table>
