@@ -15,6 +15,21 @@ app.use(bodyParser.json());
 const commentRouter = require("./routes/comment-routes");
 app.use("/comment", commentRouter);;
 
+
+// Import dependencies
+
+
+const complaintsController = require("./controllers/complaintsController"); 
+// Routing
+
+app.get("/complaints", complaintsController.fetchComplaints);
+app.get("/complaints/:id", complaintsController.fetchComplaint);
+app.post("/complaints", complaintsController.createComplaint);
+app.put("/complaints/:id", complaintsController.updateComplaint);
+app.delete("/complaints/:id", complaintsController.deleteComplaint);
+
+
+
 //connect mongoDB
 mongoose.connect(process.env.link, {
     useNewUrlParser: true,
