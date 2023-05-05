@@ -9,6 +9,8 @@ import Upload from "./components/Upload";
 // import Upload from "./Upload";
 
 function App() {
+
+
   const store = complaintsStore();
 
   // Use effect
@@ -27,6 +29,8 @@ function App() {
     <div className="App">
 
 <button onClick={handleClick}>Go to Another Page</button>
+
+
       <CreateForm />
       <Upload/>
       <Complaints />

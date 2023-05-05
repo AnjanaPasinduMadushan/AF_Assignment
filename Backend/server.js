@@ -4,7 +4,7 @@ const cors = require("cors")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const app = express();
-
+const multer = require('multer');
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
@@ -37,6 +37,16 @@ mongoose.connect(process.env.link, {
  });
 
  
+
+ const upload = multer({ dest: 'uploads/' });
+ app.use(cors());
+
+ app.post('/upload', upload.single('file'), (req, res) => {
+   // do something with the file
+   res.send('File uploaded successfully');
+ });
+
+
  const connection = mongoose.connection;
  connection.once("open", () => {
      console.log("MongoDB Connection Success!");
