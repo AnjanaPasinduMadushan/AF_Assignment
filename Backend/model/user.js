@@ -19,20 +19,17 @@ const userSchema = new Schema({
 
     NIC:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
 
     mobile:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
 
     email:{
         type:String,
-        required:true,
-        unique:true
+        required:true
     },
 
     password:{

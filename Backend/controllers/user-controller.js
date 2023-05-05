@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 //user id, checking_in and user's role is passed with token
 const createToken = (_id, role) => {
     console.log(process.env.SECRET)
-   return  jwt.sign({_id, role}, process.env.secret, {expiresIn: '60s'})
+   return  jwt.sign({_id, role}, process.env.secret, {expiresIn: '3600s'})
 }
 
 //signup function
@@ -26,13 +26,13 @@ const signUp = async (req, res, next) => {
     let existingUser;
     //chaecking whether user already sign up or not based on the email
     try {
-      existingUser = await User.findOne({ NIC : NIC });
+      existingUser = await User.findOne({ $or:[{NIC : NIC }, {email:email}, {mobile:mobile}]});
     } catch (err) {
       console.log(err);
     }
   
     if (existingUser) {
-      return res.status(400).json({ message: "User already exist...login instead " })
+      return res.status(400).json({ message: "User already exist...login instead or try with different NIC, email or mobile" })
     }
   
     const salt = await bcrypt.genSalt(6)
@@ -82,8 +82,15 @@ const signUp = async (req, res, next) => {
         console.log(err)
     }
 
+    //checking password and comare it with exist user's password in the db
+  const isPasswordCorrect = bcrypt.compareSync(password, loggedUser.password);
+
     if(!loggedUser){
       return res.status(404).json({message:"User is not found. Sign Up instead"})
+    }
+
+    else if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid email/password" })
     }
 
     else{
@@ -97,7 +104,7 @@ const signUp = async (req, res, next) => {
             //Create and setting a cookie with the user's ID and token
             res.cookie(String(loggedUser._id), token, {
                 path: "/",
-                expires: new Date(Date.now() + 1000*60),
+                expires: new Date(Date.now() + 1000*60*60),
                 httpOnly:true,//if this option isn't here cookie will be visible to the frontend
                 sameSite:"lax"
               })
@@ -294,6 +301,34 @@ const signUp = async (req, res, next) => {
 
   }
 
+
+  //logout function
+  const logout = (req, res, next) => {
+  const uId = req.userId;//request user Id from the token
+  const cookies = req.headers.cookie;//request cookie from the header
+
+  //exttracting token from the cookies
+  const previousToken = cookies.split("=")[1];
+
+  //if token is not found return this response
+  if (!previousToken) {
+    return res.status(400).json({ message: "Couldn't find token" });
+  }
+
+  //varifying token using secret key from the environmental variables
+  jwt.verify(String(previousToken), process.env.secret, (err, user) => {
+    if (err) {
+      console.log(err);
+      return res.status(403).json({ message: "Authentication failed" });//if not verified return this error
+    }
+
+    //if token is varified return this success message as response
+    res.clearCookie(`${uId}`);
+    req.cookies[`${uId}`] = "";
+    return res.status(200).json({ message: "Successfully Logged Out" });
+  });
+};
+
   exports.signUp = signUp;
   exports.login = login;
   exports.updateCheckingIn = updateCheckingIn;
@@ -303,3 +338,4 @@ const signUp = async (req, res, next) => {
   exports.updateAcc = updateAcc;
   exports.getNewUsers = getNewUsers;
   exports.getOldUsers = getOldUsers;
+  exports.logout = logout;

@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import axios from 'axios'
+import { autheticationActions } from './store'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
 
-
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [error, setError] = useState("")
   const [inputs, setInputs] = useState({
     email:"",
     password:""
@@ -18,13 +23,24 @@ const LoginForm = () => {
 
   const sendData = async()=>{
    
-    const res = await axios.post("http://localhost:8070/User/login", {
-      email:inputs.email,
-      password:inputs.password
-    }).catch((err)=>console.log(err));
-
-    const data = await res.data;
-    return data;
+    try{
+      const res = await axios.post("http://localhost:8070/User/login", {
+        email:inputs.email,
+        password:inputs.password
+      })
+      if (res && res.data) {
+        const data = await res.data;
+        console.log(data)
+        return data;
+      }else {
+        throw new Error("Response data is undefined");
+      }
+      
+      
+    }catch(err){
+      console.log(err)
+    }
+    
 
   }
 
@@ -33,7 +49,24 @@ const LoginForm = () => {
     console.log(inputs)
 
     try{
-       await sendData();
+       const data=await sendData();
+
+       if (data && data.message) {
+       setError(data.message)
+
+       if (data.User.role === "admin") {
+        navigate("/newUsers");
+       }
+      // } else if (response.User.role === "seller") {
+      //   navigate("/profile");
+      // } else {
+      //   navigate("/products");
+      // }
+       dispatch(autheticationActions.login());
+       }else {
+        setError("Check your password and email please!!!")
+       }
+       
     }catch(err){
       console.log(err)
     }
@@ -65,6 +98,8 @@ const LoginForm = () => {
         
         
       </form>
+
+      {error && <div className="error">{error}</div>}
     </div>
   )
 }

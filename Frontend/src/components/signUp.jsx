@@ -14,7 +14,7 @@ const SignUp = () => {
         isChecking:false
     })
 
-
+    const [error, setError] = useState("");
     const handleChange = async(e)=>{
         setInputs((previousState)=>({
             ...previousState,
@@ -23,27 +23,42 @@ const SignUp = () => {
     }
 
     const sendData = async()=>{
+
+        try{
         const res = await axios.post("http://localhost:8070/User/signUp", {
-            name:inputs.name,
-            age:inputs.age,
-            NIC:inputs.NIC,
-            mobile:inputs.mobile,
-            email:inputs.email,
-            password:inputs.password,
-            role:inputs.role,
-            isChecking:inputs.isChecking
-        }).catch((err)=>console.log(err))
-        
-        const data = await res.data
-        return data
-    }
+        name:inputs.name,
+        age:inputs.age,
+        NIC:inputs.NIC,
+        mobile:inputs.mobile,
+        email:inputs.email,
+        password:inputs.password,
+        role:inputs.role,
+        isChecking:inputs.isChecking
+    })
+    if (res && res.data) {
+        const data = await res.data;
+        console.log(data)
+        return data;
+      }else {
+        throw new Error("Response data is undefined");
+      }
+    }catch(err){
+        console.log(err)
+      }
+      }
 
 
     const handleSubmit = async(e)=>{
         e.preventDefault();
-console.log(inputs)
+        console.log(inputs)
         try{
-            await sendData();
+            const data = await sendData();
+            if (data && data.message) {
+                setError(data.message)
+                }else {
+                 setError("Check entered NIC, mobile and email")
+                }
+            
         }catch(err){
             console.log(err)
         }
@@ -93,6 +108,7 @@ console.log(inputs)
       
       
     </form>
+    {error && <div className="error">{error}</div>}
   </div>
   )
 }

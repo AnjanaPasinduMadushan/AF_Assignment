@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+axios.defaults.withCredentials = true;
+
 
 const Users = () => {
 
@@ -8,7 +10,9 @@ const Users = () => {
 
     useEffect(()=>{
         const getUsers=async()=>{
-            const res = await axios.get('http://localhost:8070/User/newUsers')
+            const res = await axios.get('http://localhost:8070/User/newUsers', {withCredentials:true}).catch((err)=>{
+                console.log(err)
+            })
             setUsers(res.data.users)
             console.log(res.data.users)
         }
@@ -19,7 +23,7 @@ const Users = () => {
     const hanldeVerifying = async(userId) => {
         try{
 
-            const res = await axios.patch(`http://localhost:8070/User/verifyUser/${userId}`, {
+            const res = await axios.patch(`http://localhost:8070/User/verifyUser/${userId}`,{withCredentials:true}, {
                 checkingIn:true
             })
             const newUpdateUser = res.data;
@@ -44,7 +48,7 @@ const Users = () => {
     const handleUnverify = async(userId) =>{
         try{
 
-            const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`)
+            const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`, {withCredentials:true})
             
             const newUpdateUser = res.data;
 

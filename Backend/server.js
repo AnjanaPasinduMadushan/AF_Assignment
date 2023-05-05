@@ -6,16 +6,21 @@ const mongoose = require("mongoose")
 const app = express();
 const cookieParser = require("cookie-parser")
 
+//app.use(cors({credentials: true, origin: "http://127.0.0.1:3000"}));
+app.use(cors({credentials: true, origin: "http://localhost:3000"}))
+app.use(cookieParser())
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
-app.use(cookieParser())
-app.use(cors({credentials: true, origin: "http://127.0.0.1:3000"}));
+
+
 app.use(bodyParser.json());
 
 //Routes file paths
 const user_router = require("./routes/user-routes") 
 const email_router = require("./routes/email-routes")
+
+
 
 //routes are declared here
 app.use('/User', user_router)
