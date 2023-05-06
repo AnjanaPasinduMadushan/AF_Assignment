@@ -1,17 +1,37 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from 'react'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import Complaints from "./pages/complaints";
+import LoginForm from './components/loginForm'
+import SignUp from './components/signUp'
+import Users from './components/users'
+import Header from './header'
+import Profile from './components/Profile/profile'
+import CurrentUsers from './components/Users/currentUsers'
+import UpdateProf from './components/Profile/updateProf'
+import { useSelector } from 'react-redux'
 import "./App.css";
 
-function App() {
-  return(
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/test" element={<Complaints />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+const App = () => {
+
+  const isLogged = useSelector((state) => state.isLogged)
+
+  console.log(isLogged)
+  return (
+    <BrowserRouter>
+
+      <Header />
+      <Routes>
+        <Route path="/test" element={<Complaints />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signUp" element={<SignUp />} />
+        {isLogged && <Route path="/newUsers" element={<Users />} />}
+        {isLogged && <Route path="/profile" element={<Profile />} />}
+        {isLogged && <Route path="/currentUsers" element={<CurrentUsers />} />}
+        {isLogged && <Route path="/updateProfile/:id" element={<UpdateProf />} />}
+      </Routes>
+    </BrowserRouter>
+
+  )
 }
 
 export default App

@@ -4,20 +4,31 @@ const cors = require("cors")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
 const app = express();
+const cookieParser = require("cookie-parser")
+
+
+app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(bodyParser.json());
+app.use(cookieParser())
 
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
-app.use(cors())
-app.use(bodyParser.json());
+//Routes file paths
+const user_router = require("./routes/user-routes");
+// const email_router = require("./routes/email-routes")
+const commentRouter = require("./routes/comment-routes");
+const complaintRouter = require("./routes/complaint-routes");
 
 //routes are declared here
-const commentRouter = require("./routes/comment-routes");
+app.use('/User', user_router)
+//app.use('/email', email_router)
 app.use("/comment", commentRouter);
-
-const complaintRouter = require("./routes/complaint-routes");
 app.use("/complaint", complaintRouter);
-  
+
+
+
+
 //connect mongoDB
 mongoose.connect(process.env.link, {
     useNewUrlParser: true,

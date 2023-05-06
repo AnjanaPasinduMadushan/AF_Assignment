@@ -1,0 +1,39 @@
+{
+    "name":"Anjana",
+    "age":23,
+    "NIC":200019601254,
+    "mobile":771111856,
+    "email":"Anjana@gmail.com",
+    "password":"madushan34123",
+    "role":"admin"
+}
+
+{
+    "name":"Anjana",
+    "age":23,
+    "NIC":211019601254,
+    "mobile":771111811,
+    "email":"pasindu@gmail.com",
+    "password":"madushan34123",
+     "role":"citizen"
+}
+
+{
+    "name":"Pasinud",
+    "age":23,
+    "NIC":211019111254,
+    "mobile":771171811,
+    "email":"pasi@gmail.com",
+    "password":"madushan34123",
+     "role":"citizen"
+}
+
+{
+    "name":"Anjana",
+    "age":23,
+    "NIC":211019601250,
+    "mobile":771111111,
+    "email":"pasindu465@gmail.com",
+    "password":"madushan46",
+     "role":"citizen"
+}
