@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
-
+import '../assets/users.css'
 
 const Users = () => {
 
@@ -73,29 +73,32 @@ const Users = () => {
 
   return (
     <div>
+        <br/>
 
-        <button onClick={(()=>history(`/currentUsers`))}>Current Users</button>
+       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+  <button onClick={() => history(`/currentUsers`)} className='custome_btn'>Current Users</button>
+</div>
         <div>
         {users && users.length>0 ? (
-            <table>
+            <table className='users_table'>
                 <thead>
                 <tr>
-                <th>NIC</th>
-                <th>NAME</th>
-                <th>EMAIL</th>
-                <th>MOBILE</th>
-                <th>ACTIONS</th>
+                <th className='tableCell' id="tableCell_td">NIC</th>
+                <th className='tableCell' id="tableCell_td">NAME</th>
+                <th className='tableCell' id="tableCell_td">EMAIL</th>
+                <th className='tableCell' id="tableCell_td">MOBILE</th>
+                <th className='tableCell' id="tableCell_td">ACTIONS</th>
                 </tr>
                 </thead>
             
             <tbody>
             {users.map((user, key)=>(
             <tr  key={key}>
-                <td>{user.NIC}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.mobile}</td>
-                <th><button onClick={()=>hanldeVerifying(user._id)}>Verify</button>
+                <td className='tableCell'>{user.NIC}</td>
+                <td className='tableCell'>{user.name}</td>
+                <td className='tableCell'>{user.email}</td>
+                <td className='tableCell'>{user.mobile}</td>
+                <th className='tableCell'><button onClick={()=>hanldeVerifying(user._id)}>Verify</button>
                 <button onClick={()=>handleUnverify(user._id)}>Unverify</button></th>
             </tr>
             ))}
@@ -103,7 +106,7 @@ const Users = () => {
            
                 
             </table>)
-            :(<h1><center>There are not any users sent Account creation requests!!!</center></h1>)}
+            :(<h1 className='message'><center>There are not any users sent Account creation requests!!!</center></h1>)}
         </div>
     </div>
   )

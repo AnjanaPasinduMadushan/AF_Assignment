@@ -259,48 +259,38 @@ const signUp = async (req, res, next) => {
     }
   }
 
-  const updateAcc = async(req, res, next)=>{
+const updateAcc = async (req, res, next) => {
+  const userId = req.userId;
+  const { name, age, mobile, email } = req.body;
 
-    const userId = req.userId;
+  try {
+    // Check if email or mobile already exist for another user
+    const existingUser = await User.findOne({ $or: [{ mobile: mobile }, { email: email }] });
+    if (existingUser && existingUser._id != userId) {
+      if (Number(existingUser.mobile) == Number(mobile)) {
+        return res.status(401).json({ message: "This mobile is already exists. use a different mobile " });
+      } else if (existingUser.email == email) {
+        return res.status(402).json({ message: "This email is already exists. use a different email " });
+      }
+    }
 
-    let user;
-
-    const { name, age, mobile, email } = req.body;
-  
-    let existingUser;
-        try{
-            existingUser = await User.findOne({ $or:[{email:email}, {mobile:mobile}]});
-        }catch(err){
-            console.log(err);
-        }
-        
-   
-        if(existingUser && existingUser._id.toString() !== userId){
-          return res.status(400).json({message:"This email or mobile is already exists. use a different mobile or email "})
-        }
-      try {
-       user = await User.findByIdAndUpdate(userId, {
-        name,
-        age,  
+    // Update user account
+    const user = await User.findByIdAndUpdate(userId, 
+      {
+        name, 
+        age, 
         mobile, 
         email
-      },{new:true});
-
-        if(!user){
-          return res.status(404).json({message:"User is not found!!!"})
-        }
-
-        await user.save();
-
-
-      }catch(err){
-        console.log(err)
-        return res.status(500).json({message:"Error in updating user"})
-      }
-
-      return res.status(200).json({message:"User is successfully updated!", user})
-
+      }, { new: true });
+    if (!user) {
+      return res.status(404).json({ message: "User is not found!!!" });
+    }
+    return res.status(200).json({ message: "User is successfully updated!", user });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: "Error in updating user" });
   }
+};
 
 
   //logout function

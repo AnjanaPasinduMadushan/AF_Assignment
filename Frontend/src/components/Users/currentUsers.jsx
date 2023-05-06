@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
-
+import '../../assets/users.css'
+import { useNavigate } from 'react-router-dom';
 
 const CurrentUsers = () => {
 
 
-    const [users, setUsers] = useState([])
-    const history = useNavigate()
+    const history = useNavigate();
+    const [users, setUsers] = useState([]);
 
     useEffect(()=>{
         const getUsers=async()=>{
@@ -27,25 +27,29 @@ const CurrentUsers = () => {
   return (
     <div>
 
+        <br/>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <button onClick={() => history(`/newUsers`)} className='custome_btn'>Requested Users</button>
+        </div>
         <div>
         {users && users.length>0 ? (
-            <table>
+            <table className='users_table'>
                 <thead>
                 <tr>
-                <th>NAME</th>
-                <th>AGE</th>
-                <th>EMAIL</th>
-                <th>MOBILE</th>
+                <th className='tableCell' id="tableCell_td">NAME</th>
+                <th className='tableCell' id="tableCell_td">AGE</th>
+                <th className='tableCell' id="tableCell_td">EMAIL</th>
+                <th className='tableCell' id="tableCell_td">MOBILE</th>
                 </tr>
                 </thead>
             
             <tbody>
             {users.map((user, key)=>(
             <tr  key={key}>
-                <td>{user.name}</td>
-                <td>{user.age}</td>
-                <td>{user.email}</td>
-                <td>{user.mobile}</td>
+                <td className='tableCell'>{user.name}</td>
+                <td className='tableCell'>{user.age}</td>
+                <td className='tableCell'>{user.email}</td>
+                <td className='tableCell'>{user.mobile}</td>
             </tr>
             ))}
             </tbody>

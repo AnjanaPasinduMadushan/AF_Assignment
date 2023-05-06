@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import '../../assets/forms.css'
 
 const UpdateProf = () => {
 
@@ -81,7 +82,7 @@ const UpdateProf = () => {
   return (
     <div className='forms'>
 
-      <h1>Update Account Details</h1>
+      <h1 id='update'>Update Account Details</h1>
       <form onSubmit={handleSubmit}>
 
         <div className='inputs'>
@@ -107,11 +108,12 @@ const UpdateProf = () => {
         </div>
 
         <div className='inputs'>
-        <button type="submit" className="btn btn-primary">Update</button>
+        <button type="submit" className="btn custom-button">Update</button>
         </div>
         
         
       </form>
+      {error && <div className="error">{error}</div>}
     </div>
   )
 }

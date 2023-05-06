@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import axios from 'axios'
+import '../assets/forms.css'
 
 const SignUp = () => {
 
@@ -67,43 +68,43 @@ const SignUp = () => {
 
 
   return (
-    <div>      <h1>Register</h1>
+    <div className='forms'>    
     <form onSubmit={handleSubmit}>
 
       <div className='inputs'>
-      <label>Name:</label>
+      <label className='signUp_lable'>Name:</label>
       <input type="text" name='name' value={inputs.name} onChange={handleChange}/>
       </div>
       
 
       <div className='inputs'>
-      <label>Age:</label>
+      <label className='signUp_lable'>Age:</label>
       <input type="number" name='age' value={inputs.age} onChange={handleChange}/>
       </div>
 
       <div className='inputs'>
-      <label>NIC:</label>
+      <label className='signUp_lable'>NIC:</label>
       <input type="text" name='NIC' value={inputs.NIC} onChange={handleChange}/>
       </div>
 
       <div className='inputs'>
-      <label>Mobile:</label>
+      <label className='signUp_lable'>Mobile:</label>
       <input type="text" name='mobile' value={inputs.mobile} onChange={handleChange}/>
       </div>
       
 
       <div className='inputs'> 
-      <label>Email:</label>
+      <label className='signUp_lable'>Email:</label>
       <input type="email" name='email' value={inputs.email} onChange={handleChange}/>
       </div>
       
       <div className='inputs'>
-      <label>Password:</label>
+      <label className='signUp_lable'>Password:</label>
       <input type="password" name="password" value={inputs.password} onChange={handleChange}/>
       </div>
       
       <div className='inputs'>
-      <button type="submit" className="btn btn-primary">Submit</button>
+      <button type="submit" className="btn custom-button">Submit</button>
       </div>
       
       

@@ -1,0 +1,46 @@
+.users_table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+ .tableCell {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  #tableCell_td {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* CSS for the buttons */
+  .custome_btn {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .custome_btn:hover {
+    background-color: #006080;
+  }
+  
+  /* CSS for the message */
+  .message {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f2f2f2;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }

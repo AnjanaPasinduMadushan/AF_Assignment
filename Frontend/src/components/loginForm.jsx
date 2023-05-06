@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { autheticationActions } from './store'
 import { useNavigate } from 'react-router-dom'
-
+import '../assets/forms.css'
 const LoginForm = () => {
 
   const navigate = useNavigate()
@@ -53,10 +53,11 @@ const LoginForm = () => {
 
        if (data && data.message) {
        setError(data.message)
-
+       
        if (data.User.role === "admin") {
         navigate("/newUsers");
        }
+       
       // } else if (response.User.role === "seller") {
       //   navigate("/profile");
       // } else {
@@ -93,7 +94,7 @@ const LoginForm = () => {
         </div>
         
         <div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        <button type="submit" className="btn custom-button">Submit</button>
         </div>
         
         
