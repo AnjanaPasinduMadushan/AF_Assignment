@@ -1,10 +1,9 @@
 import "../styles/comment.css";
 
-
-
 import { useEffect, useState } from "react";
 import swal from 'sweetalert';
 import axios, { Axios } from 'axios';
+import SingleComment from "./SingleComment";
 
 export default function CommentsBlock(props) {
   const complaintID = props.complaintID;
@@ -54,79 +53,11 @@ export default function CommentsBlock(props) {
     }
   }
 
-  // Pop up alert and delete comment if confirmed
-  async function deleteComment(id) {
-    swal({
-      title: "Delete Comment?",
-      icon: "warning",
-      buttons: true,
-      dangerMode: true,
-    }).then(async (willDelete) => {
-      if (willDelete) {
-        try {
-          var deleteResponse = await axios.delete(`http://localhost:8070/comment/delete/${id}`);
-          if (deleteResponse != null && deleteResponse.status == 200) {
-            swal("Comment Deleted!", { buttons: false, timer: 800 });
-            getComments();
-          }
-        } catch (e) {
-          swal("Error", { buttons: false, timer: 1000 });
-          console.log(e);
-        }
-      }
-    });
-
-
-
-  }
-
   // Use effect that runs on page load
   // This excutes the "getComments" function to retrieve the available comments
   useEffect(() => {
     getComments();
   }, []);
-
-
-  // Display date and time correctly formatted
-  function dateTimeString(unixTime) {
-    const date = new Date(unixTime * 1);
-    const options = { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    const dateTimeString = date.toLocaleString('en-GB', options);
-    return dateTimeString;
-  }
-
-
-  // This function handles displaying 'a' comment.
-  function DisplayComments() {
-    if (gotComments != null) {
-      return (
-        <div>
-          {gotComments.slice().reverse().map((comment) => (
-            <div className="m-2" key={comment._id}>
-              <div>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <b>{comment.commentorId}</b><span className="commentDateTime" > {
-                      dateTimeString(comment.commentDateTime)
-                    }</span>
-                  </div>
-                  <div>
-                    <button className="btn btn-primary rounded-pill ms-1" ><i className="fa-solid fa-marker" /></button>
-                    <button className="btn btn-danger rounded-pill ms-1" onClick={() => deleteComment(comment._id)}><i className="fa-solid fa-trash" /></button>
-                  </div>
-                </div>
-                <div>
-                  <p>{comment.commentText}</p>
-                </div>
-                <hr className="mb-0" />
-              </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  }
 
   return (
     <>
@@ -144,7 +75,21 @@ export default function CommentsBlock(props) {
           <button className="btn commentInputBtn brown-outline-Btn" type="button" onClick={submit}>Add Comment</button>
         </div>
       </div>
-      <DisplayComments />
+      {
+        gotComments != null ?
+          <div>
+            {gotComments.slice().reverse().map((comment) => (
+              <SingleComment
+                key={comment._id}
+                id={comment._id}
+                commentor={comment.commentorId}
+                commentDateTime={comment.commentDateTime}
+                commentText={comment.commentText}
+                refreshCommentList={getComments}
+              />
+            ))}
+          </div> : <></>
+      }
     </>
   );
 }
