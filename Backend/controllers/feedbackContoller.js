@@ -15,7 +15,7 @@ const getAllFeedback = async(req, res ,next) => {
 
 //Get feedback by ID
 const getByID = async(req ,res ,next) => {
-    const id = req.param.id;
+    const id = req.params.id;
     let feedback;
     try{
         feedback = await Feedback.findById(id);
@@ -24,9 +24,14 @@ const getByID = async(req ,res ,next) => {
       }
       if (!feedback) {
         return res.status(404).json({ message: "No feedback found" });
+      }else{
+        return res.status(200).json({feedback});
       }
-      return res.status(200).json({feedback});
+      
     };
+
+
+
       //update Feddback
 const updateFeedback = async (req, res, next) => {
     const id = req.params.id;
@@ -70,5 +75,5 @@ const addFeedback = async (req, res, next) => {
 
     exports.addFeedback = addFeedback;
     exports.getAllFeedback = getAllFeedback;
-    exports.getByID= getByID;
+    exports.getByID = getByID;
     exports.updateFeedback = updateFeedback;
