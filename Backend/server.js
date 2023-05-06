@@ -14,6 +14,9 @@ app.use(bodyParser.json());
 //routes are declared here
 const commentRouter = require("./routes/comment-routes");
 app.use("/comment", commentRouter);
+
+const complaintRouter = require("./routes/complaint-routes");
+app.use("/complaint", complaintRouter);
   
 //connect mongoDB
 mongoose.connect(process.env.link, {
