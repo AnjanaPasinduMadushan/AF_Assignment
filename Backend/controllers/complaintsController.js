@@ -27,7 +27,7 @@ const createComplaint = async (req, res) => {
   const complaint = await Complaint.create({
     title,
     body,
-    date,
+    date : Date.now(),
   });
 
   // respond with the new complaint

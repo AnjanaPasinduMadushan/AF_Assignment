@@ -17,7 +17,7 @@ const complaintsStore = create((set) => ({
 
   fetchComplaints: async () => {
     // Fetch the complaints
-    const res = await axios.get("http://localhost:3000/complaints");
+    const res = await axios.get("http://localhost:8070/complaints");
 
     // Set to state
     set({ complaints: res.data.complaints });
@@ -41,7 +41,7 @@ const complaintsStore = create((set) => ({
 
     const { createForm, complaints } = complaintsStore.getState();
     const res = await axios.post(
-      "http://localhost:3000/complaints",
+      "http://localhost:8070/complaints",
       createForm
     );
 
@@ -56,7 +56,7 @@ const complaintsStore = create((set) => ({
 
   deleteComplaint: async (_id) => {
     // Delete the complaint
-    const res = await axios.delete(`http://localhost:3000/complaints/${_id}`);
+    const res = await axios.delete(`http://localhost:8070/complaints/${_id}`);
     const { complaints } = complaintsStore.getState();
 
     // Update state
@@ -99,7 +99,7 @@ const complaintsStore = create((set) => ({
     } = complaintsStore.getState();
 
     // Send the update request
-    const res = await axios.put(`http://localhost:3000/complaints/${_id}`, {
+    const res = await axios.put(`http://localhost:8070/complaints/${_id}`, {
       title,
       body,
     });

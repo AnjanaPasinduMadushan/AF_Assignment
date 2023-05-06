@@ -31,9 +31,29 @@ export default function Complaint({ complaint }) {
     };
   });
 
+  // Display date and time correctly formatted
+
+  function dateTimeString(unixTime) {
+    const date = new Date(unixTime * 1);
+
+    const options = {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    };
+
+    const dateTimeString = date.toLocaleString("en-GB", options);
+
+    return dateTimeString;
+  }
+
   return (
     <div className="div2" key={complaint._id}>
       <h2>Complaint Heading</h2>
+      <h5>{dateTimeString(complaint.date)}</h5>
       <h3>{complaint.title}</h3>
       <h2>Description</h2>
       <h3>{complaint.body}</h3>

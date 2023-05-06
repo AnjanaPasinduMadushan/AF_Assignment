@@ -29,11 +29,11 @@ function Upload() {
    setFile(event.target.files[0]);
  };
 
- const handleFileUpload = () => {
+ const handleFileUpload = () => { 
    const formData = new FormData();
    formData.append('file', file);
 
-   fetch('http://localhost:3000/upload', {
+   fetch('http://localhost:8070/upload', {  
      method: 'POST',
      body: formData,
    })
