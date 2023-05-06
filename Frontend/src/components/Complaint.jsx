@@ -1,11 +1,12 @@
-import "../assets/Complaint.css";
+import "../styles/complaint.css";
 
 import { useEffect, useState } from "react";
 import CommentsBlock from "./CommentsBlock";
 
 export default function Complaint(props) {
   // Take data from props
-  const date = props.date ?? "date not defined"
+  const date = props.date ?? "date not defined";
+  const id = props.id ?? "id not defined";
   const title = props.title ?? "Title Not Defined!";
   const description = props.description ?? "Description Not Defined!";
   const image = props.image;
@@ -55,28 +56,15 @@ export default function Complaint(props) {
     }
   };
 
-  // function CommentsBlock() {
-  //   if (viewComments) {
-  //     return (
-  //       <>
-  //         <div className="input-group complaintAddComment">
-  //           <input type="text" className="form-control commentInput shadow-none" placeholder="Add a comment..." aria-label="Recipient's username" aria-describedby="basic-addon2" />
-  //           <div className="input-group-append">
-  //             <button className="btn commentInputBtn brown-outline-Btn" type="button">Add Comment</button>
-  //           </div>
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  // }
-
   // Render the feedback block only if a feedback exists
   function FeedbackBlock() {
     if (feedback) {
       return (
         <>
           <hr />
-          <b className="complaintFeedback">{feedback}</b>
+          <div className="complaintFeedback">
+            <b>{feedback}</b>
+          </div>
           <hr />
         </>
       );
@@ -97,23 +85,21 @@ export default function Complaint(props) {
         <div className="complaintBody">
           <div className="d-flex justify-content-between mb-3">
             <div>
-              <div className="complaintDate">
-                {date}
-              </div>
+              <span className="complaintDate">{date} | Ref. ID: {id}</span>
               <h4 className="complaintTitle" >{title}</h4>
             </div>
 
+            {/* TODO: Edit button must only be visible within 24hrs of creating the complaint
+                      and only to the complaint creator */}
             <div>
-              {/* TODO: Edit button must only be visible within 24hrs of creating the complaint
-                      and only to the complaint creator
-            */}
               <button type="button" className="brown-btn btn" >Edit Complaint 🖉</button>
             </div>
-
           </div>
 
           {/**Renders the Description and image depending on if image exists */}
           <DescriptionBlock />
+
+          {/**Renders the Feedback if feedback is available */}
           <FeedbackBlock />
 
           <div className="d-flex justify-content-between my-2">
@@ -125,6 +111,7 @@ export default function Complaint(props) {
                 <b>{vote} votes</b>
               </div>
             </div>
+
             <div>
               <button type="button" className="btn btn-outline-dark me-2" >Feedback</button>
               <button type="button" className="btn btn-outline-dark" onClick={toggleComments}>Comments</button>
@@ -132,7 +119,7 @@ export default function Complaint(props) {
           </div>
         </div>
 
-        {viewComments ? <CommentsBlock /> : ""}
+        {viewComments ? <CommentsBlock complaintID={id} /> : ""}
 
       </div>
     </>
