@@ -13,7 +13,9 @@ app.use(bodyParser.json());
 
 //routes are declared here
 const commentRouter = require("./routes/comment-routes");
-app.use("/comment", commentRouter);;
+const feedbackRouter = require("./routes/feedback-route");
+app.use("/comment", commentRouter);
+app.use("/feedback",feedbackRouter);
   
 //connect mongoDB
 mongoose.connect(process.env.link, {
