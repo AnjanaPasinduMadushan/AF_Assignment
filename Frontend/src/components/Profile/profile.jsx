@@ -3,7 +3,7 @@ import axios from 'axios';
 axios.defaults.withCredentials = true;
 import { useNavigate } from 'react-router-dom';
 import '../../assets/profile.css'
-
+import '../../assets/users.css'
 const Profile = () => {
 
   const [user, setUser] = useState({})
@@ -72,6 +72,7 @@ const Profile = () => {
 
   return (
 
+    <div>
     <div className="user-container">
       {user && user.role === 'admin' && (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -88,23 +89,45 @@ const Profile = () => {
         <h1 className='detail'>I am a {user.role}</h1>
       </div>)}
 
+      <div style={{display: 'inline-block'}}>
       <button className="update-button" onClick={() => navigate(`/updateProfile/${user._id}`)}>UPDATE ACC</button>
-      <button className="update-button" onClick={handleDelete}>DELETE ACC</button>
+      <button className="update-button" onClick={handleDelete} style={{marginLeft: '30px'}}>DELETE ACC</button>
+      </div>
       
-
       {user&&user.role==="citizen" &&(
-        <div>
-          <h1>My Complaints</h1>
+        
+            <div>
+              <hr/>
+              <hr/>
+              <h1>My Complaints</h1>
 
-          {complaints.length>0 && (<div>{
-            complaints.map((myComplaints)=>(
-              <div key={myComplaints._id}><h1>{myComplaints.title}</h1>
-              
-              <button onClick={()=>navigate(`/addFeedBack/${myComplaints._id}`)}>ADD FEEDBACK</button></div>
-            ))}
-          </div>)}
-        </div>
+              {complaints.length>0 && (
+                <table>
+                  <thead>
+                    <tr>
+                      <th className='tableCell' id="tableCell_td">Title</th>
+                      <th className='tableCell' id="tableCell_td">Description</th>
+                      <th className='tableCell' id="tableCell_td">No of Votes</th>
+                      <th className='tableCell' id="tableCell_td">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {complaints.map((myComplaints) => (
+                      <tr key={myComplaints._id}>
+                        <td className='tableCell'>{myComplaints.title}</td>
+                        <td className='tableCell'>{myComplaints.description}</td>
+                        <td className='tableCell'>{myComplaints.vote}</td>
+                        <td className='tableCell'><button onClick={() => navigate(`/addFeedBack/${myComplaints._id}`)}>ADD FEEDBACK</button></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
       )}
+      </div>
+
       </div>
   )
 }

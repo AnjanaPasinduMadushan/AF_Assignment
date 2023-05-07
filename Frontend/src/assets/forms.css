@@ -3,6 +3,8 @@
     margin:0 auto;
     padding-top: 150px;
   }
+
+
   .forms {
     width: 400px;
     margin: 0 auto;
@@ -18,7 +20,8 @@
   }
   
   input[type="email"],
-  input[type="password"] {
+  input[type="password"],
+  select {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -31,12 +34,13 @@
   .custom-button {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 4px;
     background-color: #FF5722;
     color: #fff;
     border: none;
     border-radius: 4px;
     margin: 10px;
+    margin:0 auto;
   }
   
   .custom-button:hover {
@@ -65,15 +69,14 @@
 
   
   /* input[type="text"], */
-  input[type="email"],
-  input[type="password"],
+.common_css,
   select {
     width: 100%;
     padding: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-top: 5px;
+    border-radius: 4px;
+
   }
 
   

@@ -30,6 +30,20 @@
     cursor: pointer;
     margin-right: 5px;
   }
+
+  /* td .verify_btn{
+    background-color: brown;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+  } */
   
   .custome_btn:hover {
     background-color: #006080;
@@ -44,3 +58,11 @@
     border: 1px solid #ddd;
     border-radius: 4px;
   }
+  
+
+  /* .users_table td:nth-child(2) {
+    width: 70%;
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } */

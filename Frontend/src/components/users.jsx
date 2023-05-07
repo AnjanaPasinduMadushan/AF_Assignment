@@ -55,7 +55,7 @@ const Users = () => {
     const handleUnverify = async(userId) =>{
         try{
 
-            const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`, {withCredentials:true})
+            const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`)
             
             const newUpdateUser = res.data;
 
@@ -78,6 +78,8 @@ const Users = () => {
 
   return (
     <div>
+
+      
         <br/>
 
        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -85,6 +87,8 @@ const Users = () => {
 
   <button onClick={() => history(`/newComplaints`)} className='custome_btn'>New Complaints</button>
 </div>
+
+<h1><center>NEW ACCOUNT CREATION REQUESTS</center></h1>
         <div>
         {users && users.length>0 ? (
             <table className='users_table'>
@@ -105,8 +109,8 @@ const Users = () => {
                 <td className='tableCell'>{user.name}</td>
                 <td className='tableCell'>{user.email}</td>
                 <td className='tableCell'>{user.mobile}</td>
-                <th className='tableCell'><button onClick={()=>hanldeVerifying(user._id)}>Verify</button>
-                <button onClick={()=>handleUnverify(user._id)}>Unverify</button></th>
+                <th className='tableCell'><button onClick={()=>hanldeVerifying(user._id)} className='btn btn-warning'>Verify</button>
+                <button onClick={()=>handleUnverify(user._id)} className='btn btn-danger' style={{marginLeft: '10px'}}>Unverify</button></th>
             </tr>
             ))}
             </tbody>

@@ -62,7 +62,8 @@ export default function Complaints() {
           title={complaint.title} 
           description={complaint.description}
           image={complaint.image}
-          status={complaint.status}/>
+          status={complaint.status}
+          feedback="safasf"/>
           ;
         })}
       {/* <Complaint

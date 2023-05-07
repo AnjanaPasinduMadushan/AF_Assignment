@@ -18,6 +18,14 @@ export default function Complaint(props) {
   const [viewComments, setViewComments] = useState(false);
   const [descriptionBtnText, setDescriptionBtnText] = useState("View Description");
   const [vote, setVote] = useState(props.vote ?? 0);
+  const [viewFeddBack, setViewFeedBack] = useState(false)
+
+  // used to toggle the description Btn and data
+  function toggleFeedback() {
+    setViewFeedBack(!viewFeddBack);
+  }
+
+
 
   // used to toggle the description Btn and data
   function toggleDescription() {
@@ -158,7 +166,7 @@ export default function Complaint(props) {
           <DescriptionBlock />
 
           {/**Renders the Feedback if feedback is available */}
-          <FeedbackBlock />
+          {viewFeddBack ? <FeedbackBlock />:""}
 
           <div className="d-flex justify-content-between my-2">
             <div className="d-flex align-items-center">
@@ -171,7 +179,7 @@ export default function Complaint(props) {
             </div>
 
             <div>
-              <button type="button" className="btn btn-outline-dark me-2" >Feedback</button>
+              <button type="button" className="btn btn-outline-dark me-2" onClick={toggleFeedback}>Feedback</button>
               <button type="button" className="btn btn-outline-dark" onClick={toggleComments}>Comments</button>
             </div>
           </div>

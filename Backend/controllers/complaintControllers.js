@@ -146,6 +146,32 @@ const unverifyComplaint = async(req, res, next) =>{
   }
 }
 
+const updateStatus = async(req, res, next)=>{
+
+  const complaintId = req.params.id;
+
+  try{
+      const complaint =  await Complaint.findByIdAndUpdate(complaintId, {
+          $set:{status:req.body.status}
+      }, {new:true}
+      )
+
+      if(!complaint){
+        return res.status(404).json({message:'Complaint is not found'})
+      }
+
+
+        
+      return res.status(200).json({message:'Complaint status is updated'})
+     
+  }catch(err){
+    console.log(err)
+    return res.status(500).json("error in update status")
+      
+  }
+
+}
+
 // Complaint creator update complaint
 const updateComplaint = async (req, res) => {
   // Get the id off the url
@@ -187,5 +213,6 @@ module.exports = {
   getByUserID,
   getNewComplaints,
   verifyComplaint,
-  unverifyComplaint
+  unverifyComplaint,
+  updateStatus
 };

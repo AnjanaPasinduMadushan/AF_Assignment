@@ -76,10 +76,12 @@ const LoginForm = () => {
   }
 
   return (
+
+  
     <div className='form'>
       <form onSubmit={handleSubmit}>
 
-      <h1>Login</h1>
+      <h1><center>Login</center></h1>
         
 
         <div>
@@ -103,9 +105,11 @@ const LoginForm = () => {
       </form>
 
       {error && <div className="error">{error}</div>}
+<br/>
 
-      <p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p>
-    </div>
+      <p><Link to='/forgetPassword'><center>Forget Password/Reset Password</center></Link></p>
+ 
+      </div>
   )
 }
 

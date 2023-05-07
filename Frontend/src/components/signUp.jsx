@@ -68,12 +68,13 @@ const SignUp = () => {
 
 
   return (
-    <div className='forms'>    
+    <div className='forms'>
+      <h1><center>Sign Up</center></h1>    
     <form onSubmit={handleSubmit}>
 
       <div className='inputs'>
       <label className='signUp_lable'>Name:</label>
-      <input type="text" name='name' value={inputs.name} onChange={handleChange}/>
+      <input type="text" name='name' value={inputs.name} onChange={handleChange} className="common_css"/>
       </div>
       
 
@@ -84,23 +85,23 @@ const SignUp = () => {
 
       <div className='inputs'>
       <label className='signUp_lable'>NIC:</label>
-      <input type="text" name='NIC' value={inputs.NIC} onChange={handleChange}/>
+      <input type="text" name='NIC' value={inputs.NIC} onChange={handleChange} className="common_css"/>
       </div>
 
       <div className='inputs'>
       <label className='signUp_lable'>Mobile:</label>
-      <input type="text" name='mobile' value={inputs.mobile} onChange={handleChange}/>
+      <input type="text" name='mobile' value={inputs.mobile} onChange={handleChange} className="common_css"/>
       </div>
       
 
       <div className='inputs'> 
       <label className='signUp_lable'>Email:</label>
-      <input type="email" name='email' value={inputs.email} onChange={handleChange}/>
+      <input type="email" name='email' value={inputs.email} onChange={handleChange} className="common_css"/>
       </div>
       
       <div className='inputs'>
       <label className='signUp_lable'>Password:</label>
-      <input type="password" name="password" value={inputs.password} onChange={handleChange}/>
+      <input type="password" name="password" value={inputs.password} onChange={handleChange} className="common_css"/>
       </div>
       
       <div className='inputs'>

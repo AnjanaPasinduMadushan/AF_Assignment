@@ -15,6 +15,8 @@ import AddFeedback from './pages/Addfeedback';
 import DisplayFeeds from './pages/displayFeeds';
 import CreateForm from './components/CreateForm'
 import NewComplaints from './components/newComplaints'
+import CurrentComplaints from './pages/CurrentComplaints'
+import ComplaintStatus from './pages/complaintStatus'
 import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
 import "./App.css";
@@ -45,6 +47,8 @@ const App = () => {
           {isLogged &&<Route path="/" element={<Complaints />} /> }
           {isLogged &&<Route path="/create-complaint" element={<CreateForm />} />}
           {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
+          {isLogged &&<Route path="/current_Complaints" element={<CurrentComplaints />} />}
+          {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
       </Routes>
     </BrowserRouter>
     
