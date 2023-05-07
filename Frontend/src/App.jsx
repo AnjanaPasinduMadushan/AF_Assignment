@@ -35,7 +35,7 @@ const App = () => {
         {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
         <Route path="/forgetPassword" element={<ForgetPwd/>} />
         <Route path="/reset-pwd/:token" element={<ResetPwd/>} />
-        <Route path="/test" element={<Complaints />} />
+        {isLogged && <Route path="/" element={<Complaints />} />}
           <Route path="/feedback" element={<Feedback/>}/>
       </Routes>
     </BrowserRouter>
