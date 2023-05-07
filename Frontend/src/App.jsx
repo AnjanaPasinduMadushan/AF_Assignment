@@ -33,8 +33,8 @@ function App() {
 
 <Navbar/>
 
-      <CreateForm />
-      <Upload/>
+      <CreateForm   uploadComponent={<Upload />}/>
+      
       <Complaints />
       <UpdateForm />
      

@@ -81,18 +81,44 @@ export default function Complaint({ complaint }) {
       {showPopup && (
         <div className="edit-delete-popup">
           <button
+            style={{
+              backgroundColor: "#ff0000",
+              color: "#ffffff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "5px",
+              marginRight: "10px",
+            }}
             className="popup-button"
             onClick={() => store.deleteComplaint(complaint._id)}
           >
             Delete Complaint
           </button>
           <button
+            style={{
+              backgroundColor: "#007bff",
+              color: "#ffffff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "5px",
+              marginRight: "10px",
+            }}
             className="popup-button"
             onClick={() => store.toggleUpdate(complaint)}
           >
             Update Complaint
           </button>
-          <button className="popup-button" onClick={hideEditDeletePopup}>
+          <button
+            className="popup-button"
+            style={{
+              backgroundColor: "#6c757d",
+              color: "#ffffff",
+              padding: "10px 20px",
+              border: "none",
+              borderRadius: "5px",
+            }}
+            onClick={hideEditDeletePopup}
+          >
             Close
           </button>
         </div>
