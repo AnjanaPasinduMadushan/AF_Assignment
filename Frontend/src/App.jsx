@@ -10,7 +10,6 @@ import CurrentUsers from './components/Users/currentUsers'
 import UpdateProf from './components/Profile/updateProf'
 import ForgetPwd from './components/forgetPwd'
 import ResetPwd from './components/resetPwd'
-import Complaints from "./pages/complaints";
 import Feedback from "./pages/Addfeedback";
 import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
