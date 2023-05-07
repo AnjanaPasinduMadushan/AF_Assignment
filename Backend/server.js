@@ -25,7 +25,10 @@ const email_router = require("./routes/email-routes")
 //routes are declared here
 app.use('/User', user_router)
 //app.use('/email', email_router)
-
+const commentRouter = require("./routes/comment-routes");
+const feedbackRouter = require("./routes/feedback-route");
+app.use("/comment", commentRouter);
+app.use("/feedback",feedbackRouter);
 
 
 
