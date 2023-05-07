@@ -1,6 +1,6 @@
 import React from 'react'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import Complaints from "./pages/complaints";
+import Complaints from './pages/Complaints'
 import LoginForm from './components/loginForm'
 import SignUp from './components/signUp'
 import Users from './components/users'
@@ -11,6 +11,10 @@ import UpdateProf from './components/Profile/updateProf'
 import ForgetPwd from './components/forgetPwd'
 import ResetPwd from './components/resetPwd'
 import Feedback from "./pages/Addfeedback";
+import AddFeedback from './pages/Addfeedback';
+import DisplayFeeds from './pages/displayFeeds';
+import CreateForm from './components/CreateForm'
+import NewComplaints from './components/newComplaints'
 import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
 import "./App.css";
@@ -21,7 +25,7 @@ const App = () => {
 
   console.log(isLogged)
   return (
-    <AuthProvider>
+    
     <BrowserRouter>
 
       <Header />
@@ -32,17 +36,22 @@ const App = () => {
         {isLogged &&<Route path="/profile" element={<Profile/>} />}
         {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
         {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
+        {isLogged &&<Route path="/addFeedBack/:id" element={<AddFeedback/>} />}
         <Route path="/forgetPassword" element={<ForgetPwd/>} />
         <Route path="/reset-pwd/:token" element={<ResetPwd/>} />
-        {isLogged && <Route path="/" element={<Complaints />} />}
+        {/* {isLogged && <Route path="/" element={<Complaints />} />} */}
           <Route path="/feedback" element={<Feedback/>}/>
+          <Route path="/displayFeeds/:id" element={<DisplayFeeds/>}/>
+          {isLogged &&<Route path="/" element={<Complaints />} /> }
+          {isLogged &&<Route path="/create-complaint" element={<CreateForm />} />}
+          {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
       </Routes>
     </BrowserRouter>
     
 
     
       
-    </AuthProvider>
+   
   )
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../asset/CreateForm.css'
 
 function Upload() {
 
@@ -46,8 +47,8 @@ function Upload() {
 
   return (
    <div>
-   <h1>Upload evidence</h1> 
-      <input type="file" onChange={handleFileInputChange} />
+   <h2><center>Upload evidence</center></h2> 
+      <input type="file" onChange={handleFileInputChange} className='file'/>
       <button onClick={handleFileUpload}>Upload</button>
     </div>
 

@@ -3,18 +3,18 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 import '../assets/users.css'
-import { AuthContext } from './AuthContext';
+//import { AuthContext } from './AuthContext';
 
 const Users = () => {
 
-    const { userData, getUserData } = useContext(AuthContext);
+  //  const { userData, getUserData } = useContext(AuthContext);
     const [users, setUsers] = useState([])
     const history = useNavigate()
 
-    console.log(userData)
+   // console.log(userData)
 
     useEffect(()=>{
-        getUserData();
+       // getUserData();
         const getUsers=async()=>{
             
             const res = await axios.get('http://localhost:8070/User/newUsers', {withCredentials:true}).catch((err)=>{
@@ -82,6 +82,8 @@ const Users = () => {
 
        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
   <button onClick={() => history(`/currentUsers`)} className='custome_btn'>Current Users</button>
+
+  <button onClick={() => history(`/newComplaints`)} className='custome_btn'>New Complaints</button>
 </div>
         <div>
         {users && users.length>0 ? (

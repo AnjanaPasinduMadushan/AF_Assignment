@@ -8,6 +8,8 @@ const Profile = () => {
 
   const [user, setUser] = useState({})
 
+  const [complaints, setComplants] = useState([])
+
   const navigate = useNavigate()
 
   const sendProfileReq = async () => {
@@ -28,13 +30,33 @@ const Profile = () => {
         
       };
 
+      const sendComplainReq = async () => {
+
+        try {
+          const res = await axios
+            .get("http://localhost:8070/complaint/getOwnComplaints", {
+              withCredentials: true,
+            })
+    
+              const data = await res.data;
+              console.log(data)
+              return data;
+              
+            }catch(err){
+                console.log(err)
+            }
+            
+          };
+
 
 
   useEffect(() => {
-    sendProfileReq().then((data) => setUser(data.user))
+    sendProfileReq().then((data) => setUser(data.user),
+    sendComplainReq().then((data) => setComplants(data.complaints)))
   }, [])
 
   console.log(user)
+  console.log("saf"+complaints)
 
   const handleDelete = async () => {
 
@@ -45,6 +67,8 @@ const Profile = () => {
     }
 
   }
+
+
 
   return (
 
@@ -65,7 +89,23 @@ const Profile = () => {
       </div>)}
 
       <button className="update-button" onClick={() => navigate(`/updateProfile/${user._id}`)}>UPDATE ACC</button>
-      <button className="update-button" onClick={handleDelete}>DELETE ACC</button></div>
+      <button className="update-button" onClick={handleDelete}>DELETE ACC</button>
+      
+
+      {user&&user.role==="citizen" &&(
+        <div>
+          <h1>My Complaints</h1>
+
+          {complaints.length>0 && (<div>{
+            complaints.map((myComplaints)=>(
+              <div key={myComplaints._id}><h1>{myComplaints.title}</h1>
+              
+              <button onClick={()=>navigate(`/addFeedBack/${myComplaints._id}`)}>ADD FEEDBACK</button></div>
+            ))}
+          </div>)}
+        </div>
+      )}
+      </div>
   )
 }
 

@@ -17,7 +17,7 @@ const complaintsStore = create((set) => ({
 
   fetchComplaints: async () => {
     // Fetch the complaints
-    const res = await axios.get("http://localhost:8070/complaints");
+    const res = await axios.get("http://localhost:8070/complaint/complaints");
 
     // Set to state
     set({ complaints: res.data.complaints });
@@ -49,7 +49,7 @@ const complaintsStore = create((set) => ({
       complaints: [...complaints, res.data.complaint],
       createForm: {
         title: "",
-        body: "",
+        description: "",
       },
     });
   },
@@ -122,4 +122,4 @@ const complaintsStore = create((set) => ({
   },
 }));
 
-export default complaintsStore;
+export { complaintsStore };

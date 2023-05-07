@@ -3,8 +3,8 @@
     "age":23,
     "NIC":200019601254,
     "mobile":771111856,
-    "email":"Anjana@gmail.com",
-    "password":"madushan34123",
+"email":"anjanapasindu20@gmail.com",
+     "password":"Admin123"
     "role":"admin"
 }
 

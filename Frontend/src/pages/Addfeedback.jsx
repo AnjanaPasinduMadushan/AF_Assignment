@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function AddFeedback() {
+
+  const {id} = useParams();
 
     const [feedback, setfeedback] = useState({
          feedback:""
     });
-  
+    const navigate = useNavigate();
     const handleChangeText = (name, value) => {
       setfeedback({ ...feedback, [name]: value.target.value });
     };
@@ -14,18 +17,18 @@ export default function AddFeedback() {
         e.preventDefault();
         console.log("submit");
         axios
-          .post("http://localhost:8070/feedback/addfeedback", feedback)
+          .post(`http://localhost:8070/feedback/addfeedback/${id}`, feedback)
           .then(() => {
-           // swal.fire(`successfully added`);
-           // navigate("/profil");
+           alert(`successfully added`);
+            navigate("/profile");
           })
           .catch((error) => {
             console.log(error);
           });
       };
-      const navigate = useNavigate();
+      
       return (
-        <form >
+        <form onSubmit={addFeedback}>
             <label>Feedback</label>
             <div>
             <input 
