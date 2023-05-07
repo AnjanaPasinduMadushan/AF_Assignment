@@ -2,7 +2,7 @@ const User = require('../model/user');
 
 //importing bcrypt
 const bcrypt = require("bcrypt");
-const email = require('./email-controller')
+const emailsent = require('./email-controller')
 
 //importing jsonwebtoken
 const jwt = require('jsonwebtoken');
@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 //user id, checking_in and user's role is passed with token
 const createToken = (_id, role) => {
     console.log(process.env.SECRET)
-   return  jwt.sign({_id, role}, process.env.secret, {expiresIn: '3600s'})
+   return  jwt.sign({_id, role}, process.env.secret, {expiresIn: '7d'})
 }
 
 //signup function
@@ -104,7 +104,7 @@ const signUp = async (req, res, next) => {
             //Create and setting a cookie with the user's ID and token
             res.cookie(String(loggedUser._id), token, {
                 path: "/",
-                expires: new Date(Date.now() + 1000*60*60),
+                expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
                 httpOnly:true,//if this option isn't here cookie will be visible to the frontend
                 sameSite:"lax"
               })
@@ -132,7 +132,7 @@ const signUp = async (req, res, next) => {
         }
 
         let msgs = 'Your account request is verified. Login to your account using your creditials'
-          email.sendVerificationEmail(user.email, msgs, function(err, msg){
+        emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
             if(err){
             console.log(err)
             }else{
@@ -161,7 +161,7 @@ const signUp = async (req, res, next) => {
           return res.status(404).json({message:'User is not found'})
         }
         let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
-          email.sendVerificationEmail(user.email, msgs, function(err, msg){
+        emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
             if(err){
             console.log(err)
             }else{
@@ -320,6 +320,75 @@ const updateAcc = async (req, res, next) => {
   });
 };
 
+
+const pwdUrl = async(req, res, next) => {
+
+  const {email} = req.body;
+
+  if(!email){
+    return res.status(422).json({msg:"Please enter your email"})
+  }
+
+  let oldEmail;
+  try{
+    oldEmail = await User.findOne({email:email})
+  }catch(err){
+        console.log(err)
+    }
+
+    if(!oldEmail){
+      return res.status(404).json({message:"Email is not found. check Your email"})
+    }
+
+    const token = createToken(oldEmail._id, oldEmail.role)
+
+
+    const url = `http://localhost:3000/reset-pwd/${token}`;
+
+    let msgs = `Click this link to reset your password\n` + url;
+    emailsent.sendVerificationEmail(oldEmail.email, msgs, function(err, msg){
+      if(err){
+      console.log(err)
+      }else{
+        console.log(msg);
+      }
+    })
+
+    res
+        .status(200)
+        .json({ msg: "Re-send the password, please check your email." });
+} 
+
+
+const resetPwd = async(req, res, next) => {
+
+
+  try{
+    const uId = req.userId;
+    const {password} = req.body;
+
+    if(!password){
+      return res.status(422).json({msg:"Please enter the New Password"})
+    }
+  
+    const salt = await bcrypt.genSalt(6)
+    //hashsync is a function that can hasing the password
+    const hashedpassword = await bcrypt.hash(password, salt);
+  
+    await User.findByIdAndUpdate(uId, {
+      $set:{password:hashedpassword}
+    })
+  
+    return res.status(200).json({msg:"Password Updated Successfully!!!"})
+  }catch(err){
+    console.log(err)
+    return res.status(500).json({msg:"something is wrong in the process"
+   })
+  }
+
+
+}
+
   exports.signUp = signUp;
   exports.login = login;
   exports.updateCheckingIn = updateCheckingIn;
@@ -330,3 +399,5 @@ const updateAcc = async (req, res, next) => {
   exports.getNewUsers = getNewUsers;
   exports.getOldUsers = getOldUsers;
   exports.logout = logout;
+  exports.pwdUrl = pwdUrl;
+  exports.resetPwd = resetPwd;

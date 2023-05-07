@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { autheticationActions } from './store'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import '../assets/forms.css'
 const LoginForm = () => {
 
@@ -101,6 +101,8 @@ const LoginForm = () => {
       </form>
 
       {error && <div className="error">{error}</div>}
+
+      <p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p>
     </div>
   )
 }

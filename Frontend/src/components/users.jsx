@@ -1,17 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 import '../assets/users.css'
+import { AuthContext } from './AuthContext';
 
 const Users = () => {
 
-
+    const { userData, getUserData } = useContext(AuthContext);
     const [users, setUsers] = useState([])
     const history = useNavigate()
 
+    console.log(userData)
+
     useEffect(()=>{
+        getUserData();
         const getUsers=async()=>{
+            
             const res = await axios.get('http://localhost:8070/User/newUsers', {withCredentials:true}).catch((err)=>{
                 console.log(err)
             })

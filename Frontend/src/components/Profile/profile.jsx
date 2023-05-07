@@ -19,7 +19,9 @@ const Profile = () => {
             })
 
           const data = await res.data;
+          console.log(data)
           return data;
+          
         }catch(err){
             console.log(err)
         }

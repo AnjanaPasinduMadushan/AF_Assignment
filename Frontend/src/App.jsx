@@ -7,6 +7,9 @@ import Header from './header'
 import Profile from './components/Profile/profile'
 import CurrentUsers from './components/Users/currentUsers'
 import UpdateProf from './components/Profile/updateProf'
+import ForgetPwd from './components/forgetPwd'
+import ResetPwd from './components/resetPwd'
+import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
 
 const App = () => {
@@ -15,6 +18,7 @@ const App = () => {
 
   console.log(isLogged)
   return (
+    <AuthProvider>
     <BrowserRouter>
 
     <Header/>
@@ -25,9 +29,15 @@ const App = () => {
         {isLogged &&<Route path="/profile" element={<Profile/>} />}
         {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
         {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
+        <Route path="/forgetPassword" element={<ForgetPwd/>} />
+        <Route path="/reset-pwd/:token" element={<ResetPwd/>} />
       </Routes>
     </BrowserRouter>
     
+
+    
+      
+    </AuthProvider>
   )
 }
 
