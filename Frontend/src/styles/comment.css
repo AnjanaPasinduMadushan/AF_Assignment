@@ -1,0 +1,26 @@
+.complaintAddComment{
+  background-color: #cccccc;
+  padding: 8px;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+
+.commentInput{
+  border-radius: 50px;
+}
+
+.commentInputBtn{
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
+
+.commentDateTime{
+  font-size: smaller;
+  color: #808080;
+}
+
+.roundButton{
+  
+}

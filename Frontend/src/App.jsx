@@ -1,5 +1,6 @@
 import React from 'react'
-import {Routes, Route, BrowserRouter} from 'react-router-dom'
+import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import Complaints from "./pages/complaints";
 import LoginForm from './components/loginForm'
 import SignUp from './components/signUp'
 import Users from './components/users'
@@ -13,17 +14,18 @@ import Complaints from "./pages/complaints";
 import Feedback from "./pages/Addfeedback";
 import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
+import "./App.css";
 
 const App = () => {
 
-  const isLogged = useSelector((state)=>state.isLogged)
+  const isLogged = useSelector((state) => state.isLogged)
 
   console.log(isLogged)
   return (
     <AuthProvider>
     <BrowserRouter>
 
-    <Header/>
+      <Header />
       <Routes>
         <Route path="/login" element={<LoginForm/>} />
         <Route path="/signUp" element={<SignUp/>} />

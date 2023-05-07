@@ -6,21 +6,19 @@ const mongoose = require("mongoose")
 const app = express();
 const cookieParser = require("cookie-parser")
 
-//app.use(cors({credentials: true, origin: "http://127.0.0.1:3000"}));
-app.use(cors({credentials: true, origin: "http://localhost:3000"}))
+
+app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(bodyParser.json());
 app.use(cookieParser())
+
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
-
-
-app.use(bodyParser.json());
-
 //Routes file paths
-const user_router = require("./routes/user-routes") 
-const email_router = require("./routes/email-routes")
-
-
+const user_router = require("./routes/user-routes");
+// const email_router = require("./routes/email-routes")
+const commentRouter = require("./routes/comment-routes");
+const complaintRouter = require("./routes/complaint-routes");
 
 //routes are declared here
 app.use('/User', user_router)
@@ -29,7 +27,7 @@ const commentRouter = require("./routes/comment-routes");
 const feedbackRouter = require("./routes/feedback-route");
 app.use("/comment", commentRouter);
 app.use("/feedback",feedbackRouter);
-
+app.use("/complaint", complaintRouter);
 
 
 //connect mongoDB
