@@ -11,6 +11,7 @@ app.use(cors({credentials: true, origin: "http://localhost:3000"}));
 app.use(bodyParser.json());
 app.use(cookieParser())
 
+const multer = require('multer');
 //declare PORT
 const PORT = process.env.PORT || 8070;
 
@@ -29,6 +30,21 @@ app.use("/feedback",feedbackRouter);
 app.use("/complaint", complaintRouter);
 
 
+
+// Import dependencies
+
+
+const complaintsController = require("./controllers/complaintsController"); 
+// Routing
+
+app.get("/complaints", complaintsController.fetchComplaints);
+app.get("/complaints/:id", complaintsController.fetchComplaint);
+app.post("/complaints", complaintsController.createComplaint);
+app.put("/complaints/:id", complaintsController.updateComplaint);
+app.delete("/complaints/:id", complaintsController.deleteComplaint);
+
+
+
 //connect mongoDB
 mongoose.connect(process.env.link, {
     useNewUrlParser: true,
@@ -36,6 +52,23 @@ mongoose.connect(process.env.link, {
  });
 
  
+
+ const upload = multer({ dest: 'uploads/' });
+ app.use(cors());
+
+ app.post('/upload', upload.single('file'), (req, res) => {
+   // do something with the file
+   
+   res.send('File uploaded successfully');
+ });
+
+
+
+
+
+
+
+
  const connection = mongoose.connection;
  connection.once("open", () => {
      console.log("MongoDB Connection Success!");
