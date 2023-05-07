@@ -1,10 +1,10 @@
 const Comment = require("../model/comment");
 const router = require("../routes/comment-routes");
 
-//add products
+//add comment
 const addComment = async (req, res, next) => {
+  const commentorId = req.userId;
   const {
-    commentorId,
     complaintId,
     commentText
   } = req.body;
@@ -92,20 +92,24 @@ exports.getByUser = getByUser;
 
 // Update comment
 const updateComment = async (req, res) => {
+  const loggedUser = req.userId;
   const commentId = req.params.commentId;
   const newText = req.body.commentText;
   const time = Date.now();
 
-  const newData = {commentText: newText, commentDateTime: time};
+  const newData = { commentText: newText, commentDateTime: time };
 
   try {
     const comment = await Comment.findById(commentId);
     if (!comment)
       return res.status(404).send({ message: "Comment not found" });
 
+    if (comment.commentorId != loggedUser)
+      return res.status(403).send({ message: "Not your comment" });
+
     Object.assign(comment, newData);
     await comment.save();
-    return res.status(200).send({message: "Comment updated!", comment: comment});
+    return res.status(200).send({ message: "Comment updated!", comment: comment });
   } catch (e) {
     console.error(e);
     return res.status(500).send({ message: "Error in updating message", error: e });
@@ -119,15 +123,15 @@ const deleteComment = async (req, res) => {
   const commentId = req.params.commentId;
 
   let comment;
-  try{
+  try {
     comment = await Comment.findByIdAndDelete(commentId)
-    if(!comment || comment.length < 1)
-      return res.status(404).send({message: "comment not found!"});
+    if (!comment || comment.length < 1)
+      return res.status(404).send({ message: "comment not found!" });
 
-    return res.status(200).send({message: "Succesfully deleted!", comment: comment});
-  }catch(err){
+    return res.status(200).send({ message: "Succesfully deleted!", comment: comment });
+  } catch (err) {
     console.error(err);
-    return res.status(500).send({message: "Delete comment failed!", error: err});
+    return res.status(500).send({ message: "Delete comment failed!", error: err });
   }
 }
 exports.deleteComment = deleteComment;

@@ -1,8 +1,31 @@
 import Complaint from "../components/Complaint";
 
 import sampleImage from "../assets/images/placeholder.jpg";
+import { useEffect, useState } from "react";
+import axios from 'axios';
 
 export default function Complaints() {
+  const [userId, setUserId] = useState("");
+
+  //TODO: find a way to pass user ID to lower components
+
+  const getLoggedUserId = async () => {
+    try {
+      const res = await axios.get("http://localhost:8070/User/profile", { withCredentials: true });
+
+      const user_Id = res.data.user._id;
+      setUserId(user_Id);
+      console.log(user_Id);
+      config.setCurrentUser(user_Id);
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
+  useEffect(() => {
+    getLoggedUserId();
+  }, [])
+
   return (
     <>
       <Complaint
@@ -15,7 +38,7 @@ export default function Complaints() {
         status="completed"
         feedback="This is a sample feedback This is a sample feedback This is a sample feedback This is a sample feedback This is a sample feedback This is a sample feedbackThis is a sample feedback"
       />
-      <Complaint 
+      <Complaint
         description=" This is a complaint without an image or video .Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi fringilla pretium dolor sed interdum. Cras id ultricies felis, a rhoncus turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; In tincidunt ex eget mollis sagittis. Nulla sollicitudin nisi id interdum rutrum. Nunc in ultrices ex. Proin feugiat eros pharetra urna ornare luctus."
       />
       <Complaint />
