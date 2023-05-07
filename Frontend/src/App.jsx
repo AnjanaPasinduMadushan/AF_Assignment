@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Complaints from "./pages/complaints";
+import Feedback from "./pages/Addfeedback";
 import "./App.css";
 
 function App() {
@@ -8,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/test" element={<Complaints />} />
+          <Route path="/feedback" element={<Feedback/>}/>
         </Routes>
       </BrowserRouter>
     </>
