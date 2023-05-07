@@ -82,6 +82,10 @@ export default App
 //       <Upload/>
 //       <Complaints />
 //       <UpdateForm />
+      // <CreateForm   uploadComponent={<Upload />}/>
+      
+      // <Complaints />
+      // <UpdateForm />
      
     
     
