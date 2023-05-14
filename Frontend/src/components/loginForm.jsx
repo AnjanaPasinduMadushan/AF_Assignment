@@ -107,7 +107,7 @@ const LoginForm = () => {
       {error && <div className="error">{error}</div>}
 <br/>
 
-      <p><Link to='/forgetPassword'><center>Forget Password/Reset Password</center></Link></p>
+      <center><p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p></center>
  
       </div>
   )

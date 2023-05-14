@@ -21,6 +21,8 @@ const user_router = require("./routes/user-routes");
 const commentRouter = require("./routes/comment-routes");
 const complaintRouter = require("./routes/complaint-routes");
 const feedbackRouter = require("./routes/feedback-route");
+const voteRouter = require("./routes/vote-routes");
+
 //routes are declared here
 app.use('/User', user_router)
 //app.use('/email', email_router)
@@ -28,6 +30,7 @@ app.use('/User', user_router)
 app.use("/comment", commentRouter);
 app.use("/feedback",feedbackRouter);
 app.use("/complaint", complaintRouter);
+app.use("/vote", voteRouter);
 
 
 
