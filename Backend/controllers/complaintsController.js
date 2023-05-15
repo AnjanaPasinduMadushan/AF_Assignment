@@ -56,14 +56,18 @@ const updateComplaint = async (req, res) => {
 };
 
 const deleteComplaint = async (req, res) => {
-  // get id off url
-  const complaintId = req.params.id;
+  try {
+    // get id off url
+    const complaintId = req.params.id;
 
-  // Delete the record
-  await Complaint.deleteOne({ id: complaintId });
+    // Delete the record
+    await Complaint.deleteOne({ _id: complaintId });
 
-  // Respond
-  res.json({ success: "Record deleted" });
+    // Respond
+    res.json({ success: "Record deleted" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 module.exports = {

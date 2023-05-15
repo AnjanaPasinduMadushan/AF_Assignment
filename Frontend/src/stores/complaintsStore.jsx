@@ -54,18 +54,20 @@ const complaintsStore = create((set) => ({
     });
   },
 
-  deleteComplaint: async (_id) => {
+deleteComplaint: async (_id) => {
+  try {
     // Delete the complaint
-    const res = await axios.delete(`http://localhost:8070/complaints/${_id}`);
-    const { complaints } = complaintsStore.getState();
+    await axios.delete(`http://localhost:8070/complaints/${_id}`);
 
     // Update state
-    const newComplaints = complaints.filter((complaint) => {
-      return complaint._id !== _id;
-    });
-
-    set({ complaints: newComplaints });
-  },
+    set((state) => ({
+      complaints: state.complaints.filter((complaint) => complaint._id !== _id),
+    }));
+  } catch (error) {
+    console.error(error);
+  }
+}
+,
 
   handleUpdateFieldChange: (e) => {
     const { value, name } = e.target;
@@ -90,7 +92,7 @@ const complaintsStore = create((set) => ({
     });
   },
 
-  updatenewComplaint: async (e) => {
+  updateComplaint: async (e) => {
     e.preventDefault();
 
     const {
