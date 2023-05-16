@@ -8,6 +8,7 @@ import CreateForm from "./components/CreateForm";
 import Upload from "./components/Upload";
 
 
+
 // import Upload from "./Upload";
 
 function App() {
@@ -18,18 +19,12 @@ function App() {
     store.fetchComplaints();
   }, []);
 
-  const history = useState();
 
-  const handleClick = () => {
-    history.push("/another-page");
-  };
+
   return (
     <div className="App">
-      <button onClick={handleClick}>Go to Another Page</button>
-
+   
       <CreateForm uploadComponent={<Upload />} />
-
-
       <Complaints />
       <UpdateForm />
     </div>

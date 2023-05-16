@@ -19,7 +19,7 @@ export default function CreateForm(props) {
     if (showForm) {
       timer = setTimeout(() => {
         setShowForm(false);
-      }, 6000); // hide form after 1 minute (60,000 milliseconds)
+      }, 60000); // hide form after 1 minute (60,000 milliseconds)
     }
     return () => {
       clearTimeout(timer);
@@ -53,29 +53,31 @@ export default function CreateForm(props) {
           +
         </button>
       )}
+{showForm && (
+  <form onSubmit={complaintStore.createComplaint}>
+    <h2>Create new Complaint</h2>
+    <input
+      onChange={complaintStore.updateCreateFormField}
+      value={complaintStore.createForm.title}
+      name="title"
+      required // Add 'required' attribute to make the field mandatory
+    />
+    <textarea
+      onChange={complaintStore.updateCreateFormField}
+      value={complaintStore.createForm.body}
+      name="body"
+      required // Add 'required' attribute to make the field mandatory
+    />
+    <button type="submit">Submit</button>
+    <div>{clickTime && <p>Last post created at {clickTime}</p>}</div>
 
-      {showForm && (
-        <form onSubmit={complaintStore.createComplaint}>
-          <h2>Create new Complaint</h2>
-          <input
-            onChange={complaintStore.updateCreateFormField}
-            value={complaintStore.createForm.title}
-            name="title"
-          />
-          <textarea
-            onChange={complaintStore.updateCreateFormField}
-            value={complaintStore.createForm.body}
-            name="body"
-          />
-          <button type="submit">Submit</button>
-          <div>{clickTime && <p>Last post created at {clickTime}</p>}</div>
+    <div>
+      {/* other form fields */}
+      {uploadComponent}
+    </div>
+  </form>
+)}
 
-          <div>
-            {/* other form fields */}
-            {uploadComponent}
-          </div>
-        </form>
-      )}
     </div>
   );
 }

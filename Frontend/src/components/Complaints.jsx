@@ -7,7 +7,7 @@ export default function Complaints() {
 
   return (
     <div className="div1" style={{   marginLeft: '150px', marginRight: '150px' }}>
-      <h2>Complaints list:</h2>
+      <h1>Complaints list</h1>
       {store.complaints &&
         store.complaints.map((complaint) => {
 
