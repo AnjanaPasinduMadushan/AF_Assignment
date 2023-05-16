@@ -56,4 +56,10 @@ form {
     border-color: #0072c6;
     outline: none;
   }
+
+  .error {
+    border: 1px solid red;
+    color: red;
+  }
+  
   

@@ -1,7 +1,7 @@
 const Complaint = require("../model/complaint");
 
 const fetchComplaints = async (req, res) => {
-  // Find the complaints   
+  // Find the complaints
   const complaints = await Complaint.find();
 
   // Respond with them
@@ -27,7 +27,7 @@ const createComplaint = async (req, res) => {
   const complaint = await Complaint.create({
     title,
     body,
-    date : Date.now(),
+    date: Date.now(),
   });
 
   // respond with the new complaint
