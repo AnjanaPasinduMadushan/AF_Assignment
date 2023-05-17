@@ -2,6 +2,7 @@ import "../styles/complaint.css";
 
 import { useEffect, useState } from "react";
 import CommentsBlock from "./CommentsBlock";
+import axios from "axios";
 
 export default function Complaint(props) {
   // Take data from props
@@ -77,6 +78,16 @@ export default function Complaint(props) {
     }
   };
 
+  async function addVote(type){
+    console.log(`adding ${type} vote`);
+    const data = {
+      complaintId: id,
+      type: type
+    };
+    const res = await axios.post("http://localhost:8070/vote/add", data);
+    console.log(res.data);
+  }
+
   // Change Description Btn label
   useEffect(() => {
     if (!viewDescription)
@@ -111,7 +122,7 @@ export default function Complaint(props) {
           <div className="d-flex justify-content-between my-2">
             <div className="d-flex align-items-center">
               {/**TODO: must include functionality for voting btns */}
-              <button type="button" className="btn btn-success me-2" onClick={() => { setVote(vote + 1) }} >▲</button>
+              <button type="button" className="btn btn-success me-2" onClick={() => { setVote(vote + 1); addVote("+") }} >▲</button>
               <button type="button" className="btn btn-danger me-2" onClick={() => { setVote(vote - 1) }} >▼</button>
               <div id="complaintVote">
                 <b>{vote} votes</b>
