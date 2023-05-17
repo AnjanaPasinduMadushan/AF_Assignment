@@ -17,6 +17,7 @@ import CreateForm from './components/CreateForm'
 import NewComplaints from './components/newComplaints'
 import CurrentComplaints from './pages/CurrentComplaints'
 import ComplaintStatus from './pages/complaintStatus'
+import DeleteAcc from './components/deleteAcc'
 import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
 import "./App.css";
@@ -38,6 +39,7 @@ const App = () => {
         {isLogged &&<Route path="/profile" element={<Profile/>} />}
         {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
         {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
+        {isLogged &&<Route path="/deleteProfile" element={<DeleteAcc />} />}
         {isLogged &&<Route path="/addFeedBack/:id" element={<AddFeedback/>} />}
         <Route path="/forgetPassword" element={<ForgetPwd/>} />
         <Route path="/reset-pwd/:token" element={<ResetPwd/>} />

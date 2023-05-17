@@ -3,113 +3,117 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { autheticationActions } from './store'
 import { useNavigate, Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import '../assets/forms.css'
 const LoginForm = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [error, setError] = useState("")
+
   const [inputs, setInputs] = useState({
-    email:"",
-    password:""
+    email: "",
+    password: ""
   })
 
-  const handleChange = (e) =>{
-    setInputs((previousState)=>({
+  const handleChange = (e) => {
+    setInputs((previousState) => ({
       ...previousState,
-      [e.target.name] : e.target.value
+      [e.target.name]: e.target.value
     }))
   }
 
-  const sendData = async()=>{
-   
-    try{
+  const sendData = async () => {
+
+    try {
       const res = await axios.post("http://localhost:8070/User/login", {
-        email:inputs.email,
-        password:inputs.password
+        email: inputs.email,
+        password: inputs.password
       })
-      if (res && res.data) {
-        const data = await res.data;
-        console.log(data)
-        return data;
-      }else {
-        throw new Error("Response data is undefined");
-      }
-      
-      
-    }catch(err){
+
+      const data = await res.data;
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: `${JSON.stringify(data.message)}`,
+      })
+      console.log(data)
+      return data;
+    } catch (err) {
       console.log(err)
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: `${JSON.stringify(err.response.data.message)}`,
+        });
+      } else if (err.request) {
+        console.log(err.request);
+      } else {
+        console.log(err.message);
+      }
     }
-    
+
 
   }
 
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(inputs)
 
-    try{
-       const data=await sendData();
+    try {
+      const data = await sendData();
 
-       if (data && data.message) {
-       setError(data.message)
-       
-       if (data.User.role === "admin") {
+      if (data.User.role === "admin") {
         navigate("/newUsers");
-       }else if(data.User.role === "citizen"){
+      } else if (data.User.role === "citizen") {
         navigate("/");
-       }
-       
-      // } else if (response.User.role === "seller") {
-      //   navigate("/profile");
-      // } else {
-      //   navigate("/products");
-      // }
-       dispatch(autheticationActions.login());
-       }else {
-        setError("Check your password and email please!!!")
-       }
-       
-    }catch(err){
+      }
+
+      dispatch(autheticationActions.login());
+
+    } catch (err) {
       console.log(err)
     }
   }
 
   return (
 
-  
+
     <div className='form'>
       <form onSubmit={handleSubmit}>
 
-      <h1><center>Login</center></h1>
-        
+        <h1><center>Login</center></h1>
+
 
         <div>
-        <label>Email:</label>
-        <input type="email" name='email' value={inputs.email} onChange={handleChange}/>
+          <label>Email:</label>
+          <input type="email" name='email' value={inputs.email} onChange={handleChange} />
         </div>
-        
 
-        
-       
+
+
+
         <div>
-        <label>Password:</label>
-        <input type="password" name="password" value={inputs.password} onChange={handleChange}/>
+          <label>Password:</label>
+          <input type="password" name="password" value={inputs.password} onChange={handleChange} />
         </div>
-        
+
         <div>
-        <button type="submit" className="btn custom-button">Submit</button>
+          <button type="submit" className="btn custom-button">Submit</button>
         </div>
-        
-        
+
+
       </form>
 
-      {error && <div className="error">{error}</div>}
-<br/>
+      <br />
 
       <center><p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p></center>
- 
-      </div>
+
+    </div>
   )
 }
 

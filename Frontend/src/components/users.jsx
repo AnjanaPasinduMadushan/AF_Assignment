@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 axios.defaults.withCredentials = true;
 import '../assets/users.css'
+import Swal from 'sweetalert2'
 //import { AuthContext } from './AuthContext';
 
 const Users = () => {
@@ -28,54 +29,71 @@ const Users = () => {
   }, [])
 
   const hanldeVerifying = async (userId) => {
+    let newUsers;
+    let status;
     try {
 
-      const res = await axios.patch(`http://localhost:8070/User/verifyUser/${userId}`, { checkingIn: true },
-        { withCredentials: true })
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You won't be able to revert this user again to unverify!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, verify user!',
+      })
 
-      const newUsers = res.data;
-      console.log(res.data)
-      setUsers((prevUsers) =>
+      if (result.isConfirmed) {
+        const res = await axios.patch(`http://localhost:8070/User/verifyUser/${userId}`, { checkingIn: true },
+          { withCredentials: true })
 
-        prevUsers.filter((user) => user._id !== userId),
+        newUsers = res.data;
+        status = res.status;
+        console.log(status)
+        console.log(newUsers)
+        if (status === 404) {
+          Swal.fire('Error', 'User is not found', 'error')
+        }
+        setUsers((prevUsers) =>
 
+          prevUsers.filter((user) => user._id !== userId));
 
-        //{
-        //   const newUsers = [...prevUsers];
+        Swal.fire('Verified', `${JSON.stringify(newUsers.message)}`, 'success')
 
-        //   const arrIndex = newUsers.findIndex(
-        //     (user) => user._id === newUpdateUser._id
-        //   );
-        //   newUsers[arrIndex] = newUpdateUser;
-
-        //   console.log(newUsers)
-        //   return newUsers;
-        // }
-
-
-      );
-
-
+      }
     } catch (err) {
       console.log(err)
+      Swal.fire('Error', 'An error occurred while Verifying the user', 'error');
     }
   }
 
 
   const handleUnverify = async (userId) => {
+    let newUsers;
+    let status;
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You won't be able to revert this user again to verify!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Unverify user!',
+      })
+      if (result.isConfirmed) {
+        const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`)
 
-      const res = await axios.delete(`http://localhost:8070/User/UnverifyUser/${userId}`)
+        newUsers = res.data;
+        status = res.status;
+        console.log(status)
+        console.log(newUsers)
 
-      //const newUpdateUser = res.data;
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user._id !== userId));
+        Swal.fire('Deleted!', `${JSON.stringify(newUsers.message)}`, 'success')
 
-      setUsers((prevUsers) =>
-        prevUsers.filter((user) => user._id !== userId)
 
-      );
-
+      }
     } catch (err) {
       console.log(err)
+      Swal.fire('Error', 'An error occurred while Verifying the user', 'error');
     }
   }
 

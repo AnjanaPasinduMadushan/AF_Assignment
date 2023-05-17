@@ -9,255 +9,270 @@ const jwt = require('jsonwebtoken');
 
 //user id, checking_in and user's role is passed with token
 const createToken = (_id, role) => {
-    console.log(process.env.SECRET)
-   return  jwt.sign({_id, role}, process.env.secret, {expiresIn: '7d'})
+  console.log(process.env.SECRET)
+  return jwt.sign({ _id, role }, process.env.secret, { expiresIn: '1d' })
 }
 
 //signup function
 const signUp = async (req, res, next) => {
 
-    const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
-    //validation for all the input fields
-    // if (!name ||!age ||!NIC ||!mobile || !email || !password) {
-    //   return res.status(422).json({message:"All feilds should be filled"})
-    // }
- 
-  
-    let existingUser;
-    //chaecking whether user already sign up or not based on the email
-    try {
-      existingUser = await User.findOne({ $or:[{NIC : NIC }, {email:email}, {mobile:mobile}]});
-    } catch (err) {
-      console.log(err);
-    }
-  
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exist...login instead or try with different NIC, email or mobile" })
-    }
-  
-    const salt = await bcrypt.genSalt(6)
-    //hashsync is a function that can hasing the password
-    const hashedpassword = await bcrypt.hash(password, salt);
-  
-  
-    //creating a new User
-    const user = new User({
-      name,
-      age,
-      NIC,
-      mobile,
-      email,
-      password: hashedpassword,
-      role: role || "citizen",
-      checkingIn
-    });
-  
-    try {
-      await user.save();//saving document(a new user to) into DB
-  
-      return res.status(201).json({ message: "Your Account Creation Request is sent to the authorities", User:user })//sending the new user details with token as a message for the response
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({message:"Error in saving user in DB"})
-    }
-  
+  const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
+  //validation for all the input fields
+  // if (!name ||!age ||!NIC ||!mobile || !email || !password) {
+  //   return res.status(422).json({message:"All feilds should be filled"})
+  // }
+
+
+  let existingUser;
+  //chaecking whether user already sign up or not based on the email
+  try {
+    existingUser = await User.findOne({ $or: [{ NIC: NIC }, { email: email }, { mobile: mobile }] });
+  } catch (err) {
+    console.log(err);
   }
 
-  const login = async(req, res, next) =>{
-
-    const {email, password} = req.body;
-
-    console.log(email, password)
-
-    //checking whether pasword and login fields are filled or not 
-    if (!email || !password) {
-      return res.status(422).json({message:"All feilds should be filled"})
+  if (existingUser) {
+    if (existingUser.NIC == NIC) {
+      return res.status(409).json({ message: "A User is already signUp with this NIC" })
+    }
+    else if (existingUser.email == email) {
+      return res.status(409).json({ message: "A User is already signUp with this email" })
+    }
+    else if (existingUser.mobile == mobile) {
+      return res.status(409).json({ message: "A User is already signUp with this mobile" })
     }
 
-    let loggedUser;
+  }
 
-    try{
-        loggedUser = await User.findOne({email:email})
-    }catch(err){
+  const salt = await bcrypt.genSalt(6)
+  //hashsync is a function that can hasing the password
+  const hashedpassword = await bcrypt.hash(password, salt);
+
+
+  //creating a new User
+  const user = new User({
+    name,
+    age,
+    NIC,
+    mobile,
+    email,
+    password: hashedpassword,
+    role: role || "citizen",
+    checkingIn
+  });
+
+  try {
+    await user.save();//saving document(a new user to) into DB
+
+    return res.status(201).json({ message: "Your Account Creation Request is sent to the authorities", User: user })//sending the new user details with token as a message for the response
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: "Error in saving user in DB" })
+  }
+
+}
+
+const login = async (req, res, next) => {
+
+  const { email, password } = req.body;
+
+  console.log(email, password)
+
+  //checking whether pasword and login fields are filled or not 
+  if (!email || !password) {
+    return res.status(422).json({ message: "All feilds should be filled" })
+  }
+
+  let loggedUser;
+
+  try {
+    loggedUser = await User.findOne({ email: email })
+  } catch (err) {
+    console.log(err)
+  }
+
+  if (!loggedUser) {
+    return res.status(404).json({ message: "User is not found. Sign Up instead" })
+  }
+  else {
+    if (!loggedUser.checkingIn) {
+      return res.status(401).json({ message: "You do not have permission to login" })
+    }
+    else {
+      //checking password and comare it with exist user's password in the db
+      const isPasswordCorrect = bcrypt.compareSync(password, loggedUser.password);
+      if (!isPasswordCorrect) {
+        return res.status(400).json({ message: "Invalid password" })
+      }
+      const token = createToken(loggedUser._id, loggedUser.role)
+
+
+      //Create and setting a cookie with the user's ID and token
+      res.cookie(String(loggedUser._id), token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+        httpOnly: true,//if this option isn't here cookie will be visible to the frontend
+        sameSite: "lax"
+      })
+
+      //we send this msg along with the token and user details
+      return res.status(200).json({ message: "Successfully logged in", User: loggedUser, token })
+    }
+  }
+
+}
+
+//update the CheckingIn
+const updateCheckingIn = async (req, res, next) => {
+
+  const userId = req.params.id;
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, {
+      $set: { checkingIn: req.body.checkingIn }
+    }, { new: true }
+    )
+
+    if (!user) {
+      return res.status(404).json({ message: 'User is not found' })
+    }
+
+    let msgs = 'Your account request is verified. Login to your account using your creditials'
+    emailsent.sendVerificationEmail(user.email, msgs, function (err, msg) {
+      if (err) {
         console.log(err)
-    }
+      } else {
+        console.log(msg);
+      }
+    })
 
-    //checking password and comare it with exist user's password in the db
-  const isPasswordCorrect = bcrypt.compareSync(password, loggedUser.password);
+    return res.status(200).json({ message: 'User is verified' })
 
-    if(!loggedUser){
-      return res.status(404).json({message:"User is not found. Sign Up instead"})
-    }
-
-    else if (!isPasswordCorrect) {
-      return res.status(400).json({ message: "Invalid email/password" })
-    }
-
-    else{
-        if(!loggedUser.checkingIn){
-          return res.status(401).json({message:"You do not have permission to login"})
-        }
-        else{
-            const token = createToken(loggedUser._id, loggedUser.role)
-    
-    
-            //Create and setting a cookie with the user's ID and token
-            res.cookie(String(loggedUser._id), token, {
-                path: "/",
-                expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-                httpOnly:true,//if this option isn't here cookie will be visible to the frontend
-                sameSite:"lax"
-              })
-        
-              //we send this msg along with the token and user details
-          return res.status(200).json({ message: "Successfully logged in", User: loggedUser, token })
-        }
-    }
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json("error in update checking in")
 
   }
 
-  //update the CheckingIn
-  const updateCheckingIn = async(req, res, next)=>{
+}
 
-    const userId = req.params.id;
+const unverifiedUser = async (req, res, next) => {
 
-    try{
-        const user =  await User.findByIdAndUpdate(userId, {
-            $set:{checkingIn:req.body.checkingIn}
-        }, {new:true}
-        )
+  const userId = req.params.id;
 
-        if(!user){
-          return res.status(404).json({message:'User is not found'})
-        }
+  try {
+    const user = await User.findByIdAndDelete(userId)
 
-        let msgs = 'Your account request is verified. Login to your account using your creditials'
-        emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
-            if(err){
-            console.log(err)
-            }else{
-              console.log(msg);
-            }
-          })
-          
-        return res.status(200).json({message:'User is verified'})
-       
-    }catch(err){
-      console.log(err)
-      return res.status(500).json("error in update checking in")
-        
+    if (!user) {
+      return res.status(404).json({ message: 'User is not found' })
     }
-
-  }
-
-  const unverifiedUser = async(req, res, next) =>{
-
-    const userId = req.params.id;
-
-    try{
-        const user =await User.findByIdAndDelete(userId)
-
-        if(!user){
-          return res.status(404).json({message:'User is not found'})
-        }
-        let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
-        emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
-            if(err){
-            console.log(err)
-            }else{
-              console.log(msg);
-            }
-          })
-        return res.status(200).json({message:"Account unverified successfull!!!"})
-    }catch(err){
-      console.log(err)
-      return res.status(500).json({message:"Error in unveried user"})
-        
-    }
-  }
-
-  const getNewUsers = async(req, res, next)=>{
-
-
-    let users;
-    try{
-        users =  await User.find({checkingIn:false})
-      }catch(err){
+    let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
+    emailsent.sendVerificationEmail(user.email, msgs, function (err, msg) {
+      if (err) {
         console.log(err)
-        return res.status(500).json("error in fetching users")   
+      } else {
+        console.log(msg);
       }
-
-        if(!users){
-          return res.status(404).json({message:'Users are not found'})
-        }
-        else{
-          return res.status(200).json({users})
-        }
+    })
+    return res.status(200).json({ message: "Account unverified successfull!!!" })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "Error in unveried user" })
 
   }
+}
 
-  const getOldUsers = async(req, res, next)=>{
+const getNewUsers = async (req, res, next) => {
 
-    const userId = req.params.id;
 
-    let users;
-    try{
-        users =  await User.find({checkingIn:true})
-      }catch(err){
-        console.log(err)
-        return res.status(500).json("error in fetching users")   
-      }
-
-        if(!users){
-          return res.status(404).json({message:'Users are not found'})
-        }
-        else{
-          return res.status(200).json({users})
-        }
-
+  let users;
+  try {
+    users = await User.find({ checkingIn: false })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json("error in fetching users")
   }
 
-  const getOwnAcc = async(req, res, next) => {
+  if (!users) {
+    return res.status(404).json({ message: 'Users are not found' })
+  }
+  else {
+    return res.status(200).json({ users })
+  }
 
-    const userId = req.userId;
+}
 
-    try{
+const getOldUsers = async (req, res, next) => {
 
-      const user = await User.findById(userId, "-password")
-      
-      
-      if(!user){
-        return res.status(404).json({message:"User is not found"})
-      }
-      else{
-        res.status(200).json({user})
+  const userId = req.params.id;
 
-      }
-    }catch(err){
-      console.log(err)
-      return res.status(500).json({message:"Error in getting your Account"})
-      
+  let users;
+  try {
+    users = await User.find({ checkingIn: true })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json("error in fetching users")
+  }
+
+  if (!users) {
+    return res.status(404).json({ message: 'Users are not found' })
+  }
+  else {
+    return res.status(200).json({ users })
+  }
+
+}
+
+const getOwnAcc = async (req, res, next) => {
+
+  const userId = req.userId;
+
+  try {
+
+    const user = await User.findById(userId, "-password")
+
+
+    if (!user) {
+      return res.status(404).json({ message: "User is not found" })
     }
+    else {
+      res.status(200).json({ user })
+
+    }
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "Error in getting your Account" })
+
   }
+}
 
-  const deleteAcc = async(req, res, next)=>{
+const deleteAcc = async (req, res, next) => {
 
-    const userId = req.userId;
+  const userId = req.userId;
+  const pwd = req.body.password;
 
-    try{
-      const user = await User.findByIdAndDelete(userId)
+  try {
+    const user = await User.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: "User is not found" })
+    } else {
+      const isPasswordCorrect = bcrypt.compareSync(pwd, user.password);
+      if (!isPasswordCorrect) {
+        return res.status(401).json({ message: "Password is incorrect. Try again!!!" })
+      }
+
+      await User.findByIdAndDelete(userId)
       res.clearCookie(`${req.userId}`);
       req.cookies[`${req.userId}`] = "";
-      if(!user){
-        return res.status(404).json({message:"User is not found"})
-      }
-
-      return res.status(200).json({message:"User is deleted"})
-    }catch(err){
-      return res.status(500).json({message:"Error in getting your Account"})
-      console.log(err)
+      return res.status(200).json({ message: "Your account is deleted" })
     }
+
+
+  } catch (err) {
+    return res.status(500).json({ message: "Error in deleting your Account" })
   }
+}
 
 const updateAcc = async (req, res, next) => {
   const userId = req.userId;
@@ -275,11 +290,11 @@ const updateAcc = async (req, res, next) => {
     }
 
     // Update user account
-    const user = await User.findByIdAndUpdate(userId, 
+    const user = await User.findByIdAndUpdate(userId,
       {
-        name, 
-        age, 
-        mobile, 
+        name,
+        age,
+        mobile,
         email
       }, { new: true });
     if (!user) {
@@ -293,8 +308,8 @@ const updateAcc = async (req, res, next) => {
 };
 
 
-  //logout function
-  const logout = (req, res, next) => {
+//logout function
+const logout = (req, res, next) => {
   const uId = req.userId;//request user Id from the token
   const cookies = req.headers.cookie;//request cookie from the header
 
@@ -321,83 +336,84 @@ const updateAcc = async (req, res, next) => {
 };
 
 
-const pwdUrl = async(req, res, next) => {
+const pwdUrl = async (req, res, next) => {
 
-  const {email} = req.body;
+  const { email } = req.body;
 
-  if(!email){
-    return res.status(422).json({msg:"Please enter your email"})
+  if (!email) {
+    return res.status(422).json({ msg: "Please enter your email" })
   }
 
   let oldEmail;
-  try{
-    oldEmail = await User.findOne({email:email})
-  }catch(err){
-        console.log(err)
-    }
+  try {
+    oldEmail = await User.findOne({ email: email })
+  } catch (err) {
+    console.log(err)
+  }
 
-    if(!oldEmail){
-      return res.status(404).json({message:"Email is not found. check Your email"})
-    }
+  if (!oldEmail) {
+    return res.status(404).json({ message: "Email is not found. check Your email" })
+  }
 
-    const token = createToken(oldEmail._id, oldEmail.role)
+  const token = createToken(oldEmail._id, oldEmail.role)
 
 
-    const url = `http://localhost:3000/reset-pwd/${token}`;
+  const url = `http://localhost:3000/reset-pwd/${token}`;
 
-    let msgs = `Click this link to reset your password\n` + url;
-    emailsent.sendVerificationEmail(oldEmail.email, msgs, function(err, msg){
-      if(err){
+  let msgs = `Click this link to reset your password\n` + url;
+  emailsent.sendVerificationEmail(oldEmail.email, msgs, function (err, msg) {
+    if (err) {
       console.log(err)
-      }else{
-        console.log(msg);
-      }
-    })
-
-    res
-        .status(200)
-        .json({ msg: "Re-send the password, please check your email." });
-} 
-
-
-const resetPwd = async(req, res, next) => {
-
-
-  try{
-    const uId = req.userId;
-    const {password} = req.body;
-
-    if(!password){
-      return res.status(422).json({msg:"Please enter the New Password"})
+    } else {
+      console.log(msg);
     }
-  
+  })
+
+  res
+    .status(200)
+    .json({ msg: "Re-send the password, please check your email." });
+}
+
+
+const resetPwd = async (req, res, next) => {
+
+
+  try {
+    const uId = req.userId;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(422).json({ msg: "Please enter the New Password" })
+    }
+
     const salt = await bcrypt.genSalt(6)
     //hashsync is a function that can hasing the password
     const hashedpassword = await bcrypt.hash(password, salt);
-  
+
     await User.findByIdAndUpdate(uId, {
-      $set:{password:hashedpassword}
+      $set: { password: hashedpassword }
     })
-  
-    return res.status(200).json({msg:"Password Updated Successfully!!!"})
-  }catch(err){
+
+    return res.status(200).json({ msg: "Password Updated Successfully!!!" })
+  } catch (err) {
     console.log(err)
-    return res.status(500).json({msg:"something is wrong in the process"
-   })
+    return res.status(500).json({
+      msg: "something is wrong in the process"
+    })
   }
 
 
 }
 
-  exports.signUp = signUp;
-  exports.login = login;
-  exports.updateCheckingIn = updateCheckingIn;
-  exports.unverifiedUser = unverifiedUser;
-  exports.getOwnAcc = getOwnAcc;
-  exports.deleteAcc = deleteAcc;
-  exports.updateAcc = updateAcc;
-  exports.getNewUsers = getNewUsers;
-  exports.getOldUsers = getOldUsers;
-  exports.logout = logout;
-  exports.pwdUrl = pwdUrl;
-  exports.resetPwd = resetPwd;
+exports.signUp = signUp;
+exports.login = login;
+exports.updateCheckingIn = updateCheckingIn;
+exports.unverifiedUser = unverifiedUser;
+exports.getOwnAcc = getOwnAcc;
+exports.deleteAcc = deleteAcc;
+exports.updateAcc = updateAcc;
+exports.getNewUsers = getNewUsers;
+exports.getOldUsers = getOldUsers;
+exports.logout = logout;
+exports.pwdUrl = pwdUrl;
+exports.resetPwd = resetPwd;
