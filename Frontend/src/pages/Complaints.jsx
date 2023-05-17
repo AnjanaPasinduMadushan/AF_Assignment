@@ -1,5 +1,5 @@
 import Complaint from "../components/Complaint";
-import {complaintsStore} from "../stores/complaintsStore";
+import { complaintsStore } from "../stores/complaintsStore";
 import sampleImage from "../assets/images/placeholder.jpg";
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -33,7 +33,7 @@ export default function Complaints() {
   useEffect(() => {
     store.fetchComplaints();
 
-    
+
   }, []);
 
   function dateTimeString(unixTime) {
@@ -43,28 +43,28 @@ export default function Complaints() {
     return dateTimeString;
   }
 
-  
+
   return (
     <>
 
-    <button onClick={()=>navigate('/create-complaint')}>ADD Complaint</button>
+      <button onClick={() => navigate('/create-complaint')}>ADD Complaint</button>
 
-    <h1><center>COMPLAINTS</center></h1>
+      <h1><center>COMPLAINTS</center></h1>
 
-{store.complaints &&
-        store.complaints.map((complaint) => {
-
+      {store.complaints && store.complaints.map((complaint) => {
           const formatDate = dateTimeString(complaint.date)
-          
-          return <Complaint complaint={complaint} key={complaint._id}
-          date={formatDate} 
-          id={complaint.id} 
-          title={complaint.title} 
-          description={complaint.description}
-          image={complaint.image}
-          status={complaint.status}
-          feedback="safasf"/>
-          ;
+
+          return <Complaint 
+            key={complaint._id}
+            complaint={complaint}
+            date={formatDate}
+            id={complaint._id}
+            title={complaint.title}
+            description={complaint.description}
+            image={complaint.image}
+            status={complaint.status}
+            feedback="safasf" />
+            ;
         })}
       {/* <Complaint
         date="05/04/2023"

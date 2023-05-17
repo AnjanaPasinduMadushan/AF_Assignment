@@ -16,7 +16,6 @@ export default function CommentsBlock(props) {
       swal("", "Enter comment first!", "error", { buttons: false, timer: 1000 });
     } else {
       const commentData = {
-        commentorId: "a6s5fds4f5sdf",
         complaintId: complaintID,
         commentText: newComment
       };

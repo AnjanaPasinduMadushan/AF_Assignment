@@ -71,19 +71,27 @@ const vote = async (req, res) => {
 }
 exports.vote = vote;
 
-// const getUserPlacedVoteForComplaint = async (req, res) =>{
-//   const userId = req.userId;
-//   const complaintId = req.body.complintId;
-
-//   try {
-//     let vote = await Vote.findOne({ complaintId: complaintId });
-//     if (vote == null) {
-//       return res.status(200).json({ vote: null, message: "no votes found in database for this complaint" });
-//     }else{
-//       console.log(vote)
-//     }
-//   } catch (e) {
-    
-//   }
-// }
-// exports.getUserPlacedVoteForComplaint = getUserPlacedVoteForComplaint;
+const checkVote = async (req, res) =>{
+  const userId = req.userId;
+  const complaintId = req.params.complaintId;
+  
+  try {
+    let vote = await Vote.findOne({ complaintId: complaintId });
+    if (vote == null) {
+      return res.status(200).json({ vote: null, message: "no votes found in database for this complaint" });
+    }else{
+      const index = vote.votedUsers.findIndex(item => item.user === userId);
+      if (index != -1) {
+        let placedVote = vote.votedUsers[index].type;
+        return res.status(200).json({vote: placedVote, message: "vote found"});
+      }else{
+        return res.status(200).json({vote: null, message: "User has not placed vote for this complaint"});
+      }
+      
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({error: e});
+  }
+}
+exports.checkVote = checkVote;
