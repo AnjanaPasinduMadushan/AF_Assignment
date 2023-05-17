@@ -7,7 +7,7 @@ const app = express();
 const cookieParser = require("cookie-parser")
 
 
-app.use(cors({credentials: true, origin: "http://localhost:3000"}));
+app.use(cors({ credentials: true, origin: "http://localhost:3000"}));
 app.use(bodyParser.json());
 app.use(cookieParser())
 
@@ -28,7 +28,7 @@ app.use('/User', user_router)
 //app.use('/email', email_router)
 
 app.use("/comment", commentRouter);
-app.use("/feedback",feedbackRouter);
+app.use("/feedback", feedbackRouter);
 app.use("/complaint", complaintRouter);
 app.use("/vote", voteRouter);
 
@@ -37,7 +37,7 @@ app.use("/vote", voteRouter);
 // Import dependencies
 
 
-const complaintsController = require("./controllers/complaintsController"); 
+const complaintsController = require("./controllers/complaintsController");
 // Routing
 
 app.get("/complaints", complaintsController.fetchComplaints);
@@ -50,21 +50,19 @@ app.delete("/complaints/:id", complaintsController.deleteComplaint);
 
 //connect mongoDB
 mongoose.connect(process.env.link, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
- });
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
- 
 
- const upload = multer({ dest: 'uploads/' });
- app.use(cors());
 
- app.post('/upload', upload.single('file'), (req, res) => {
-   // do something with the file
-   
-   res.send('File uploaded successfully');
- });
+const upload = multer({ dest: 'uploads/' });
 
+app.post('/upload', upload.single('file'), (_req, res) => {
+  // do something with the file
+
+  res.send('File uploaded successfully');
+});
 
 
 
@@ -72,14 +70,14 @@ mongoose.connect(process.env.link, {
 
 
 
- const connection = mongoose.connection;
- connection.once("open", () => {
-     console.log("MongoDB Connection Success!");
- });
 
-app.listen(PORT, ()=>{
-    console.log(`The server is running on PORT ${PORT}`)
+const connection = mongoose.connection;
+connection.once("open", () => {
+  console.log("MongoDB Connection Success!");
+});
+
+app.listen(PORT, () => {
+  console.log(`The server is running on PORT ${PORT}`)
 })
 
 
- 
