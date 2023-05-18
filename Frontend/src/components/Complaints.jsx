@@ -46,7 +46,7 @@ export default function Complaints() {
 
   return (
     <div className="div1" style={{ marginLeft: '150px', marginRight: '150px' }}>
-      <h1>Complaints list</h1>
+      <h1>Complain list</h1>
       <input
         type="text"
         value={searchQuery}

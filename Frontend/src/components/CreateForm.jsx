@@ -162,7 +162,7 @@ export default function CreateForm(props) {
       )}
       {showForm && (
         <form onSubmit={complaintStore.createComplaint}>
-          <h2>Create new Complaint</h2>
+          <h2>Create new Complain </h2>
           Your confidentiality will be ensured.
           <input
             onChange={handleTitleChange}
