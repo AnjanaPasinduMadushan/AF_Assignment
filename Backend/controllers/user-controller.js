@@ -7,6 +7,9 @@ const emailsent = require('./email-controller')
 //importing jsonwebtoken
 const jwt = require('jsonwebtoken');
 
+//importing Validations
+const { checkingMobileValidation, nicValidation, validateEmail, validatePWD } = require("../Validation/user_validation")
+
 //user id, checking_in and user's role is passed with token
 const createToken = (_id, role) => {
   console.log(process.env.SECRET)
@@ -18,9 +21,25 @@ const signUp = async (req, res, next) => {
 
   const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
   //validation for all the input fields
-  // if (!name ||!age ||!NIC ||!mobile || !email || !password) {
-  //   return res.status(422).json({message:"All feilds should be filled"})
-  // }
+  if (!name || !age || !NIC || !mobile || !email || !password) {
+    return res.status(422).json({ message: "All feilds should be filled" })
+  }
+
+  //validation
+  if (!checkingMobileValidation(mobile)) {
+    return res.status(400).json({ message: "Please provide valid mobile Number with 10 digits" })
+  }
+  else if (!nicValidation(NIC)) {
+    return res.status(400).json({ message: "Please provide valid NIC Number with 9 digits with v/V or 12 digits" })
+  }
+  else if (!validateEmail(email)) {
+    return res.status(400).json({ message: "Please provide valid Email" })
+  }
+  else if (!validatePWD(password)) {
+    console.log(password)
+    return res.status(400).json({ message: "Please provide valid Password" })
+  }
+
 
 
   let existingUser;

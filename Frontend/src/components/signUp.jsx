@@ -16,6 +16,10 @@ const SignUp = () => {
     role: 'citizen',
   })
 
+  const [pwd, setPwd] = useState('')
+  const [checkPwd, setchkPwd] = useState('');
+
+
   const handleChange = async (e) => {
     setInputs((previousState) => ({
       ...previousState,
@@ -68,11 +72,20 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(inputs)
-    try {
-      await sendData();
+    if (pwd === checkPwd) {
+      inputs.password = checkPwd;
+      try {
+        await sendData();
 
-    } catch (err) {
-      console.log(err)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'error',
+        text: `Passwords do not matched`,
+      })
     }
 
   }
@@ -112,7 +125,22 @@ const SignUp = () => {
 
         <div className='inputs'>
           <label className='signUp_lable'>Password:</label>
-          <input type="password" name="password" value={inputs.password} onChange={handleChange} className="common_css" />
+          <input type="text" name='password' value={pwd} onChange={(e) => setPwd(e.target.value)} className="common_css" />
+          <small>
+            Password requirements:
+            <ul>
+              <li>At least 8 characters long</li>
+              <li>Contains at least one lowercase letter</li>
+              <li>Contains at least one uppercase letter</li>
+              <li>Contains at least one digit (0-9)</li>
+              <li>Contains at least one special character (e.g., !@#$%^&*)</li>
+            </ul>
+          </small>
+        </div>
+
+        <div className='inputs'>
+          <label className='signUp_lable'>Password Confirmation:</label>
+          <input type="password" name="confirmPassword" value={checkPwd} onChange={(e) => setchkPwd(e.target.value)} className="common_css" />
         </div>
 
         <div className='inputs'>
