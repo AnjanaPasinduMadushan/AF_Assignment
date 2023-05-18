@@ -63,13 +63,20 @@ export default function CreateForm(props) {
       name="title"
       required // Add 'required' attribute to make the field mandatory
     />
+    Report Corruption <br></br>
+    Please describe the incident *
     <textarea
-      onChange={complaintStore.updateCreateFormField}
-      value={complaintStore.createForm.body}
-      name="body"
-      required // Add 'required' attribute to make the field mandatory
-    />
-    <button type="submit">Submit</button>
+  onChange={complaintStore.updateCreateFormField}
+  value={complaintStore.createForm.body}
+  name="body"
+  required // Add 'required' attribute to make the field mandatory
+  style={{
+    width: '580px',
+    height: '200px',
+  }}
+/>
+
+    {/* <button type="submit">Submit</button> */}
     <div>{clickTime && <p>Last post created at {clickTime}</p>}</div>
 
     <div>

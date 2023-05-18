@@ -46,9 +46,24 @@ function Upload() {
 
   return (
    <div>
-   <h1>Upload evidence</h1> 
+   <h1>Attach documents</h1> 
       <input type="file" onChange={handleFileInputChange} />
-      <button onClick={handleFileUpload}>Upload</button>
+      <button
+  onClick={handleFileUpload}
+  style={{
+    backgroundColor: 'blue',
+    color: 'white',
+    borderRadius: '5px',
+    padding: '10px 20px',
+    border: 'none',
+    fontSize: '16px',
+    cursor: 'pointer',
+  }}
+>
+  Upload & Submit
+</button>
+
+      (pdf, doc, docx, xls, xlsx, txt, zip, rar, mp3, mp4, wma, flv, avi, jpg, jpeg, png formats)
     </div>
 
     

@@ -52,8 +52,8 @@ export default function Complaint({ complaint }) {
 
   return (
     <div className="div2" key={complaint._id}>
-      <h2>Complaint Heading</h2>
-      <h5>{dateTimeString(complaint.date)}</h5>
+      <h2>Complain Heading</h2>
+      <h5>Created at: {dateTimeString(complaint.date)}</h5>
       <h3>{complaint.title}</h3>
       <h2>Description</h2>
       <h3>{complaint.body}</h3>
