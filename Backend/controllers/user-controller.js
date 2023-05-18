@@ -19,9 +19,9 @@ const createToken = (_id, role) => {
 //signup function
 const signUp = async (req, res, next) => {
 
-  const { name, age, NIC, mobile, email, password, role, checkingIn } = req.body;
+  const { name, NIC, mobile, email, password, role, checkingIn } = req.body;
   //validation for all the input fields
-  if (!name || !age || !NIC || !mobile || !email || !password) {
+  if (!name || !NIC || !mobile || !email || !password) {
     return res.status(422).json({ message: "All feilds should be filled" })
   }
 
@@ -71,7 +71,6 @@ const signUp = async (req, res, next) => {
   //creating a new User
   const user = new User({
     name,
-    age,
     NIC,
     mobile,
     email,
@@ -115,7 +114,7 @@ const login = async (req, res, next) => {
   }
   else {
     if (!loggedUser.checkingIn) {
-      return res.status(401).json({ message: "You do not have permission to login" })
+      return res.status(401).json({ message: "You do not have permission to login. Wait until the verification email!!!" })
     }
     else {
       //checking password and comare it with exist user's password in the db
@@ -295,7 +294,22 @@ const deleteAcc = async (req, res, next) => {
 
 const updateAcc = async (req, res, next) => {
   const userId = req.userId;
-  const { name, age, mobile, email } = req.body;
+  const { name, mobile, email } = req.body;
+
+  //validation
+  if (!checkingMobileValidation(mobile)) {
+    return res.status(400).json({ message: "Please provide valid mobile Number with 10 digits" })
+  }
+  else if (!nicValidation(NIC)) {
+    return res.status(400).json({ message: "Please provide valid NIC Number with 9 digits with v/V or 12 digits" })
+  }
+  else if (!validateEmail(email)) {
+    return res.status(400).json({ message: "Please provide valid Email" })
+  }
+  else if (!validatePWD(password)) {
+    console.log(password)
+    return res.status(400).json({ message: "Please provide valid Password" })
+  }
 
   try {
     // Check if email or mobile already exist for another user

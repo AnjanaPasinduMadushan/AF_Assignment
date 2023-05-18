@@ -18,7 +18,6 @@ import NewComplaints from './components/newComplaints'
 import CurrentComplaints from './pages/CurrentComplaints'
 import ComplaintStatus from './pages/complaintStatus'
 import DeleteAcc from './components/deleteAcc'
-import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux'
 import "./App.css";
 

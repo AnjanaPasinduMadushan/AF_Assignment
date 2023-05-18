@@ -8,7 +8,6 @@ const SignUp = () => {
 
   const [inputs, setInputs] = useState({
     name: "",
-    age: "",
     NIC: "",
     mobile: "",
     email: "",
@@ -32,7 +31,6 @@ const SignUp = () => {
     try {
       const res = await axios.post("http://localhost:8070/User/signUp", {
         name: inputs.name,
-        age: inputs.age,
         NIC: inputs.NIC,
         mobile: inputs.mobile,
         email: inputs.email,
@@ -102,10 +100,10 @@ const SignUp = () => {
         </div>
 
 
-        <div className='inputs'>
+        {/* <div className='inputs'>
           <label className='signUp_lable'>Age:</label>
           <input type="number" name='age' value={inputs.age} onChange={handleChange} />
-        </div>
+        </div> */}
 
         <div className='inputs'>
           <label className='signUp_lable'>NIC:</label>

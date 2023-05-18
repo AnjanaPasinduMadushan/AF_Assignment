@@ -11,7 +11,6 @@ const UpdateProf = () => {
 
   const [inputs, setInputs] = useState({
     name: "",
-    age: "",
     mobile: "",
     email: ""
   })
@@ -54,7 +53,6 @@ const UpdateProf = () => {
       if (result.isConfirmed) {
         const res = await axios.patch("http://localhost:8070/User/updateProfile", {
           name: inputs.name,
-          age: inputs.age,
           mobile: inputs.mobile,
           email: inputs.email,
         })
@@ -113,10 +111,10 @@ const UpdateProf = () => {
           <input type="text" name='name' value={inputs.name} onChange={handleChange} />
         </div>
 
-        <div className='inputs'>
+        {/* <div className='inputs'>
           <label>Age:</label>
           <input type="number" name='age' value={inputs.age} onChange={handleChange} />
-        </div>
+        </div> */}
 
 
         <div className='inputs'>

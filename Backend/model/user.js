@@ -12,10 +12,10 @@ const userSchema = new Schema({
     required: true
   },
 
-  age: {
-    type: Number,
-    required: true
-  },
+  // age: {
+  //   type: Number,
+  //   required: true
+  // },
 
   NIC: {
     type: String,

@@ -5,14 +5,17 @@
   background-color: #920d37;
   padding: 20px;
 }
+
 .header__logo {
   display: flex;
   align-items: center;
 }
+
 .header__logo img {
   width: 50px;
   height: 50px;
 }
+
 .header__title {
   font-size: 36px;
   margin: 0;
@@ -24,7 +27,12 @@
   align-items: center;
 }
 
-
+.activeNavItem {
+  color: blue;
+  text-decoration: underline;
+  text-decoration-color: blue;
+  text-decoration-thickness: 2px;
+}
 
 
 /* .header__list {
@@ -45,6 +53,7 @@
   align-items: center;
   gap: 10px;
 }
+
 .header__item {
   display: flex;
   flex-wrap: wrap;
@@ -110,6 +119,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
