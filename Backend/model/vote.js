@@ -16,7 +16,8 @@ const VoteSchema = new Schema({
     user: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
+      sparse: true // allow null value to bypass unique test
     },
     type:{
       type: String,
