@@ -1,10 +1,13 @@
 import "../styles/complaint.css";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CommentsBlock from "./CommentsBlock";
 import axios from "axios";
 
 export default function Complaint(props) {
+  const navigate = useNavigate();
+
   // Take data from props
   const date = props.date ?? "date not defined";
   const id = props.id ?? "id not defined";
@@ -78,7 +81,7 @@ export default function Complaint(props) {
     }
   };
 
-  async function addVote(type){
+  async function addVote(type) {
     console.log(`adding ${type} vote`);
     const data = {
       complaintId: id,
@@ -108,9 +111,9 @@ export default function Complaint(props) {
 
             {/* TODO: Edit button must only be visible within 24hrs of creating the complaint
                       and only to the complaint creator */}
-            <div>
-              <button type="button" className="brown-btn btn" >Edit Complaint 🖉</button>
-            </div>
+            {/* <div>
+              <button type="button" className="brown-btn btn" onClick={()=>navigate(`updateComplaint/${id}`)} >Edit Complaint 🖉</button>
+            </div> */}
           </div>
 
           {/**Renders the Description and image depending on if image exists */}
