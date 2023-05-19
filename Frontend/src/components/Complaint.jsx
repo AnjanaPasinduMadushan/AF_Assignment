@@ -22,7 +22,15 @@ export default function Complaint(props) {
   const [viewComments, setViewComments] = useState(false);
   const [descriptionBtnText, setDescriptionBtnText] = useState("View Description");
   const [vote, setVote] = useState(props.vote ?? 0);
-  const [viewFeddBack, setViewFeedBack] = useState(false)
+  const [viewFeddBack, setViewFeedBack] = useState(false);
+
+  const disabledColor = "btn-secondary";
+  const upColor = "btn-outline-success";
+  const upSelectedColor = "btn-success";
+  const downColor = "btn-outline-danger";
+  const downSelectedColor = "btn-danger";
+  const [upVoteBtnClass, setUpVoteBtnClass] = useState(disabledColor);
+  const [downVoteBtnClass, setDownVoteBtnClass] = useState(disabledColor);
 
   // used to toggle the description Btn and data
   function toggleFeedback() {
@@ -81,13 +89,45 @@ export default function Complaint(props) {
     }
   };
 
-  async function addVote(type) {
-    console.log(`adding ${type} vote`);
+  // Fill in some data as the page loads using following function
+  async function checkVotes() {
+    try {
+      const res = await axios.get(`http://localhost:8070/vote/checkVote/${id}`);
+      setVote(res.data.totalVotes);
+      console.log(`complaint: ${id}, userVote: ${res.data.userVote}`);
+      if (res.data.userVote == null) {
+        setUpVoteBtnClass(upColor);
+        setDownVoteBtnClass(downColor);
+      } else if (res.data.userVote == "+") {
+        setUpVoteBtnClass(upSelectedColor);
+        setDownVoteBtnClass(disabledColor);
+      } else if (res.data.userVote == "-") {
+        setDownVoteBtnClass(downSelectedColor);
+        setUpVoteBtnClass(disabledColor);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function changeVote(type) {
     const data = {
       complaintId: id,
       type: type
     };
     const res = await axios.post("http://localhost:8070/vote/add", data);
+    if (res.data.message.split(',')[1] == "added") {
+      if (res.data.message.split(',')[0] == "+")
+        setVote(vote + 1);
+      else
+        setVote(vote - 1);
+    } else {
+      if (res.data.message.split(',')[0] == "+")
+        setVote(vote - 1);
+      else
+        setVote(vote + 1);
+    }
+
     console.log(res.data);
   }
 
@@ -98,6 +138,10 @@ export default function Complaint(props) {
     else
       setDescriptionBtnText("Hide Description");
   }, [viewDescription]);
+
+  useEffect(() => {
+    checkVotes();
+  }, [vote]);
 
   return (
     <>
@@ -125,9 +169,9 @@ export default function Complaint(props) {
           <div className="d-flex justify-content-between my-2">
             <div className="d-flex align-items-center">
               {/**TODO: must include functionality for voting btns */}
-              <button type="button" className="btn btn-success me-2" onClick={() => { setVote(vote + 1); addVote("+") }} >▲</button>
-              <button type="button" className="btn btn-danger me-2" onClick={() => { setVote(vote - 1) }} >▼</button>
-              <div id="complaintVote">
+              <button type="button" id="+Vote" className={`btn ${upVoteBtnClass} me-2`} onClick={() => { changeVote("+") }} >▲</button>
+              <button type="button" id="-Vote" className={`btn ${downVoteBtnClass} me-2`} onClick={() => { changeVote("-") }} >▼</button>
+              <div id="complaintVote" className="me-2">
                 <b>{vote} votes</b>
               </div>
             </div>

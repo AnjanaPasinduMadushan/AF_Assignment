@@ -46,26 +46,26 @@ export default function Complaints() {
 
   return (
     <>
-
-      <button onClick={() => navigate('/create-complaint')}>ADD Complaint</button>
-
-      <h1><center>COMPLAINTS</center></h1>
+      <div className="position-relative m-3">
+        <h1><center>COMPLAINTS</center></h1>
+        <button className="btn brown-btn position-absolute top-0 end-0" onClick={() => navigate('/create-complaint')}>ADD Complaint</button>
+      </div>
 
       {store.complaints && store.complaints.map((complaint) => {
-          const formatDate = dateTimeString(complaint.date)
+        const formatDate = dateTimeString(complaint.date)
 
-          return <Complaint 
-            key={complaint._id}
-            complaint={complaint}
-            date={formatDate}
-            id={complaint._id}
-            title={complaint.title}
-            description={complaint.description}
-            image={complaint.image}
-            status={complaint.status}
-            feedback="safasf" />
-            ;
-        })}
+        return <Complaint
+          key={complaint._id}
+          complaint={complaint}
+          date={formatDate}
+          id={complaint._id}
+          title={complaint.title}
+          description={complaint.description}
+          image={complaint.image}
+          status={complaint.status}
+          feedback="safasf"
+        />;
+      })}
       {/* <Complaint
         date="05/04/2023"
         id="a65s4dfs65854fd"

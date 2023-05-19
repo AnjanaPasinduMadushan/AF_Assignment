@@ -3,6 +3,9 @@
 # vsCode user settings
 .vs
 
+# uploads folder
+/Backend/uploads/
+
 # dependencies
 node_modules
 /.pnp

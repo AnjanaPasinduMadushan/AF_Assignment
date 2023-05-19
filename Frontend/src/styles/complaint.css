@@ -1,5 +1,6 @@
 .complaintCard{
   width: 60%;
+  min-width: 380px;
   border: 3px solid #920d37;
   background-color: #e6e6e6;
 }
