@@ -1,9 +1,13 @@
 import "../styles/complaint.css";
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CommentsBlock from "./CommentsBlock";
+import axios from "axios";
 
 export default function Complaint(props) {
+  const navigate = useNavigate();
+
   // Take data from props
   const date = props.date ?? "date not defined";
   const id = props.id ?? "id not defined";
@@ -24,8 +28,6 @@ export default function Complaint(props) {
   function toggleFeedback() {
     setViewFeedBack(!viewFeddBack);
   }
-
-
 
   // used to toggle the description Btn and data
   function toggleDescription() {
@@ -59,64 +61,6 @@ export default function Complaint(props) {
       return (
         <div className="card-body">
           <p className="card-text noImageComplaintDescription">{description}</p>
-        {/* <button
-          className="post-button post-button-like"
-          onClick={handleDownVote}
-        >
-          {likes === 1 ? "" : "Downvote"}
-        </button>
-
-        <button
-          className="post-button post-button-more"
-          onClick={showEditDeletePopup}
-        >
-          More
-        </button>
-      </div>
-
-      {showPopup && (
-        <div className="edit-delete-popup">
-          <button
-            style={{
-              backgroundColor: "#ff0000",
-              color: "#ffffff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-              marginRight: "10px",
-            }}
-            className="popup-button"
-            onClick={() => store.deleteComplaint(complaint._id)}
-          >
-            Delete Complaint
-          </button>
-          <button
-            style={{
-              backgroundColor: "#007bff",
-              color: "#ffffff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-              marginRight: "10px",
-            }}
-            className="popup-button"
-            onClick={() => store.toggleUpdate(complaint)}
-          >
-            Update Complaint
-          </button>
-          <button
-            className="popup-button"
-            style={{
-              backgroundColor: "#6c757d",
-              color: "#ffffff",
-              padding: "10px 20px",
-              border: "none",
-              borderRadius: "5px",
-            }}
-            onClick={hideEditDeletePopup}
-          >
-            Close
-          </button> */}
         </div>
       );
     }
@@ -136,6 +80,16 @@ export default function Complaint(props) {
       );
     }
   };
+
+  async function addVote(type) {
+    console.log(`adding ${type} vote`);
+    const data = {
+      complaintId: id,
+      type: type
+    };
+    const res = await axios.post("http://localhost:8070/vote/add", data);
+    console.log(res.data);
+  }
 
   // Change Description Btn label
   useEffect(() => {
@@ -157,21 +111,21 @@ export default function Complaint(props) {
 
             {/* TODO: Edit button must only be visible within 24hrs of creating the complaint
                       and only to the complaint creator */}
-            <div>
-              <button type="button" className="brown-btn btn" >Edit Complaint 🖉</button>
-            </div>
+            {/* <div>
+              <button type="button" className="brown-btn btn" onClick={()=>navigate(`updateComplaint/${id}`)} >Edit Complaint 🖉</button>
+            </div> */}
           </div>
 
           {/**Renders the Description and image depending on if image exists */}
           <DescriptionBlock />
 
           {/**Renders the Feedback if feedback is available */}
-          {viewFeddBack ? <FeedbackBlock />:""}
+          {viewFeddBack ? <FeedbackBlock /> : ""}
 
           <div className="d-flex justify-content-between my-2">
             <div className="d-flex align-items-center">
               {/**TODO: must include functionality for voting btns */}
-              <button type="button" className="btn btn-success me-2" onClick={() => { setVote(vote + 1) }} >▲</button>
+              <button type="button" className="btn btn-success me-2" onClick={() => { setVote(vote + 1); addVote("+") }} >▲</button>
               <button type="button" className="btn btn-danger me-2" onClick={() => { setVote(vote - 1) }} >▼</button>
               <div id="complaintVote">
                 <b>{vote} votes</b>

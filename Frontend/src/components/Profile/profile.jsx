@@ -1,135 +1,193 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 axios.defaults.withCredentials = true;
-import { useNavigate } from 'react-router-dom';
-import '../../assets/profile.css'
-import '../../assets/users.css'
+import { useNavigate } from "react-router-dom";
+import "../../assets/profile.css";
+import "../../assets/users.css";
 const Profile = () => {
+  const [user, setUser] = useState({});
 
-  const [user, setUser] = useState({})
+  const [complaints, setComplants] = useState([]);
 
-  const [complaints, setComplants] = useState([])
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const sendProfileReq = async () => {
-
     try {
-      const res = await axios
-        .get("http://localhost:8070/User/profile", {
+      const res = await axios.get("http://localhost:8070/User/profile", {
+        withCredentials: true,
+      });
+
+      const data = await res.data;
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sendComplainReq = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:8070/complaint/getOwnComplaints",
+        {
           withCredentials: true,
-        })
-
-          const data = await res.data;
-          console.log(data)
-          return data;
-          
-        }catch(err){
-            console.log(err)
         }
-        
-      };
+      );
 
-      const sendComplainReq = async () => {
-
-        try {
-          const res = await axios
-            .get("http://localhost:8070/complaint/getOwnComplaints", {
-              withCredentials: true,
-            })
-    
-              const data = await res.data;
-              console.log(data)
-              return data;
-              
-            }catch(err){
-                console.log(err)
-            }
-            
-          };
-
-
+      const data = await res.data;
+      console.log(data);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    sendProfileReq().then((data) => setUser(data.user),
-    sendComplainReq().then((data) => setComplants(data.complaints)))
-  }, [])
+    sendProfileReq().then(
+      (data) => setUser(data.user),
+      sendComplainReq().then((data) => setComplants(data.complaints))
+    );
+  }, []);
 
-  console.log(user)
-  console.log("saf"+complaints)
+  console.log(user);
+  console.log("saf" + complaints);
 
   const handleDelete = async () => {
-
     try {
-      await axios.delete(`http://localhost:8070/User/deleteAcc`).then(() => navigate("/signUp"))
+      await axios
+        .delete(`http://localhost:8070/User/deleteAcc`)
+        .then(() => navigate("/signUp"));
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
+  };
 
-  }
-
-
+  /////////////////////////////////////////////////////
+  const handleComplaintDelete = async (complaintId) => {
+    try {
+      await axios.delete(`http://localhost:8070/complaints/${complaintId}`);
+      setComplants((prevComplaints) =>
+        prevComplaints.filter((complaint) => complaint._id !== complaintId)
+      );
+    } catch (err) {
+      console.log(err);
+      // Handle the error and show an error message to the user, if needed.
+    }
+  };
 
   return (
-
     <div>
-    <div className="user-container">
-      {user && user.role === 'admin' && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <button onClick={() => navigate(`/currentUsers`)} className='custome_btn'>Current Users</button>
+      <div className="user-container">
+        {user && user.role === "admin" && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <button
+              onClick={() => navigate(`/currentUsers`)}
+              className="custome_btn"
+            >
+              Current Users
+            </button>
+          </div>
+        )}
 
+        <br />
+        {user && (
+          <div className="info">
+            <h1 className="detail">Name:{user.name}</h1>
+            <h1 className="detail">Mobile:{user.mobile}</h1>
+            <h1 className="detail">E-mail:{user.email}</h1>
+            <h1 className="detail">NIC:{user.NIC}</h1>
+            <h1 className="detail">I am a {user.role}</h1>
+          </div>
+        )}
+
+        <div style={{ display: "inline-block" }}>
+          <button
+            className="update-button"
+            onClick={() => navigate(`/updateProfile/${user._id}`)}
+          >
+            UPDATE ACC
+          </button>
+          <button
+            className="update-button"
+            onClick={handleDelete}
+            style={{ marginLeft: "30px" }}
+          >
+            DELETE ACC
+          </button>
         </div>
-      )}
 
-      <br />{user && (<div className='info'>
-        <h1 className='detail'>Name:{user.name}</h1>
-        <h1 className='detail'>Mobile:{user.mobile}</h1>
-        <h1 className='detail'>E-mail:{user.email}</h1>
-        <h1 className='detail'>NIC:{user.NIC}</h1>
-        <h1 className='detail'>I am a {user.role}</h1>
-      </div>)}
+        {user && user.role === "citizen" && (
+          <div>
+            <hr />
+            <hr />
+            <h1>My Complaints</h1>
 
-      <div style={{display: 'inline-block'}}>
-      <button className="update-button" onClick={() => navigate(`/updateProfile/${user._id}`)}>UPDATE ACC</button>
-      <button className="update-button" onClick={handleDelete} style={{marginLeft: '30px'}}>DELETE ACC</button>
-      </div>
-      
-      {user&&user.role==="citizen" &&(
-        
-            <div>
-              <hr/>
-              <hr/>
-              <h1>My Complaints</h1>
-
-              {complaints.length>0 && (
-                <table>
-                  <thead>
-                    <tr>
-                      <th className='tableCell' id="tableCell_td">Title</th>
-                      <th className='tableCell' id="tableCell_td">Description</th>
-                      <th className='tableCell' id="tableCell_td">No of Votes</th>
-                      <th className='tableCell' id="tableCell_td">Action</th>
+            {complaints.length > 0 && (
+              <table>
+                <thead>
+                  <tr>
+                    <th className="tableCell" id="tableCell_td">
+                      Title
+                    </th>
+                    <th className="tableCell" id="tableCell_td">
+                      Description
+                    </th>
+                    <th className="tableCell" id="tableCell_td">
+                      No of Votes
+                    </th>
+                    <th className="tableCell" id="tableCell_td">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {complaints.map((myComplaints) => (
+                    <tr key={myComplaints._id}>
+                      <td className="tableCell">{myComplaints.title}</td>
+                      <td className="tableCell">{myComplaints.description}</td>
+                      <td className="tableCell">{myComplaints.vote}</td>
+                      <td className="tableCell">
+                        <button
+                          className="btn btn-info me-2"
+                          onClick={() =>
+                            navigate(`/addFeedBack/${myComplaints._id}`)
+                          }
+                        >
+                          ADD FEEDBACK
+                        </button>
+                        <button
+                          className="btn btn-warning me-2"
+                          onClick={() =>
+                            navigate(`/updateComplaint/${myComplaints._id}`)
+                          }
+                        >
+                          UPDATE 🖉
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() =>
+                            handleComplaintDelete(myComplaints._id)
+                          }
+                        >
+                          DELETE
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {complaints.map((myComplaints) => (
-                      <tr key={myComplaints._id}>
-                        <td className='tableCell'>{myComplaints.title}</td>
-                        <td className='tableCell'>{myComplaints.description}</td>
-                        <td className='tableCell'>{myComplaints.vote}</td>
-                        <td className='tableCell'><button onClick={() => navigate(`/addFeedBack/${myComplaints._id}`)}>ADD FEEDBACK</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-      )}
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
       </div>
+    </div>
+  );
+};
 
-      </div>
-  )
-}
-
-export default Profile
+export default Profile;

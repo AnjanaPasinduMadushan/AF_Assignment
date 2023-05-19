@@ -18,7 +18,8 @@ import NewComplaints from './components/newComplaints'
 import CurrentComplaints from './pages/CurrentComplaints'
 import ComplaintStatus from './pages/complaintStatus'
 import { AuthProvider } from './components/AuthContext'
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
+import UpdateForm from './components/UpdateForm'
 import "./App.css";
 
 const App = () => {
@@ -34,21 +35,21 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<LoginForm/>} />
         <Route path="/signUp" element={<SignUp/>} />
+        <Route path="/forgetPassword" element={<ForgetPwd/>} />
+        <Route path="/reset-pwd/:token" element={<ResetPwd/>} />
+        <Route path="/feedback" element={<Feedback/>}/>
+        <Route path="/displayFeeds/:id" element={<DisplayFeeds/>}/>
         {isLogged &&<Route path="/newUsers" element={<Users/>} />}
         {isLogged &&<Route path="/profile" element={<Profile/>} />}
         {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
         {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
         {isLogged &&<Route path="/addFeedBack/:id" element={<AddFeedback/>} />}
-        <Route path="/forgetPassword" element={<ForgetPwd/>} />
-        <Route path="/reset-pwd/:token" element={<ResetPwd/>} />
-        {/* {isLogged && <Route path="/" element={<Complaints />} />} */}
-          <Route path="/feedback" element={<Feedback/>}/>
-          <Route path="/displayFeeds/:id" element={<DisplayFeeds/>}/>
-          {isLogged &&<Route path="/" element={<Complaints />} /> }
-          {isLogged &&<Route path="/create-complaint" element={<CreateForm />} />}
-          {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
-          {isLogged &&<Route path="/current_Complaints" element={<CurrentComplaints />} />}
-          {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
+        {isLogged &&<Route path="/" element={<Complaints />} /> }
+        {isLogged &&<Route path="/create-complaint" element={<CreateForm />} />}
+        {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
+        {isLogged &&<Route path="/current_Complaints" element={<CurrentComplaints />} />}
+        {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
+        {isLogged &&<Route path="/updateComplaint/:id" element={<UpdateForm />} />}
       </Routes>
     </BrowserRouter>
     

@@ -2,7 +2,7 @@ const Complaint = require("../model/complaint");
 
 const fetchComplaints = async (req, res) => {
   // Find the complaints   
-  const complaints = await Complaint.find({isApproved:true});
+  const complaints = await Complaint.find({ isApproved: true });
 
   // Respond with them
   res.json({ complaints });
@@ -19,46 +19,47 @@ const fetchComplaint = async (req, res) => {
   res.json({ complaint });
 };
 
-const getByUserID = async(req ,res ,next) => {
+const getByUserID = async (req, res, next) => {
   const id = req.userId;
   let complaints;
-  try{
-    complaints = await Complaint.find({userId:id});
-  }catch (err) {
-      console.log(err);
-    }
-    if (!complaints) {
-      return res.status(404).json({ message: "No Complaints found" });
-    }else{
-      return res.status(200).json({ complaints });
-    }
-    
-  };
+  try {
+    complaints = await Complaint.find({ userId: id });
+  } catch (err) {
+    console.log(err);
+  }
+  if (!complaints) {
+    return res.status(404).json({ message: "No Complaints found" });
+  } else {
+    return res.status(200).json({ complaints });
+  }
+
+};
 
 const createComplaint = async (req, res) => {
   // Get the sent in data off request body
   const { title, description, image } = req.body;
   const userId = req.userId;
-let complaint;
-  try{
- // Create a complaint with it
-complaint = await Complaint.create({
-  userId,
-  title,
-  description,
-  date: Date.now(),
-  image,
-  vote: 0,
-  status: "pending",
-  feedback: "",
-  isApproved: false
-});
-  }catch(err){
+  let complaint;
+  console.log()
+  try {
+    // Create a complaint with it
+    complaint = await Complaint.create({
+      userId,
+      title,
+      description,
+      date: Date.now(),
+      image,
+      vote: 0,
+      status: "pending",
+      feedback: "",
+      isApproved: false
+    });
+  } catch (err) {
     console.log(err)
   }
- 
 
-  if(!complaint){
+
+  if (!complaint) {
     return res.status(404).status("not found")
   }
 
@@ -67,107 +68,107 @@ complaint = await Complaint.create({
 };
 
 
-const getNewComplaints = async(req, res, next)=>{
+const getNewComplaints = async (req, res, next) => {
 
 
   let complaints;
-  try{
-    complaints =  await Complaint.find({isApproved:false})
-    }catch(err){
-      console.log(err)
-      return res.status(500).json("error in fetching complaints")   
+  try {
+    complaints = await Complaint.find({ isApproved: false })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json("error in fetching complaints")
+  }
+
+  if (!complaints) {
+    return res.status(404).json({ message: 'Complaints are not found' })
+  }
+  else {
+    return res.status(200).json({ complaints })
+  }
+
+}
+
+const verifyComplaint = async (req, res, next) => {
+
+  const complaintId = req.params.id;
+
+  try {
+    const complaint = await Complaint.findByIdAndUpdate(complaintId, {
+      $set: { isApproved: req.body.isApproved }
+    }, { new: true }
+    )
+
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint is not found' })
     }
 
-      if(!complaints){
-        return res.status(404).json({message:'Complaints are not found'})
-      }
-      else{
-        return res.status(200).json({complaints})
-      }
+    // let msgs = 'Your account request is verified. Login to your account using your creditials'
+    // emailsent.sendVerificationEmail(complaint.email, msgs, function(err, msg){
+    //     if(err){
+    //     console.log(err)
+    //     }else{
+    //       console.log(msg);
+    //     }
+    //   })
 
-}
+    return res.status(200).json({ message: 'Complaint is verified' })
 
-const verifyComplaint = async(req, res, next)=>{
-
-  const complaintId = req.params.id;
-
-  try{
-      const complaint =  await Complaint.findByIdAndUpdate(complaintId, {
-          $set:{isApproved:req.body.isApproved}
-      }, {new:true}
-      )
-
-      if(!complaint){
-        return res.status(404).json({message:'Complaint is not found'})
-      }
-
-      // let msgs = 'Your account request is verified. Login to your account using your creditials'
-      // emailsent.sendVerificationEmail(complaint.email, msgs, function(err, msg){
-      //     if(err){
-      //     console.log(err)
-      //     }else{
-      //       console.log(msg);
-      //     }
-      //   })
-        
-      return res.status(200).json({message:'Complaint is verified'})
-     
-  }catch(err){
+  } catch (err) {
     console.log(err)
     return res.status(500).json("error in update checking in")
-      
+
   }
 
 }
 
-const unverifyComplaint = async(req, res, next) =>{
+const unverifyComplaint = async (req, res, next) => {
 
   const complaintId = req.params.id;
 
-  try{
-      const complaint =await Complaint.findByIdAndDelete(complaintId)
+  try {
+    const complaint = await Complaint.findByIdAndDelete(complaintId)
 
-      if(!complaint){
-        return res.status(404).json({message:'Complaint is not found'})
-      }
-      // let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
-      // emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
-      //     if(err){
-      //     console.log(err)
-      //     }else{
-      //       console.log(msg);
-      //     }
-      //   })
-      return res.status(200).json({message:"Complaint unverified successfull!!!"})
-  }catch(err){
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint is not found' })
+    }
+    // let msgs = `Your account creation request is unverified. Check your entered NIC (${user.NIC}) again and request`
+    // emailsent.sendVerificationEmail(user.email, msgs, function(err, msg){
+    //     if(err){
+    //     console.log(err)
+    //     }else{
+    //       console.log(msg);
+    //     }
+    //   })
+    return res.status(200).json({ message: "Complaint unverified successfull!!!" })
+  } catch (err) {
     console.log(err)
-    return res.status(500).json({message:"Error in unveried complaint"})
-      
+    return res.status(500).json({ message: "Error in unveried complaint" })
+
   }
 }
 
-const updateStatus = async(req, res, next)=>{
+const updateStatus = async (req, res, next) => {
 
   const complaintId = req.params.id;
 
-  try{
-      const complaint =  await Complaint.findByIdAndUpdate(complaintId, {
-          $set:{status:req.body.status}
-      }, {new:true}
-      )
+  try {
+    const complaint = await Complaint.findByIdAndUpdate(complaintId, {
+      $set: { status: req.body.status }
+    }, { new: true }
+    )
 
-      if(!complaint){
-        return res.status(404).json({message:'Complaint is not found'})
-      }
+    if (!complaint) {
+      return res.status(404).json({ message: 'Complaint is not found' })
+    }
 
 
-        
-      return res.status(200).json({message:'Complaint status is updated'})
-     
-  }catch(err){
+
+    return res.status(200).json({ message: 'Complaint status is updated' })
+
+  } catch (err) {
     console.log(err)
     return res.status(500).json("error in update status")
-      
+
   }
 
 }
@@ -192,15 +193,19 @@ const updateComplaint = async (req, res) => {
 };
 
 const deleteComplaint = async (req, res) => {
-  // get id off url
+  // Get id from URL
   const complaintId = req.params.id;
 
-  // Delete the record
   try {
+    // Delete the record
     await Complaint.deleteOne({ _id: complaintId });
-    res.status(200).json({ success: "Record deleted" });
-  } catch (e) {
-    res.status(500).json({ error: "Could not delete" });
+
+    // Respond
+    res.json({ success: "Record deleted" });
+  } catch (error) {
+    // Handle any errors
+    console.log(error);
+    res.status(500).json({ error: "An error occurred while deleting the record" });
   }
 };
 

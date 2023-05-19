@@ -6,13 +6,13 @@ const complaintsStore = create((set) => ({
 
   createForm: {
     title: "",
-    body: "",
+    description: "",
   },
 
   updateForm: {
     _id: null,
     title: "",
-    body: "",
+    description: "",
   },
 
   fetchComplaints: async () => {
@@ -80,11 +80,11 @@ const complaintsStore = create((set) => ({
     });
   },
 
-  toggleUpdate: ({ _id, title, body }) => {
+  toggleUpdate: ({ _id, title, description }) => {
     set({
       updateForm: {
         title,
-        body,
+        description,
         _id,
       },
     });
@@ -94,14 +94,14 @@ const complaintsStore = create((set) => ({
     e.preventDefault();
 
     const {
-      updateForm: { title, body, _id },
+      updateForm: { title, description, _id },
       complaints,
     } = complaintsStore.getState();
 
     // Send the update request
     const res = await axios.put(`http://localhost:8070/complaints/${_id}`, {
       title,
-      body,
+      description,
     });
 
     // Update state
@@ -116,7 +116,7 @@ const complaintsStore = create((set) => ({
       updateForm: {
         _id: null,
         title: "",
-        body: "",
+        description: "",
       },
     });
   },

@@ -7,8 +7,8 @@ router.get("/complaints", middlware.checkToken, complaintsController.fetchCompla
 router.get("/complaints/:id", middlware.checkToken, complaintsController.fetchComplaint);
 router.get("/getOwnComplaints", middlware.checkToken, middlware.citizenRole, complaintsController.getByUserID);
 router.post("/complaints", middlware.checkToken, middlware.citizenRole, complaintsController.createComplaint);
-router.put("/complaints/:id", complaintsController.updateComplaint);
-router.delete("/complaints/:id", complaintsController.deleteComplaint);
+router.put("/complaints/:id", middlware.checkToken, middlware.citizenRole, complaintsController.updateComplaint);
+router.delete("/complaints/:id", middlware.checkToken, middlware.citizenRole, complaintsController.deleteComplaint);
 router.get("/getNewComplaints", middlware.checkToken, middlware.AdminRole, complaintsController.getNewComplaints)
 router.patch("/verifyComplaint/:id", middlware.checkToken, middlware.AdminRole, complaintsController.verifyComplaint)
 router.delete("/unverifyComplaint/:id", middlware.checkToken, middlware.AdminRole, complaintsController.unverifyComplaint)
