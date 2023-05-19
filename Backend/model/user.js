@@ -47,6 +47,11 @@ const userSchema = new Schema({
   checkingIn: {
     type: Boolean,
     default: false
+  },
+
+  emailVerification: {
+    type: Boolean,
+    default: false
   }
 
 })

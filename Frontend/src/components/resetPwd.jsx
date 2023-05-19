@@ -4,19 +4,19 @@ const ResetPwd = () => {
   const { token } = useParams();
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async(event) => {
-    vent.preventDefault();
-  try {
-    const response = await fetch(`/resetPwd/${token}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password }),
-    });
-    const data = await response.json();
-    console.log(data.msg); // Password updated successfully
-  } catch (error) {
-    console.error(error);
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/resetPwd/${token}`, {
+        method: 'get',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      const data = await response.json();
+      console.log(data.msg); // Password updated successfully
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

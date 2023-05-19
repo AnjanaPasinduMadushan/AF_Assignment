@@ -17,8 +17,11 @@ router.delete("/UnverifyUser/:id", userController.unverifiedUser)
 router.patch("/verifyUser/:id", userController.updateCheckingIn)
 router.post("/deleteAcc", middlware.checkToken, userController.deleteAcc)
 router.patch("/updateProfile", middlware.checkToken, userController.updateAcc)
-router.post("/sentUrl", userController.pwdUrl)
-router.post("/reset-pwd/token", middlware.checkToken, userController.resetPwd)
+// router.post("/sentUrl", userController.pwdUrl)
+// router.get("/reset-pwd/:token", middlware.checkToken, userController.resetPwd)
+router.post("/verifyEmail", userController.verifyEmail)
+// router.post("/resendOTP", userController.resendOTP)
+// router.get("/:id/verifyEmail/:token", userController.verifyEmail)
 // router.patch("/update/pwd", requireAuth, updatePassword)
 
 
