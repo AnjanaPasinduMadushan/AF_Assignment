@@ -175,7 +175,7 @@ export default function Complaints() {
           value={searchTerm}
           onChange={handleSearch}
           style={{
-            marginLeft: "225px",
+            marginLeft: "1095px",
             padding: "10px",
             fontSize: "15px",
             borderRadius: "10px",
