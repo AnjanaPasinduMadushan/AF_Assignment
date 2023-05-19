@@ -2,8 +2,14 @@
 
 .form_comaplin {
   width: 600px;
-  margin: 0 auto;
+  margin-top: 50px;
+ margin-left: 400px;
   padding-top: 50px;
+  background-color: #b0b8b177;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 50px;
+
 }
 
 h1 {
