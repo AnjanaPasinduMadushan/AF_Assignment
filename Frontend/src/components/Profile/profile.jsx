@@ -58,15 +58,6 @@ const Profile = () => {
   console.log(user)
   console.log("saf" + complaints)
 
-  const handleDelete = async () => {
-
-    try {
-      await axios.delete(`http://localhost:8070/User/deleteAcc`).then(() => navigate("/signUp"))
-    } catch (err) {
-      console.log(err)
-    }
-
-  }
 
 
 
@@ -91,7 +82,7 @@ const Profile = () => {
 
         <div style={{ display: 'inline-block' }}>
           <button className="update-button" onClick={() => navigate(`/updateProfile/${user._id}`)}>UPDATE ACC</button>
-          <button className="update-button" onClick={handleDelete} style={{ marginLeft: '30px' }}>DELETE ACC</button>
+          <button className="delete-button" onClick={() => navigate(`/deleteProfile`)} style={{ marginLeft: '30px' }}>DELETE ACC</button>
         </div>
 
         {user && user.role === "citizen" && (
@@ -101,7 +92,7 @@ const Profile = () => {
             <hr />
             <h1>My Complaints</h1>
 
-            {complaints.length > 0 && (
+            {complaints.length > 0 ? (
               <table>
                 <thead>
                   <tr>
@@ -125,7 +116,7 @@ const Profile = () => {
                   ))}
                 </tbody>
               </table>
-            )}
+            ) : <h1 className='message'>You have not posted any complaints</h1>}
           </div>
 
         )}

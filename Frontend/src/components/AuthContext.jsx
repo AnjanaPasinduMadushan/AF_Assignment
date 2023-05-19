@@ -11,12 +11,12 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.get('http://localhost:8070/User/profile', { withCredentials: true });
       setUserData(response.data.user);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ userData, getUserData }}>
+    <AuthContext.Provider value={{ getUserData }}>
       {children}
     </AuthContext.Provider>
   );
