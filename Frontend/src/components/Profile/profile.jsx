@@ -65,12 +65,6 @@ const Profile = () => {
 
     <div>
       <div className="user-container">
-        {user && user.role === 'admin' && (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <button onClick={() => navigate(`/currentUsers`)} className='custome_btn'>Current Users</button>
-
-          </div>
-        )}
 
         <br />{user && (<div className='info'>
           <h1 className='detail'>Name:{user.name}</h1>
