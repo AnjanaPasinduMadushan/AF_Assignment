@@ -21,6 +21,7 @@ import { AuthProvider } from './components/AuthContext'
 import { useSelector } from 'react-redux';
 import UpdateForm from './components/UpdateForm'
 import "./App.css";
+import Footer from './Footer'
 
 const App = () => {
 
@@ -51,6 +52,7 @@ const App = () => {
         {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
         {isLogged &&<Route path="/updateComplaint/:id" element={<UpdateForm />} />}
       </Routes>
+      <Footer/>
     </BrowserRouter>
     
 
