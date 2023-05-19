@@ -117,6 +117,8 @@ function Upload() {
       <h1>Attach documents</h1>
       <input type="file" onChange={handleFileInputChange} />
       {error && <div style={{ color: 'red' }}>{error}</div>}
+
+      <p style={{ fontSize: "15px", color: "gray" }}>(pdf, doc, docx, xls, xlsx, txt, zip, rar, mp3, mp4, wma, flv, avi, jpg, jpeg, png formats)</p>
       <button
         onClick={handleFileUpload}
         style={{
@@ -127,11 +129,12 @@ function Upload() {
           border: 'none',
           fontSize: '16px',
           cursor: 'pointer',
+          width:"550px"
         }}
       >
         Upload & Submit
       </button>
-      <p>(pdf, doc, docx, xls, xlsx, txt, zip, rar, mp3, mp4, wma, flv, avi, jpg, jpeg, png formats)</p>
+     
     </div>
   );
 }

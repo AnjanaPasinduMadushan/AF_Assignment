@@ -143,7 +143,7 @@ export default function CreateForm(props) {
         <h1>
           <center>Create new Complaint</center>
         </h1>
-        Your confidentiality will be ensured.
+        <div style={{ fontSize: "15px", color: "gray" }}>Your confidentiality will be ensured.</div>
         <input
           type="text"
           onChange={(e) => setTitle(e.target.value)}
@@ -155,23 +155,23 @@ export default function CreateForm(props) {
         {titleError && <p className="error">{titleError}</p>}
         Word Count: {titleWordCount} /100
         <br />
-        Report Corruption
-        <br />
-        <br /> Please describe the incident *
+ 
+   
+        <br /> <div style={{ fontSize: "15px", color: "gray" }}>Please describe the incident *</div>
         <textarea
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           name="description"
           placeholder="Type your complaint"
           className="textarea"
+          style={{ width: "550px", height: "200px" }}
         />
         {descriptionError && <p className="error">{descriptionError}</p>}
-        Word Count: {descriptionWordCount} / 1000
+        Word Count: {descriptionWordCount} / 500
         <div>
-          <Upload />
-          <button type="submit" className="custom-button">
-            Submit
-          </button>
+        <br />  <br />
+          <Upload />  <br />
+     
         </div>
       </form>
       <br></br><br></br>
