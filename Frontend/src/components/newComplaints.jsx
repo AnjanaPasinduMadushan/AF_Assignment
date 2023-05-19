@@ -3,6 +3,7 @@ import axios from 'axios'
 import '../assets/users.css'
 import { useNavigate } from 'react-router'
 axios.defaults.withCredentials = true;
+import Swal from 'sweetalert2';
 
 const NewComplaints = () => {
 
@@ -25,30 +26,58 @@ const NewComplaints = () => {
 
 
   const hanldeVerifying = async (complaintId) => {
+    let newComplaints;
     try {
 
-      const res = await axios.patch(`http://localhost:8070/complaint/verifyComplaint/${complaintId}`, { isApproved: true },
-        { withCredentials: true }
-      )
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You won't be able to revert this complain again to unverify!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, verify complaint!',
+      })
+      if (result.isConfirmed) {
+        const res = await axios.patch(`http://localhost:8070/complaint/verifyComplaint/${complaintId}`, { isApproved: true },
+          { withCredentials: true }
+        )
+        newComplaints = res.data;
 
-
-      setComplaints((prevComplaint) =>
-        prevComplaint.filter((complaint) => complaint._id !== complaintId));
+        setComplaints((prevComplaint) =>
+          prevComplaint.filter((complaint) => complaint._id !== complaintId));
+        Swal.fire('Deleted!', `${JSON.stringify(newComplaints.message)}`, 'success')
+      }
+      Swal.fire('Verified', `${JSON.stringify(newComplaints.message)}`, 'success')
     } catch (err) {
       console.log(err)
+      Swal.fire('Error', 'An error occurred while Verifying the compaint', 'error');
     }
   }
 
 
   const handleUnverify = async (complaintId) => {
+    let newComplaints;
+
     try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You won't be able to revert this complaint again to verify!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Unverify complaint!',
+      })
+      if (result.isConfirmed) {
+        const res = await axios.delete(`http://localhost:8070/complaint/unverifyComplaint/${complaintId}`, { withCredentials: true })
 
-      const res = await axios.delete(`http://localhost:8070/complaint/unverifyComplaint/${complaintId}`, { withCredentials: true })
+        newComplaints = res.data;
 
-      setComplaints((prevComplaint) =>
-        prevComplaint.filter((complaint) => complaint._id !== complaintId));
+        setComplaints((prevComplaint) =>
+          prevComplaint.filter((complaint) => complaint._id !== complaintId));
+        Swal.fire('Deleted!', `${JSON.stringify(newComplaints.message)}`, 'success')
+      }
+
     } catch (err) {
       console.log(err)
+      Swal.fire('Error', 'An error occurred while Verifying the complaint', 'error');
     }
   }
 
