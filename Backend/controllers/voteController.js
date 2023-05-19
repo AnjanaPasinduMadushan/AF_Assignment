@@ -29,6 +29,7 @@ const vote = async (req, res) => {
         votedUsers: [{ user: voterId, type: voteType }]
       });
       vote = await vote.save();
+
       return res.status(200).json({ message: `${voteType} vote added`, vote });
     } else {
       // already have a document on mongoDB
@@ -44,6 +45,13 @@ const vote = async (req, res) => {
 
         vote.votedUsers.push({ user: voterId, type: voteType });
         vote = await vote.save();
+
+        await Complaint.findByIdAndUpdate(complaintId, {
+          $set: { vote: vote.votes }
+        })
+
+
+
         return res.status(200).json({ message: `${voteType},added`, vote });
       } else {
         // user already has a vote on complaint
@@ -59,7 +67,9 @@ const vote = async (req, res) => {
 
 
           vote = await vote.save();
-
+          await Complaint.findByIdAndUpdate(complaintId, {
+            $set: { vote: vote.votes }
+          })
           return res.status(200).json({ message: `${existingVote[0].type},removed`, vote });
         } else {
           return res.status(404).json({ message: "Error, vote not found" });

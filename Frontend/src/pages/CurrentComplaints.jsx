@@ -9,7 +9,7 @@ const CurrentComplaints = () => {
   const [complaints, setComplaints] = useState([])
   useEffect(() => {
     const getCurrComplaints = async () => {
-      const res = await axios("http://localhost:8070/complaint/complaints").catch((err) => {
+      const res = await axios("http://localhost:8070/complaint/currentComplaints").catch((err) => {
         console.log(err)
       })
 
@@ -35,6 +35,7 @@ const CurrentComplaints = () => {
               <tr>
                 <th className='tableCell' id="tableCell_td">TITLE</th>
                 <th className='tableCell' id="tableCell_td">DESCRIPTION</th>
+                <th className='tableCell' id="tableCell_td">VOTE</th>
                 <th className='tableCell' id="tableCell_td">DATE</th>
                 <th className='tableCell' id="tableCell_td">ACTIONS</th>
               </tr>
@@ -48,6 +49,7 @@ const CurrentComplaints = () => {
 
                   <td className='tableCell'>{complaints.title}</td>
                   <td className='tableCell'>{complaints.description}</td>
+                  <td className='tableCell'>{complaints.vote}</td>
                   <td className='tableCell'>{complaints.date}</td>
                   <td className='tableCell'><button onClick={() => navigate(`/complaint_Status/${complaints._id}`)} className='btn btn-warning'>VIEW</button></td>
                 </tr>

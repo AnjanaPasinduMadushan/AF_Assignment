@@ -46,7 +46,7 @@ const Header = () => {
   };
   const handleLogout = () => {
     sendLogoutReq().then(() => dispatch(autheticationActions.logOut()))
-      .then(() => history("./signUp"));
+      .then(() => history("./login"));
 
   };
 
@@ -55,7 +55,7 @@ const Header = () => {
     <div>
       <header className="header">
         <div className="header__logo">
-          <h1 className="header__title" onClick={()=>history("/")}>CitizenConnect</h1>
+          <h1 className="header__title" onClick={() => history("/")}>CitizenConnect</h1>
         </div>
 
         <nav className="header__nav">
@@ -101,7 +101,7 @@ const Header = () => {
 
               <li className="header__item">
                 {isLogged && userData.role === 'admin' && (
-                  <NavLink activeClassName="activeNavItem" className="feedback" to="./profile">
+                  <NavLink activeClassName="activeNavItem" className="feedback" to="./feed">
                     Feedbacks
                   </NavLink>
                 )}

@@ -54,6 +54,7 @@ const App = () => {
         {isLogged && <Route path="/current_Complaints" element={<CurrentComplaints />} />}
         {isLogged && <Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
         {isLogged && <Route path="/updateComplaint/:id" element={<UpdateForm />} />}
+        <Route path="*" element={<h1><center>Page Not Found</center></h1>} />
 
       </Routes>
     </BrowserRouter>
