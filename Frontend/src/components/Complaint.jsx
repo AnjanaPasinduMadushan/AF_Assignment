@@ -94,7 +94,6 @@ export default function Complaint(props) {
     try {
       const res = await axios.get(`http://localhost:8070/vote/checkVote/${id}`);
       setVote(res.data.totalVotes);
-      console.log(`complaint: ${id}, userVote: ${res.data.userVote}`);
       if (res.data.userVote == null) {
         setUpVoteBtnClass(upColor);
         setDownVoteBtnClass(downColor);
@@ -127,8 +126,6 @@ export default function Complaint(props) {
       else
         setVote(vote + 1);
     }
-
-    console.log(res.data);
   }
 
   // Change Description Btn label

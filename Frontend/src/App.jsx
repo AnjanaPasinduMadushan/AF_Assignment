@@ -29,39 +29,34 @@ const App = () => {
 
   console.log(isLogged)
   return (
-    
+
     <BrowserRouter>
 
       <Header />
       <Routes>
-       
-        <Route path="/login" element={<LoginForm/>} />
-        <Route path="/signUp" element={<SignUp/>} />
-        <Route path="/feedback" element={<Feedback/>}/>
-        <Route path="/displayFeeds/:id" element={<DisplayFeeds/>}/>
-        <Route path='/verifyEmail' element={<EmailVerify/>}/>
-        <Route path="/feed" element={<AdminFeedback/>}/>
-        <Route pathe ="/home" element ={<Home/>} />
-        {isLogged &&<Route path="/newUsers" element={<Users/>} />}
-        {isLogged &&<Route path="/profile" element={<Profile/>} />}
-        {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
-        {isLogged &&<Route path="/updateProfile/:id" element={<UpdateProf/>} />}
-        {isLogged &&<Route path="/deleteProfile" element={<DeleteAcc />} />}
-        {isLogged &&<Route path="/addFeedBack/:id" element={<AddFeedback/>} />}
-        {isLogged &&<Route path="/" element={<Complaints />} /> }
-        {isLogged &&<Route path="/create-complaint" element={<CreateForm />} />}
-        {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
-        {isLogged &&<Route path="/current_Complaints" element={<CurrentComplaints />} />}
-        {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
-        {isLogged &&<Route path="/updateComplaint/:id" element={<UpdateForm />} />}
-        
+
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/displayFeeds/:id" element={<DisplayFeeds />} />
+        <Route path='/verifyEmail' element={<EmailVerify />} />
+        <Route path="/feed" element={<AdminFeedback />} />
+        <Route path="/home" element={<Home />} />
+        {isLogged && <Route path="/newUsers" element={<Users />} />}
+        {isLogged && <Route path="/profile" element={<Profile />} />}
+        {isLogged && <Route path="/currentUsers" element={<CurrentUsers />} />}
+        {isLogged && <Route path="/updateProfile/:id" element={<UpdateProf />} />}
+        {isLogged && <Route path="/deleteProfile" element={<DeleteAcc />} />}
+        {isLogged && <Route path="/addFeedBack/:id" element={<AddFeedback />} />}
+        {isLogged && <Route path="/" element={<Complaints />} />}
+        {isLogged && <Route path="/create-complaint" element={<CreateForm />} />}
+        {isLogged && <Route path="/newComplaints" element={<NewComplaints />} />}
+        {isLogged && <Route path="/current_Complaints" element={<CurrentComplaints />} />}
+        {isLogged && <Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
+        {isLogged && <Route path="/updateComplaint/:id" element={<UpdateForm />} />}
+
       </Routes>
     </BrowserRouter>
-    
-
-    
-      
-   
   )
 }
 

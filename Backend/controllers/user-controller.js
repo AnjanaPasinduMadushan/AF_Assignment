@@ -17,7 +17,7 @@ const createToken = (_id, role) => {
 }
 
 //signup function
-const signUp = async (req, res, next) => {
+const signUp = async (req, res) => {
 
   const { name, NIC, mobile, email, password, role, checkingIn, emailVerification } = req.body;
   //validation for all the input fields
@@ -92,7 +92,7 @@ const signUp = async (req, res, next) => {
 
 }
 
-const sendOptVerifcation = async ({ _id, email }, res) => {
+const sendOptVerifcation = async ({ _id, email }) => {
   try {
     const random = RandomOTP().toString();
     console.log(random)
@@ -192,7 +192,7 @@ const verifyEmail = async (req, res) => {
 // }
 
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
 
   const { email, password } = req.body;
 
@@ -243,7 +243,7 @@ const login = async (req, res, next) => {
 }
 
 //update the CheckingIn
-const updateCheckingIn = async (req, res, next) => {
+const updateCheckingIn = async (req, res) => {
 
   const userId = req.params.id;
 
@@ -276,7 +276,7 @@ const updateCheckingIn = async (req, res, next) => {
 
 }
 
-const unverifiedUser = async (req, res, next) => {
+const unverifiedUser = async (req, res) => {
 
   const userId = req.params.id;
 
@@ -302,7 +302,7 @@ const unverifiedUser = async (req, res, next) => {
   }
 }
 
-const getNewUsers = async (req, res, next) => {
+const getNewUsers = async (_req, res) => {
 
 
   let users;
@@ -322,9 +322,8 @@ const getNewUsers = async (req, res, next) => {
 
 }
 
-const getOldUsers = async (req, res, next) => {
+const getOldUsers = async (_req, res) => {
 
-  const userId = req.params.id;
 
   let users;
   try {
@@ -343,7 +342,7 @@ const getOldUsers = async (req, res, next) => {
 
 }
 
-const getOwnAcc = async (req, res, next) => {
+const getOwnAcc = async (req, res) => {
 
   const userId = req.userId;
 
@@ -366,7 +365,7 @@ const getOwnAcc = async (req, res, next) => {
   }
 }
 
-const deleteAcc = async (req, res, next) => {
+const deleteAcc = async (req, res) => {
 
   const userId = req.userId;
   const pwd = req.body.password;
@@ -394,7 +393,7 @@ const deleteAcc = async (req, res, next) => {
   }
 }
 
-const updateAcc = async (req, res, next) => {
+const updateAcc = async (req, res) => {
   const userId = req.userId;
   const { name, mobile, email } = req.body;
 
@@ -402,15 +401,8 @@ const updateAcc = async (req, res, next) => {
   if (!checkingMobileValidation(mobile)) {
     return res.status(400).json({ message: "Please provide valid mobile Number with 10 digits" })
   }
-  else if (!nicValidation(NIC)) {
-    return res.status(400).json({ message: "Please provide valid NIC Number with 9 digits with v/V or 12 digits" })
-  }
   else if (!validateEmail(email)) {
     return res.status(400).json({ message: "Please provide valid Email" })
-  }
-  else if (!validatePWD(password)) {
-    console.log(password)
-    return res.status(400).json({ message: "Please provide valid Password" })
   }
 
   try {
@@ -443,7 +435,7 @@ const updateAcc = async (req, res, next) => {
 
 
 //logout function
-const logout = (req, res, next) => {
+const logout = (req, res) => {
   const uId = req.userId;//request user Id from the token
   const cookies = req.headers.cookie;//request cookie from the header
 
@@ -456,7 +448,7 @@ const logout = (req, res, next) => {
   }
 
   //varifying token using secret key from the environmental variables
-  jwt.verify(String(previousToken), process.env.secret, (err, user) => {
+  jwt.verify(String(previousToken), process.env.secret, (err) => {
     if (err) {
       console.log(err);
       return res.status(403).json({ message: "Authentication failed" });//if not verified return this error

@@ -55,8 +55,7 @@ const Header = () => {
     <div>
       <header className="header">
         <div className="header__logo">
-          {/* <img src="" alt="Logo" /> */}
-          <h1 className="header__title">CitizenConnect</h1>
+          <h1 className="header__title" onClick={()=>history("/")}>CitizenConnect</h1>
         </div>
 
         <nav className="header__nav">
