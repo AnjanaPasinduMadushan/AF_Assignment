@@ -32,7 +32,11 @@ const Header = () => {
       <header className="header">
         <div className="header__logo">
           {/* <img src="" alt="Logo" /> */}
-          <h1 className="header__title"> <svg
+          <h1 className="header__title"> 
+          
+          
+          
+          <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             width="400"
@@ -180,7 +184,11 @@ const Header = () => {
                 </g>
               </g>
             </g>
-          </svg></h1>
+          </svg>
+          
+          
+          
+          </h1>
         </div>
 
         <nav className="header__nav">

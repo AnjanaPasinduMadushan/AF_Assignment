@@ -98,35 +98,36 @@ const Profile = () => {
         <br />
         {user && (
           <div className="info">
+            <h1>Your Details </h1>
             <h1 className="detail">Name:{user.name}</h1>
             <h1 className="detail">Mobile:{user.mobile}</h1>
             <h1 className="detail">E-mail:{user.email}</h1>
             <h1 className="detail">NIC:{user.NIC}</h1>
             <h1 className="detail">I am a {user.role}</h1>
+
+            <div>
+              <button
+                className="update-button"
+                onClick={() => navigate(`/updateProfile/${user._id}`)}
+              >
+                Update Account
+              </button>
+              <button
+                className="update-button"
+                onClick={handleDelete}
+                style={{ marginLeft: "30px" }}
+              >
+                Delete Account
+              </button>
+            </div>
           </div>
         )}
 
-        <div style={{ display: "inline-block" }}>
-          <button
-            className="update-button"
-            onClick={() => navigate(`/updateProfile/${user._id}`)}
-          >
-            UPDATE ACC
-          </button>
-          <button
-            className="update-button"
-            onClick={handleDelete}
-            style={{ marginLeft: "30px" }}
-          >
-            DELETE ACC
-          </button>
-        </div>
-
         {user && user.role === "citizen" && (
           <div>
+  
             <hr />
-            <hr />
-            <h1>My Complaints</h1>
+            <h1>My Complaints </h1>
 
             {complaints.length > 0 && (
               <table>

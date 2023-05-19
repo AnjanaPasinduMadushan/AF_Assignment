@@ -159,12 +159,14 @@ export default function Complaints() {
     value={searchTerm}
     onChange={handleSearch}
     style={{
-      marginLeft:"250px",
+      marginLeft:"225px",
       padding: "10px",
-      fontSize: "16px",
+      fontSize: "15px",
       borderRadius: "10px",
-      border: "1px solid #ccc",
+      
+      border: "2px solid #920d37",
       width: "300px",
+      background:"#e6e6e6"
     }}
   />
 </div><br></br>
