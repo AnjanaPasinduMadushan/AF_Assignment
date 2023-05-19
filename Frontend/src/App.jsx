@@ -18,6 +18,7 @@ import NewComplaints from './components/newComplaints'
 import CurrentComplaints from './pages/CurrentComplaints'
 import ComplaintStatus from './pages/complaintStatus'
 import DeleteAcc from './components/deleteAcc'
+import EmailVerify from './pages/emailVerify'
 import { useSelector } from 'react-redux'
 import "./App.css";
 
@@ -50,6 +51,7 @@ const App = () => {
           {isLogged &&<Route path="/newComplaints" element={<NewComplaints />} />}
           {isLogged &&<Route path="/current_Complaints" element={<CurrentComplaints />} />}
           {isLogged &&<Route path="/complaint_Status/:id" element={<ComplaintStatus />} />}
+          <Route path='/verifyEmail' element={<EmailVerify/>}/>
       </Routes>
     </BrowserRouter>
     

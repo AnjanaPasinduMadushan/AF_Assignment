@@ -111,7 +111,7 @@ const LoginForm = () => {
 
       <br />
 
-      <center><p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p></center>
+      {/* <center><p><Link to='/forgetPassword'>Forget Password/Reset Password</Link></p></center> */}
 
     </div>
   )

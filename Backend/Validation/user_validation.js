@@ -21,7 +21,14 @@ const validatePWD = (pwd) => {
 };
 
 
+const RandomOTP = () => {
+  const no = Math.floor(1000 + Math.random() * 9000)
+
+  return no;
+}
+
 exports.checkingMobileValidation = checkingMobileValidation;
 exports.nicValidation = nicValidation
 exports.validateEmail = validateEmail
 exports.validatePWD = validatePWD
+exports.RandomOTP = RandomOTP

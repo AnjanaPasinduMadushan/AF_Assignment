@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import '../assets/forms.css'
+import { useNavigate } from 'react-router-dom'
 
 const SignUp = () => {
 
+  const navigate = useNavigate()
 
   const [inputs, setInputs] = useState({
     name: "",
@@ -45,13 +47,14 @@ const SignUp = () => {
         title: 'Success',
         text: `${JSON.stringify(data.message)}`,
       })
+      navigate('/verifyEmail')
       return data;
-    } catch (err) {
-      console.log(err)
-      if (err.response) {
-        console.log(err.response.data);
-        console.log(err.response.status);
-        console.log(err.response.headers);
+    } catch (e) {
+      console.log(e)
+      if (e.response) {
+        console.log(e.response.data);
+        console.log(e.response.status);
+        console.log(e.response.headers);
 
         Swal.fire({
           icon: 'error',

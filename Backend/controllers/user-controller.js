@@ -1,5 +1,5 @@
 const User = require('../model/user');
-
+const OTP = require('../model/otp')
 //importing bcrypt
 const bcrypt = require("bcrypt");
 const emailsent = require('./email-controller')
@@ -8,7 +8,7 @@ const emailsent = require('./email-controller')
 const jwt = require('jsonwebtoken');
 
 //importing Validations
-const { checkingMobileValidation, nicValidation, validateEmail, validatePWD } = require("../Validation/user_validation")
+const { checkingMobileValidation, nicValidation, validateEmail, validatePWD, RandomOTP } = require("../Validation/user_validation");
 
 //user id, checking_in and user's role is passed with token
 const createToken = (_id, role) => {
@@ -19,7 +19,7 @@ const createToken = (_id, role) => {
 //signup function
 const signUp = async (req, res, next) => {
 
-  const { name, NIC, mobile, email, password, role, checkingIn } = req.body;
+  const { name, NIC, mobile, email, password, role, checkingIn, emailVerification } = req.body;
   //validation for all the input fields
   if (!name || !NIC || !mobile || !email || !password) {
     return res.status(422).json({ message: "All feilds should be filled" })
@@ -76,12 +76,14 @@ const signUp = async (req, res, next) => {
     email,
     password: hashedpassword,
     role: role || "citizen",
-    checkingIn
+    checkingIn,
+    emailVerification
   });
 
   try {
-    await user.save();//saving document(a new user to) into DB
-
+    await user.save().then((result) => {
+      sendOptVerifcation(result, res)
+    })
     return res.status(201).json({ message: "Your Account Creation Request is sent to the authorities", User: user })//sending the new user details with token as a message for the response
   } catch (err) {
     console.log(err);
@@ -89,6 +91,106 @@ const signUp = async (req, res, next) => {
   }
 
 }
+
+const sendOptVerifcation = async ({ _id, email }, res) => {
+  try {
+    const random = RandomOTP().toString();
+    console.log(random)
+    const salt = 6;
+
+    const hashedOTP = await bcrypt.hash(random, salt);
+
+    const otp = new OTP(
+      {
+        userId: _id,
+        otp: hashedOTP,
+        email: email,
+        createdAt: Date.now(),
+        expiredAt: Date.now() + (3600000)
+      }
+    )
+
+    await otp.save()
+
+    let msgs = `Check your email account and verify your email\n` + random
+    emailsent.sendVerificationEmail(email, msgs, function (err, msg) {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(msg);
+      }
+    })
+
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const verifyEmail = async (req, res) => {
+  try {
+
+    // const userId = req.params.id;
+    const { email, otp } = req.body;
+
+    if (!otp || !email) {
+      return res.status(400).json({ message: "Both feilds should be filled" })
+    } else {
+      const otpEmail = await OTP.findOne({ email })
+
+
+      if (!otpEmail) {
+        return res.status(404).json({ message: "You have already verified, have not registered yet or incorrct Email!!!" })
+      } else {
+        const otpUid = otpEmail.userId;
+        // const { expiredAt } = otpSend[0];
+        const hashedOTP = otpEmail.otp;
+
+        if (otpEmail.expiredAt < Date.now()) {
+          await OTP.findOneAndDelete({ email });
+
+          return res.status(400).json({ message: "OTP is expired" })
+        } else {
+          const checkOtp = bcrypt.compareSync(otp, hashedOTP)
+
+          if (!checkOtp) {
+            return res.status(404).json({ message: "You have entered an invalid OTP" })
+          }
+          else {
+            await User.findByIdAndUpdate({ _id: otpUid }, { emailVerification: true })
+            await OTP.findOneAndDelete({ email })
+
+            return res.status(200).json({ message: "Email is verified. Wait for NIC verification message!!!" })
+          }
+        }
+      }
+    }
+
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ message: "Error in verifing email" })
+  }
+}
+
+// const resendOTP = async (req, res) => {
+
+//   try {
+
+//     let { userId, email } = req.body;
+
+//     if (!userId || !email) {
+//       return res.status(400).json({ message: "All Feilds must be filled" })
+//     } else {
+//       await OTP.deleteMany({ userId })
+//       emailsent.sendVerificationEmail({ _id: userId, email }, res)
+//     }
+
+//   } catch (err) {
+//     console.log()
+
+//     return res.status(500).json({ message: "Error when Resending OTP" })
+//   }
+// }
+
 
 const login = async (req, res, next) => {
 
@@ -205,7 +307,7 @@ const getNewUsers = async (req, res, next) => {
 
   let users;
   try {
-    users = await User.find({ checkingIn: false })
+    users = await User.find({ checkingIn: false, emailVerification: true })
   } catch (err) {
     console.log(err)
     return res.status(500).json("error in fetching users")
@@ -326,7 +428,6 @@ const updateAcc = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(userId,
       {
         name,
-        age,
         mobile,
         email
       }, { new: true });
@@ -369,74 +470,74 @@ const logout = (req, res, next) => {
 };
 
 
-const pwdUrl = async (req, res, next) => {
+// const pwdUrl = async (req, res, next) => {
 
-  const { email } = req.body;
+//   const { email } = req.body;
 
-  if (!email) {
-    return res.status(422).json({ msg: "Please enter your email" })
-  }
+//   if (!email) {
+//     return res.status(422).json({ msg: "Please enter your email" })
+//   }
 
-  let oldEmail;
-  try {
-    oldEmail = await User.findOne({ email: email })
-  } catch (err) {
-    console.log(err)
-  }
+//   let oldEmail;
+//   try {
+//     oldEmail = await User.findOne({ email: email })
+//   } catch (err) {
+//     console.log(err)
+//   }
 
-  if (!oldEmail) {
-    return res.status(404).json({ message: "Email is not found. check Your email" })
-  }
+//   if (!oldEmail) {
+//     return res.status(404).json({ message: "Email is not found. check Your email" })
+//   }
 
-  const token = createToken(oldEmail._id, oldEmail.role)
-
-
-  const url = `http://localhost:3000/reset-pwd/${token}`;
-
-  let msgs = `Click this link to reset your password\n` + url;
-  emailsent.sendVerificationEmail(oldEmail.email, msgs, function (err, msg) {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(msg);
-    }
-  })
-
-  res
-    .status(200)
-    .json({ msg: "Re-send the password, please check your email." });
-}
+//   const token = createToken(oldEmail._id, oldEmail.role)
 
 
-const resetPwd = async (req, res, next) => {
+//   const url = `http://localhost:3000/reset-pwd/${token}`;
+
+//   let msgs = `Click this link to reset your password\n` + url;
+//   emailsent.sendVerificationEmail(oldEmail.email, msgs, function (err, msg) {
+//     if (err) {
+//       console.log(err)
+//     } else {
+//       console.log(msg);
+//     }
+//   })
+
+//   res
+//     .status(200)
+//     .json({ msg: "Re-send the password, please check your email." });
+// }
 
 
-  try {
-    const uId = req.userId;
-    const { password } = req.body;
-
-    if (!password) {
-      return res.status(422).json({ msg: "Please enter the New Password" })
-    }
-
-    const salt = await bcrypt.genSalt(6)
-    //hashsync is a function that can hasing the password
-    const hashedpassword = await bcrypt.hash(password, salt);
-
-    await User.findByIdAndUpdate(uId, {
-      $set: { password: hashedpassword }
-    })
-
-    return res.status(200).json({ msg: "Password Updated Successfully!!!" })
-  } catch (err) {
-    console.log(err)
-    return res.status(500).json({
-      msg: "something is wrong in the process"
-    })
-  }
+// const resetPwd = async (req, res, next) => {
 
 
-}
+//   try {
+//     const uId = req.userId;
+//     const { password } = req.body;
+
+//     if (!password) {
+//       return res.status(422).json({ msg: "Please enter the New Password" })
+//     }
+
+//     const salt = await bcrypt.genSalt(6)
+//     //hashsync is a function that can hasing the password
+//     const hashedpassword = await bcrypt.hash(password, salt);
+
+//     await User.findByIdAndUpdate(uId, {
+//       $set: { password: hashedpassword }
+//     })
+
+//     return res.status(200).json({ msg: "Password Updated Successfully!!!" })
+//   } catch (err) {
+//     console.log(err)
+//     return res.status(500).json({
+//       msg: "something is wrong in the process"
+//     })
+//   }
+
+
+// }
 
 exports.signUp = signUp;
 exports.login = login;
@@ -448,5 +549,7 @@ exports.updateAcc = updateAcc;
 exports.getNewUsers = getNewUsers;
 exports.getOldUsers = getOldUsers;
 exports.logout = logout;
-exports.pwdUrl = pwdUrl;
-exports.resetPwd = resetPwd;
+// exports.pwdUrl = pwdUrl;
+// exports.resetPwd = resetPwd;
+exports.verifyEmail = verifyEmail;
+// exports.resendOTP = resendOTP;
