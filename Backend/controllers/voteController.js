@@ -9,6 +9,8 @@ const vote = async (req, res) => {
   const voteType = req.body.type;
 
   try {
+
+    let complaint;
     // check if votes document for the complaint already exists
     let vote = await Vote.findOne({ complaintId: complaintId });
 
@@ -17,7 +19,7 @@ const vote = async (req, res) => {
       console.log(`Vote Document with complaintID: ${complaintId} not found`);
 
       // check if complaintID is valid
-      const complaint = await Complaint.findById(complaintId);
+      complaint = await Complaint.findById(complaintId);
       if (complaint == null) {
         // if not valid
         return res.status(404).json({ message: `Complaint with id:${complaintId} not found` });
@@ -29,7 +31,6 @@ const vote = async (req, res) => {
         votedUsers: [{ user: voterId, type: voteType }]
       });
       vote = await vote.save();
-      console.log(`vote document created: ${vote}`);
       return res.status(200).json({ message: `${voteType} vote added`, vote });
     } else {
       // already have a document on mongoDB
@@ -47,6 +48,13 @@ const vote = async (req, res) => {
         console.log("creating vote");
         vote.votedUsers.push({ user: voterId, type: voteType });
         vote = await vote.save();
+
+        await Complaint.findByIdAndUpdate(complaintId, {
+          $set: { vote: vote.votes }
+        })
+
+
+
         return res.status(200).json({ message: `${voteType},added`, vote });
       } else {
         // user already has a vote on complaint
@@ -62,6 +70,9 @@ const vote = async (req, res) => {
             vote.votes++;
 
           vote = await vote.save();
+          await Complaint.findByIdAndUpdate(complaintId, {
+            $set: { vote: vote.votes }
+          })
           return res.status(200).json({ message: `${existingVote[0].type},removed`, vote });
         } else {
           console.log("vote not found");

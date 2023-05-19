@@ -251,7 +251,7 @@ const Header = () => {
 
               <li className="header__item">
                 {isLogged && userData.role === 'admin' && (
-                  <NavLink activeClassName="activeNavItem" className="feedback" to="./profile">
+                  <NavLink activeClassName="activeNavItem" className="feedback" to="./feed">
                     Feedbacks
                   </NavLink>
                 )}

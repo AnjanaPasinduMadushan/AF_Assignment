@@ -1,6 +1,7 @@
 const Complaint = require("../model/complaint");
 
 const fetchComplaints = async (req, res) => {
+
   // Find the complaints   
   const complaints = await Complaint.find({ isApproved: true });
 
@@ -40,7 +41,6 @@ const createComplaint = async (req, res) => {
   const { title, description, image } = req.body;
   const userId = req.userId;
   let complaint;
-  console.log()
   try {
     // Create a complaint with it
     complaint = await Complaint.create({
@@ -74,6 +74,26 @@ const getNewComplaints = async (req, res, next) => {
   let complaints;
   try {
     complaints = await Complaint.find({ isApproved: false })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json("error in fetching complaints")
+  }
+
+  if (!complaints) {
+    return res.status(404).json({ message: 'Complaints are not found' })
+  }
+  else {
+    return res.status(200).json({ complaints })
+  }
+
+}
+
+const getCurrentComplaints = async (req, res, next) => {
+
+
+  let complaints;
+  try {
+    complaints = await Complaint.find({ isApproved: true }).sort({ vote: -1 })
   } catch (err) {
     console.log(err)
     return res.status(500).json("error in fetching complaints")
@@ -219,5 +239,6 @@ module.exports = {
   getNewComplaints,
   verifyComplaint,
   unverifyComplaint,
-  updateStatus
+  updateStatus,
+  getCurrentComplaints
 };

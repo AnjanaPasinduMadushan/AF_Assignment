@@ -106,7 +106,6 @@ const Users = () => {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <button onClick={() => history(`/currentUsers`)} className='custome_btn'>Current Users</button>
 
-        <button onClick={() => history(`/newComplaints`)} className='custome_btn'>New Complaints</button>
       </div>
 
       <h1><center>NEW ACCOUNT CREATION REQUESTS</center></h1>
