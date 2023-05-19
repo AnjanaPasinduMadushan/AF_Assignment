@@ -1,13 +1,13 @@
-import { complaintsStore } from "../stores/complaintsStore";
-import '../asset/CreateForm.css'
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Upload from "./Upload";
+import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import swal from "sweetalert";
+import '../asset/CreateForm.css';
 
-export default function CreateForm(props) {
+export default function CreateForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const navigate = useNavigate();
 
   async function submit(e) {
     e.preventDefault();
@@ -21,6 +21,7 @@ export default function CreateForm(props) {
     try {
       const complaint = await axios.post("http://localhost:8070/complaint/complaints", data);
       swal("successs");
+      navigate(-1);
     } catch (e) {
       console.log(e);
     }
