@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Complaint from "../components/Complaint";
 import { complaintsStore } from "../stores/complaintsStore";
+import axios from "axios";
 
 export default function Complaints() {
   const store = complaintsStore();
@@ -84,28 +85,16 @@ export default function Complaints() {
       <h1 style={{ fontFamily: "'League Spartan', sans-serif", fontWeight: 'bold' }}>
         <center>Complaint List</center>
       </h1>
-      {/* <div style={{ marginTop: "20px", padding: "auto" }}> */}
       <div className="px-5 my-2 input-group w-100">
         <center>
-        <input
-          type="text"
-          placeholder="Search Complaint..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="form-control w-100"
-        // style={{
-        //   marginLeft: "20px",
-        //   marginRight: "20px",
-        //   padding: "10px",
-        //   fontSize: "15px",
-        //   borderRadius: "10px",
-
-        //   width: "80%",
-        //   background: "#e6e6e6",
-        // }}
-        /></center>
+          <input
+            type="text"
+            placeholder="Search Complaint..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="form-control w-100"
+          /></center>
       </div>
-      {/* </div> */}
       <br />
       {filteredComplaints.map((complaint) => {
         const formatDate = dateTimeString(complaint.date);
@@ -119,7 +108,6 @@ export default function Complaints() {
             description={complaint.description}
             image={complaint.image}
             status={complaint.status}
-            feedback="safasf"
           />
         );
       })}

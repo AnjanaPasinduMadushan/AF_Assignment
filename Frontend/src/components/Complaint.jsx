@@ -14,7 +14,6 @@ export default function Complaint(props) {
   const title = props.title ?? "Title Not Defined!";
   const description = props.description ?? "Description Not Defined!";
   const image = props.image;
-  const feedback = props.feedback;
 
 
   // set initial values of states
@@ -22,7 +21,7 @@ export default function Complaint(props) {
   const [viewComments, setViewComments] = useState(false);
   const [descriptionBtnText, setDescriptionBtnText] = useState("View Description");
   const [vote, setVote] = useState(props.vote ?? 0);
-  const [viewFeddBack, setViewFeedBack] = useState(false);
+  const [viewFeedBack, setViewFeedBack] = useState(false);
 
   const disabledColor = "btn-secondary";
   const upColor = "btn-outline-success";
@@ -31,10 +30,14 @@ export default function Complaint(props) {
   const downSelectedColor = "btn-danger";
   const [upVoteBtnClass, setUpVoteBtnClass] = useState(disabledColor);
   const [downVoteBtnClass, setDownVoteBtnClass] = useState(disabledColor);
+  const [feedback, setFeedback] = useState("");
 
   // used to toggle the description Btn and data
-  function toggleFeedback() {
-    setViewFeedBack(!viewFeddBack);
+  async function toggleFeedback() {
+    setViewFeedBack(!viewFeedBack);
+    if (viewFeedBack)
+      setFeedback( await getFeedback(id));
+    console.log(feedback);
   }
 
   // used to toggle the description Btn and data
@@ -74,6 +77,8 @@ export default function Complaint(props) {
     }
   };
 
+  //TODO: view feedback not working still
+  
   // Render the feedback block only if a feedback exists
   function FeedbackBlock() {
     if (feedback) {
@@ -140,6 +145,20 @@ export default function Complaint(props) {
     checkVotes();
   }, [vote]);
 
+
+  async function getFeedback(id) {
+    try {
+      const feedback = await axios.get(`http://localhost:8070/feedback/getComplaint/${id}`);
+      console.log(feedback.data.feedback[0])
+      if (feedback.data.feedback[0])
+        setFeedback(feedback.data.feedback[0].feedback);
+      else
+        setFeedback("");
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <>
       <div className="card complaintCard mx-auto mb-4" >
@@ -149,23 +168,16 @@ export default function Complaint(props) {
               <span className="complaintDate">{date} | Ref. ID: {id}</span>
               <h4 className="complaintTitle" >{title}</h4>
             </div>
-
-            {/* TODO: Edit button must only be visible within 24hrs of creating the complaint
-                      and only to the complaint creator */}
-            {/* <div>
-              <button type="button" className="brown-btn btn" onClick={()=>navigate(`updateComplaint/${id}`)} >Edit Complaint 🖉</button>
-            </div> */}
           </div>
 
           {/**Renders the Description and image depending on if image exists */}
           <DescriptionBlock />
 
           {/**Renders the Feedback if feedback is available */}
-          {viewFeddBack ? <FeedbackBlock /> : ""}
+          {viewFeedBack ? <FeedbackBlock /> : ""}
 
           <div className="d-flex justify-content-between my-2">
             <div className="d-flex align-items-center">
-              {/**TODO: must include functionality for voting btns */}
               <button type="button" id="+Vote" className={`btn ${upVoteBtnClass} me-2`} onClick={() => { changeVote("+") }} >▲</button>
               <button type="button" id="-Vote" className={`btn ${downVoteBtnClass} me-2`} onClick={() => { changeVote("-") }} >▼</button>
               <div id="complaintVote" className="me-2">

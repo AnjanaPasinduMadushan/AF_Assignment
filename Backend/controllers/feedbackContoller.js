@@ -13,6 +13,21 @@ const getAllFeedback = async(req, res ,next) => {
         return res.status(200).json(feedback);
 };
 
+// get by complaint ID
+const getByComplaintID = async(req ,res) => {
+  const id = req.params.complaintId;
+  let feedback;
+  try{
+      feedback = await Feedback.find({complaintId:id});
+  }catch (err) {
+      console.log(err);
+    }
+    if (!feedback) {
+      return res.status(404).json({ message: "No feedback found" });
+    }else{
+      return res.status(200).json({feedback});
+    }    
+  };
 
 //Get feedback by userID
 const getByUserID = async(req ,res ,next) => {
@@ -100,4 +115,5 @@ const addFeedback = async (req, res, next) => {
     exports.getAllFeedback = getAllFeedback;
     exports.getByID = getByID;
     exports.updateFeedback = updateFeedback;
-    exports.getByUserID =  getByUserID
+    exports.getByUserID =  getByUserID;
+    exports.getByComplaintID = getByComplaintID;
