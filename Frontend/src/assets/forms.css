@@ -1,14 +1,17 @@
 .form {
-  width: 400px;
-  margin: 0 auto;
-  padding-top: 150px;
+  width: 500px;
+  margin: 10px auto;
+  padding: 25px;
+
+  border-radius: 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
-
 .forms {
-  width: 400px;
-  margin: 0 auto;
-  padding-top: 15px;
+  width: 520px;
+  margin: 20px auto;
+  padding: 25px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .signUp_label {
@@ -29,8 +32,6 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
-
 
 .custom-button {
   display: block;
@@ -53,15 +54,12 @@ select {
   margin-top: 10px;
 }
 
-
 .emailVerify {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 80vh;
 }
-
-
 
 #update {
   text-align: center;
@@ -72,9 +70,6 @@ select {
   margin-bottom: 15px;
 }
 
-
-
-/* input[type="text"], */
 .common_css,
 select {
   width: 100%;
@@ -82,9 +77,7 @@ select {
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
-
 }
-
 
 input[type="number"],
 select {

@@ -48,6 +48,18 @@ const Profile = () => {
 
   };
 
+  const handleComplaintDelete = async (complaintId) => {
+    try {
+      await axios.delete(`http://localhost:8070/complaints/${complaintId}`);
+      setComplants((prevComplaints) =>
+        prevComplaints.filter((complaint) => complaint._id !== complaintId)
+      );
+    } catch (err) {
+      console.log(err);
+      // Handle the error and show an error message to the user, if needed.
+    }
+  };
+
 
 
   useEffect(() => {

@@ -1,59 +1,141 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import '../asset/CreateForm.css'
+// import React, { useState } from 'react';
+// import axios from 'axios';
+
+// function Upload() {
+//  const [file, setFile] = useState(null);
+
+//  const handleFileInputChange = (event) => {
+//    setFile(event.target.files[0]);
+//  };
+
+//  const handleFileUpload = () => {
+//    const formData = new FormData();
+//    formData.append('file', file);
+
+//    fetch('http://localhost:8070/upload', {
+//      method: 'POST',
+//      body: formData,
+//    })
+//      .then((response) => response.text())
+//      .then((result) => console.log(result))
+//      .catch((error) => console.log(error));
+//  };
+
+//   return (
+//    <div>
+//    <h1>Attach documents</h1>
+//       <input type="file" onChange={handleFileInputChange} />
+//       <button
+//   onClick={handleFileUpload}
+//   style={{
+//     backgroundColor: 'blue',
+//     color: 'white',
+//     borderRadius: '5px',
+//     padding: '10px 20px',
+//     border: 'none',
+//     fontSize: '16px',
+//     cursor: 'pointer',
+//   }}
+// >
+//   Upload & Submit
+// </button>
+
+//       (pdf, doc, docx, xls, xlsx, txt, zip, rar, mp3, mp4, wma, flv, avi, jpg, jpeg, png formats)
+//     </div>
+
+//   );
+// }
+
+// export default Upload;
+import React, { useState } from "react";
+import axios from "axios";
 
 function Upload() {
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
 
+  const allowedFileTypes = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "text/plain",
+    "application/zip",
+    "application/x-rar-compressed",
+    "audio/mp3",
+    "video/mp4",
+    "audio/x-ms-wma",
+    "video/x-flv",
+    "video/x-msvideo",
+    "image/jpeg",
+    "image/png",
+  ];
 
-  // const handleChange = (event) => {
-  //   setFile(event.target.files[0]);
-  // };
+  const maxFileSize = 10 * 1024 * 1024; // 10MB
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();
+  const handleFileInputChange = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      if (allowedFileTypes.includes(selectedFile.type)) {
+        if (selectedFile.size <= maxFileSize) {
+          setFile(selectedFile);
+          setError(null);
+        } else {
+          setError("File size exceeds the maximum allowed size of 10MB.");
+        }
+      } else {
+        setError(
+          "Invalid file type. Only PDF, Word, Excel, Text, Zip, Audio, Video, and Image formats are allowed."
+        );
+      }
+    }
+  };
 
-  //   const formData = new FormData();
-  //   formData.append('file', file);
+  const handleFileUpload = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
 
-  //   try {
-  //     const response = await axios.post('/upload', formData);
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
-  
- const [file, setFile] = useState(null);
-
- const handleFileInputChange = (event) => {
-   setFile(event.target.files[0]);
- };
-
- const handleFileUpload = () => { 
-   const formData = new FormData();
-   formData.append('file', file);
-
-   fetch('http://localhost:8070/upload', {  
-     method: 'POST',
-     body: formData,
-   })
-     .then((response) => response.text())
-     .then((result) => console.log(result))
-     .catch((error) => console.log(error));
- };
-
-
+      axios
+        .post("http://localhost:8070/upload", formData)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      setError("Please select a file to upload.");
+    }
+  };
 
   return (
-   <div>
-   <h2><center>Upload evidence</center></h2> 
-      <input type="file" onChange={handleFileInputChange} className='file'/>
-      <button onClick={handleFileUpload}>Upload</button>
+    <div>
+      <h1>Attach documents</h1>
+      <input type="file" onChange={handleFileInputChange} />
+      {error && <div style={{ color: "red" }}>{error}</div>}
+
+      <p style={{ fontSize: "15px", color: "gray" }}>
+        (pdf, doc, docx, xls, xlsx, txt, zip, rar, mp3, mp4, wma, flv, avi, jpg,
+        jpeg, png formats)
+      </p>
+      <button
+        onClick={handleFileUpload}
+        style={{
+          backgroundColor: "blue",
+          color: "white",
+          borderRadius: "5px",
+          padding: "10px 20px",
+          border: "none",
+          fontSize: "16px",
+          cursor: "pointer",
+          width: "550px",
+        }}
+      >
+        Upload & Submit
+      </button>
     </div>
-
-    
-
   );
 }
 

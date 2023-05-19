@@ -22,6 +22,9 @@ import EmailVerify from './pages/emailVerify'
 
 import { useSelector } from 'react-redux'
 import "./App.css"
+import { AuthProvider } from './components/AuthContext'
+
+import Footer from './Footer'
 
 const App = () => {
 
@@ -56,6 +59,7 @@ const App = () => {
         {isLogged && <Route path="/updateComplaint/:id" element={<UpdateForm />} />}
 
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }

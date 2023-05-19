@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
-import axios from 'axios'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import '../assets/users.css';
 axios.defaults.withCredentials = true;
-import '../assets/users.css'
-import Swal from 'sweetalert2'
 //import { AuthContext } from './AuthContext';
 
 const Users = () => {
@@ -107,8 +107,6 @@ const Users = () => {
         <button onClick={() => history(`/currentUsers`)} className='custome_btn'>Current Users</button>
 
         <button onClick={() => history(`/newComplaints`)} className='custome_btn'>New Complaints</button>
-
-        <button onClick={() => history(`/feed`)} className='custome_btn'>View Feedbacks</button>
       </div>
 
       <h1><center>NEW ACCOUNT CREATION REQUESTS</center></h1>

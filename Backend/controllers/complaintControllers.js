@@ -193,15 +193,19 @@ const updateComplaint = async (req, res) => {
 };
 
 const deleteComplaint = async (req, res) => {
-  // get id off url
+  // Get id from URL
   const complaintId = req.params.id;
 
-  // Delete the record
   try {
+    // Delete the record
     await Complaint.deleteOne({ _id: complaintId });
-    res.status(200).json({ success: "Record deleted" });
-  } catch (e) {
-    res.status(500).json({ error: "Could not delete" });
+
+    // Respond
+    res.json({ success: "Record deleted" });
+  } catch (error) {
+    // Handle any errors
+    console.log(error);
+    res.status(500).json({ error: "An error occurred while deleting the record" });
   }
 };
 

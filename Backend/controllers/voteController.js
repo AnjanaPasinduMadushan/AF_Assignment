@@ -3,6 +3,7 @@ const Complaint = require("../model/complaint");
 
 // add or remove vote depending if user has placed a vote before
 const vote = async (req, res) => {
+  console.log("Add vote called");
   const voterId = req.userId;
   const complaintId = req.body.complaintId;
   const voteType = req.body.type;
@@ -13,6 +14,7 @@ const vote = async (req, res) => {
 
     if (vote == null) {
       // no document on MongoDB
+      console.log(`Vote Document with complaintID: ${complaintId} not found`);
 
       // check if complaintID is valid
       const complaint = await Complaint.findById(complaintId);
@@ -27,9 +29,11 @@ const vote = async (req, res) => {
         votedUsers: [{ user: voterId, type: voteType }]
       });
       vote = await vote.save();
+      console.log(`vote document created: ${vote}`);
       return res.status(200).json({ message: `${voteType} vote added`, vote });
     } else {
       // already have a document on mongoDB
+      console.log(`vote document with complaintID: ${complaintId} found: ${vote}`);
 
       // check if current user has placed a vote for this complaint
       if (!vote.votedUsers.some(obj => obj.user == voterId)) {
@@ -40,6 +44,7 @@ const vote = async (req, res) => {
         else
           vote.votes--;
 
+        console.log("creating vote");
         vote.votedUsers.push({ user: voterId, type: voteType });
         vote = await vote.save();
         return res.status(200).json({ message: `${voteType},added`, vote });
@@ -48,6 +53,7 @@ const vote = async (req, res) => {
 
         const index = vote.votedUsers.findIndex(item => item.user === voterId);
         if (index !== -1) {
+          console.log("removing vote");
           const existingVote = vote.votedUsers.splice(index, 1);
 
           if (existingVote[0].type == "+")
@@ -55,11 +61,10 @@ const vote = async (req, res) => {
           else
             vote.votes++;
 
-
           vote = await vote.save();
-
           return res.status(200).json({ message: `${existingVote[0].type},removed`, vote });
         } else {
+          console.log("vote not found");
           return res.status(404).json({ message: "Error, vote not found" });
         }
       }
