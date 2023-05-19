@@ -33,7 +33,6 @@
 //   useEffect(() => {
 //     store.fetchComplaints();
 
-
 //   }, []);
 
 //   function dateTimeString(unixTime) {
@@ -42,7 +41,6 @@
 //     const dateTimeString = date.toLocaleString('en-GB', options);
 //     return dateTimeString;
 //   }
-
 
 //   return (
 //     <>
@@ -54,7 +52,7 @@
 //       {store.complaints && store.complaints.map((complaint) => {
 //           const formatDate = dateTimeString(complaint.date)
 
-//           return <Complaint 
+//           return <Complaint
 //             key={complaint._id}
 //             complaint={complaint}
 //             date={formatDate}
@@ -143,33 +141,32 @@ export default function Complaints() {
 
   return (
     <>
-      <button
-        style={buttonStyle}
-        onClick={() => navigate("/create-complaint")}
-      >
+      <button style={buttonStyle} onClick={() => navigate("/create-complaint")}>
         +
-      </button><br></br>
+      </button>
+      <br></br>
       <h1>
         <center>Complaint List</center>
       </h1>
       <div style={{ marginTop: "20px" }}>
-  <input
-    type="text"
-    placeholder="Search Complaint..."
-    value={searchTerm}
-    onChange={handleSearch}
-    style={{
-      marginLeft:"225px",
-      padding: "10px",
-      fontSize: "15px",
-      borderRadius: "10px",
-      
-      border: "2px solid #920d37",
-      width: "300px",
-      background:"#e6e6e6"
-    }}
-  />
-</div><br></br>
+        <input
+          type="text"
+          placeholder="Search Complaint..."
+          value={searchTerm}
+          onChange={handleSearch}
+          style={{
+            marginLeft: "225px",
+            padding: "10px",
+            fontSize: "15px",
+            borderRadius: "10px",
+
+            border: "2px solid #920d37",
+            width: "300px",
+            background: "#e6e6e6",
+          }}
+        />
+      </div>
+      <br></br>
       {filteredComplaints.map((complaint) => {
         const formatDate = dateTimeString(complaint.date);
         return (
