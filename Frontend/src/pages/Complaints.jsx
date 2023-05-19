@@ -87,11 +87,11 @@
 
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { useNavigate } from "react-router";
 import Complaint from "../components/Complaint";
 import { complaintsStore } from "../stores/complaintsStore";
-import sampleImage from "../assets/images/placeholder.jpg";
+// import sampleImage from "../assets/images/placeholder.jpg";
 
 export default function Complaints() {
   const store = complaintsStore();
@@ -170,10 +170,8 @@ export default function Complaints() {
     }}
   />
 </div><br></br>
-
       {filteredComplaints.map((complaint) => {
         const formatDate = dateTimeString(complaint.date);
-
         return (
           <Complaint
             key={complaint._id}
