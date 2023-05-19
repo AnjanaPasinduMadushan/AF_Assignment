@@ -156,7 +156,7 @@ const Footer = () => {
               </g>
             </g>
           </svg>
-            <p className="text-justify">Scanfcode.com 
+            <p className="text-justify">CitizenConnect.com 
 Introducing the Government Complaint Management System (CitizenConnect.), an innovative solution designed to streamline the process of addressing citizen grievances and enhancing public service delivery. GCMS is a robust platform that enables citizens to voice their concerns, report issues, and seek resolutions efficiently and effectively.</p>
           </div>
 
