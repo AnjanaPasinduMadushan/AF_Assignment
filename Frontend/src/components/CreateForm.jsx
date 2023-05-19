@@ -153,7 +153,7 @@ export default function CreateForm(props) {
           className="complaint_text"
         />
         {titleError && <p className="error">{titleError}</p>}
-        Word Count: {titleWordCount}
+        Word Count: {titleWordCount} /100
         <br />
         Report Corruption
         <br />
@@ -166,7 +166,7 @@ export default function CreateForm(props) {
           className="textarea"
         />
         {descriptionError && <p className="error">{descriptionError}</p>}
-        Word Count: {descriptionWordCount}
+        Word Count: {descriptionWordCount} / 1000
         <div>
           <Upload />
           <button type="submit" className="custom-button">
