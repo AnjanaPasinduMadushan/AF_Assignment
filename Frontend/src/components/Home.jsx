@@ -1,12 +1,22 @@
 import React from 'react';
-
+import { Container } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
 function Home() {
   return (
-    <div>
-      <h1>About Us</h1>
-      <p>We are a company that specializes in creating awesome websites and web applications.</p>
-      <p>Our team of talented developers and designers work together to deliver high-quality products that exceed our clients' expectations.</p>
-    </div>
+    <Container>
+      <Card style={{ width: '18rem' }}>
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        <Card.Link href="#">Card Link</Card.Link>
+        <Card.Link href="#">Another Link</Card.Link>
+      </Card.Body>
+    </Card>
+    </Container>
   );
 }
 

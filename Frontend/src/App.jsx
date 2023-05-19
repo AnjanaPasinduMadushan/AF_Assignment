@@ -1,27 +1,27 @@
 import React from 'react'
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
-import Complaints from './pages/Complaints'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import CreateForm from './components/CreateForm'
+import Home from './components/Home'
+import Profile from './components/Profile/profile'
+import UpdateProf from './components/Profile/updateProf'
+import UpdateForm from './components/UpdateForm'
+import CurrentUsers from './components/Users/currentUsers'
+import DeleteAcc from './components/deleteAcc'
+import AdminFeedback from './components/feedback/feeedback'
 import LoginForm from './components/loginForm'
+import NewComplaints from './components/newComplaints'
 import SignUp from './components/signUp'
 import Users from './components/users'
 import Header from './header'
-import Profile from './components/Profile/profile'
-import CurrentUsers from './components/Users/currentUsers'
-import UpdateProf from './components/Profile/updateProf'
-import ForgetPwd from './components/forgetPwd'
-import ResetPwd from './components/resetPwd'
-import Feedback from "./pages/Addfeedback";
-import AddFeedback from './pages/Addfeedback';
-import DisplayFeeds from './pages/displayFeeds';
-import CreateForm from './components/CreateForm'
-import NewComplaints from './components/newComplaints'
+import { default as AddFeedback, default as Feedback } from "./pages/Addfeedback"
+import Complaints from './pages/Complaints'
 import CurrentComplaints from './pages/CurrentComplaints'
 import ComplaintStatus from './pages/complaintStatus'
-import DeleteAcc from './components/deleteAcc'
-import UpdateForm from './components/UpdateForm'
+import DisplayFeeds from './pages/displayFeeds'
 import EmailVerify from './pages/emailVerify'
+
 import { useSelector } from 'react-redux'
-import "./App.css";
+import "./App.css"
 
 const App = () => {
 
@@ -34,11 +34,14 @@ const App = () => {
 
       <Header />
       <Routes>
+       
         <Route path="/login" element={<LoginForm/>} />
         <Route path="/signUp" element={<SignUp/>} />
         <Route path="/feedback" element={<Feedback/>}/>
         <Route path="/displayFeeds/:id" element={<DisplayFeeds/>}/>
         <Route path='/verifyEmail' element={<EmailVerify/>}/>
+        <Route path="/feed" element={<AdminFeedback/>}/>
+        <Route pathe ="/home" element ={<Home/>} />
         {isLogged &&<Route path="/newUsers" element={<Users/>} />}
         {isLogged &&<Route path="/profile" element={<Profile/>} />}
         {isLogged &&<Route path="/currentUsers" element={<CurrentUsers/>} />}
@@ -62,53 +65,4 @@ const App = () => {
   )
 }
 
-export default App
-// import { useState, useEffect } from "react";
-// // import { useHistory } from "react-router-dom";
-// // import axios from "axios";
-// import complaintsStore from "./stores/complaintsStore";
-// import Complaints from "./components/Complaints";
-// import UpdateForm from "./components/UpdateForm";
-// import CreateForm from "./components/CreateForm";
-// import Upload from "./components/Upload";
-// import Navbar from "./components/Navbar";
-// // import Upload from "./Upload";
-
-// function App() {
-
-
-//   const store = complaintsStore();
-
-//   // Use effect
-//   useEffect(() => {
-//     store.fetchComplaints();
-//   }, []);
-
-
-
-//   const history = useState();
-
- 
-//   return (
-//     <div className="App">
-
-
-
-//       <CreateForm />
-//       <Upload/>
-//       <Complaints />
-//       <UpdateForm />
-      // <CreateForm   uploadComponent={<Upload />}/>
-      
-      // <Complaints />
-      // <UpdateForm />
-     
-    
-    
-
-    
-//     </div>
-//   );
-// }
-
-// export default App;
+export default App;
