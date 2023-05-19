@@ -34,8 +34,7 @@ const Header = () => {
           {/* <img src="" alt="Logo" /> */}
           <h1 className="header__title"> 
           
-          
-          
+          <a href="http://localhost:3000/">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -185,6 +184,9 @@ const Header = () => {
               </g>
             </g>
           </svg>
+      </a>
+          
+         
           
           
           

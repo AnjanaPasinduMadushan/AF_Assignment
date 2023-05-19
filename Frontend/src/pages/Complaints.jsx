@@ -83,11 +83,9 @@
 // }
 
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
 import { useNavigate } from "react-router";
 import Complaint from "../components/Complaint";
 import { complaintsStore } from "../stores/complaintsStore";
-// import sampleImage from "../assets/images/placeholder.jpg";
 
 export default function Complaints() {
   const store = complaintsStore();
@@ -135,16 +133,19 @@ export default function Complaints() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredComplaints = store.complaints.filter((complaint) =>
-    complaint.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Add a conditional check to prevent filtering when store.complaints is null
+  const filteredComplaints = store.complaints
+    ? store.complaints.filter((complaint) =>
+        complaint.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   return (
     <>
       <button style={buttonStyle} onClick={() => navigate("/create-complaint")}>
         +
       </button>
-      <br></br>
+      <br />
       <h1>
         <center>Complaint List</center>
       </h1>
@@ -159,14 +160,13 @@ export default function Complaints() {
             padding: "10px",
             fontSize: "15px",
             borderRadius: "10px",
-
             border: "2px solid #920d37",
             width: "300px",
             background: "#e6e6e6",
           }}
         />
       </div>
-      <br></br>
+      <br />
       {filteredComplaints.map((complaint) => {
         const formatDate = dateTimeString(complaint.date);
         return (
