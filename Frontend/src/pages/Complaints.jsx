@@ -44,11 +44,32 @@ export default function Complaints() {
   }
 
 
+  const buttonStyle = {
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    backgroundColor: 'red',
+    color: 'white',
+    border: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '20px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+  };
+
   return (
     <>
 
-      <button onClick={() => navigate('/create-complaint')}>ADD Complaint</button>
-
+     
+      <button style={buttonStyle} onClick={() => navigate('/create-complaint')}>
+      +
+    </button>
       <h1><center>COMPLAINTS</center></h1>
 
       {store.complaints && store.complaints.map((complaint) => {
