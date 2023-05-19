@@ -1,29 +1,50 @@
+/* CreateForm.css */
+
 .form_comaplin {
   width: 600px;
-  margin:0 auto;
+  margin: 0 auto;
   padding-top: 50px;
 }
 
-.textarea{
+h1 {
+  text-align: center;
+}
+
+.complaint_text,
+.textarea {
   width: 100%;
-  height: 230px;
   padding: 10px;
   margin-bottom: 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.complaint_text{
-width: 100%;
-padding: 10px;
-margin-bottom: 20px;
-border: 1px solid #ccc;
-border-radius: 4px;
+.complaint_text:hover,
+.textarea:hover {
+  border-color: #4caf50;
 }
 
+.error {
+  color: red;
+  margin-top: 5px;
+}
 
-.file{
+.custom-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-button:hover {
+  background-color: #45a049;
+}
+
+.file {
   width: 100%;
   display: block;
-  margin: 0 auto
+  margin: 0 auto;
 }
+
+/* Additional styles as per your requirements */
