@@ -8,6 +8,8 @@ const vote = async (req, res) => {
   const voteType = req.body.type;
 
   try {
+
+    let complaint;
     // check if votes document for the complaint already exists
     let vote = await Vote.findOne({ complaintId: complaintId });
 
@@ -15,7 +17,7 @@ const vote = async (req, res) => {
       // no document on MongoDB
 
       // check if complaintID is valid
-      const complaint = await Complaint.findById(complaintId);
+      complaint = await Complaint.findById(complaintId);
       if (complaint == null) {
         // if not valid
         return res.status(404).json({ message: `Complaint with id:${complaintId} not found` });

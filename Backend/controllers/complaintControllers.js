@@ -1,6 +1,8 @@
 const Complaint = require("../model/complaint");
+const Vote = require('../model/vote')
 
 const fetchComplaints = async (req, res) => {
+
   // Find the complaints   
   const complaints = await Complaint.find({ isApproved: true });
 
@@ -40,7 +42,6 @@ const createComplaint = async (req, res) => {
   const { title, description, image } = req.body;
   const userId = req.userId;
   let complaint;
-  console.log()
   try {
     // Create a complaint with it
     complaint = await Complaint.create({
