@@ -20,6 +20,20 @@ const CurrentComplaints = () => {
     getCurrComplaints()
   }, [])
 
+  function dateTimeString(unixTime) {
+    const date = new Date(unixTime * 1);
+    const options = {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    };
+    const dateTimeString = date.toLocaleString("en-GB", options);
+    return dateTimeString;
+  }
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -50,7 +64,7 @@ const CurrentComplaints = () => {
                   <td className='tableCell'>{complaints.title}</td>
                   <td className='tableCell'>{complaints.description}</td>
                   <td className='tableCell'>{complaints.vote}</td>
-                  <td className='tableCell'>{complaints.date}</td>
+                  <td className='tableCell'>{dateTimeString(complaints.date)}</td>
                   <td className='tableCell'><button onClick={() => navigate(`/complaint_Status/${complaints._id}`)} className='btn btn-warning'>VIEW</button></td>
                 </tr>
               ))}
