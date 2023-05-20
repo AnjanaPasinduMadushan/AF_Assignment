@@ -1,22 +1,45 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
+import Carousel from 'react-bootstrap/Carousel';
+
 function Home() {
   return (
-    <Container>
-      <Card style={{ width: '18rem' }}>
-      <Card.Body>
-        <Card.Title>Card Title</Card.Title>
-        <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
-        <Card.Link href="#">Card Link</Card.Link>
-        <Card.Link href="#">Another Link</Card.Link>
-      </Card.Body>
-    </Card>
-    </Container>
+  
+    <Carousel slide={false}>
+    <Carousel.Item>
+      <img
+        className="d-block w-100"
+        src="https://images.unsplash.com/photo-1598955890270-d77cdb06d2bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+        alt="First slide"
+      />
+      <Carousel.Caption>
+        <h3>Welcome to CitizenConnect</h3>
+        
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item>
+      <img
+        className="d-block w-100"
+        src="https://images.unsplash.com/photo-1612862862126-865765df2ded?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1674&q=80"
+        alt="Second slide"
+      />
+
+      <Carousel.Caption>
+      <h3>Welcome to CitizenConnect</h3>
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item>
+      <img
+        className="d-block w-100"
+        src="https://images.unsplash.com/photo-1561150018-8bb356679537?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2044&q=80"
+        alt="Third slide"
+      />
+
+      <Carousel.Caption>
+      <h3>Welcome to CitizenConnect</h3>
+      </Carousel.Caption>
+    </Carousel.Item>
+  </Carousel>
+  
   );
 }
 

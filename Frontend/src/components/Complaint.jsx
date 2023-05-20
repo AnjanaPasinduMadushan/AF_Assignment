@@ -35,9 +35,14 @@ export default function Complaint(props) {
   // used to toggle the description Btn and data
   async function toggleFeedback() {
     setViewFeedBack(!viewFeedBack);
-    if (viewFeedBack)
-      setFeedback( await getFeedback(id));
-    console.log(feedback);
+    if (!viewFeedBack) {
+      try {
+        const feedback = await getFeedback(id);
+        setFeedback(feedback);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   // used to toggle the description Btn and data
@@ -148,14 +153,14 @@ export default function Complaint(props) {
 
   async function getFeedback(id) {
     try {
-      const feedback = await axios.get(`http://localhost:8070/feedback/getComplaint/${id}`);
-      console.log(feedback.data.feedback[0])
-      if (feedback.data.feedback[0])
-        setFeedback(feedback.data.feedback[0].feedback);
-      else
-        setFeedback("");
-    } catch (e) {
-      console.log(e);
+      const response = await axios.get(`http://localhost:8070/feedback/getComplaint/${id}`);
+      if (response.data.feedback.length > 0) {
+        return response.data.feedback[0].feedback;
+      }
+      return "";
+    } catch (error) {
+      console.log(error);
+      return "";
     }
   }
 
