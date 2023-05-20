@@ -55,7 +55,7 @@ const Header = () => {
     <div>
       <header className="header">
         <div className="header__logo">
-          <h1 className="header__title" onClick={()=>history("/")}>
+          <h1 className="header__title" onClick={()=>history("/complain")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"

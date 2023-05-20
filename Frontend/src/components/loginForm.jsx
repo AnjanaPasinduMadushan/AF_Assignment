@@ -70,7 +70,7 @@ const LoginForm = () => {
       if (data.User.role === "admin") {
         navigate("/newUsers");
       } else if (data.User.role === "citizen") {
-        navigate("/");
+        navigate("/complain");
       }
 
       dispatch(autheticationActions.login());
