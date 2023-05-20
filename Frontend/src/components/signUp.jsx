@@ -49,12 +49,12 @@ const SignUp = () => {
       })
       navigate('/verifyEmail')
       return data;
-    } catch (e) {
-      console.log(e)
-      if (e.response) {
-        console.log(e.response.data);
-        console.log(e.response.status);
-        console.log(e.response.headers);
+    } catch (err) {
+      console.log(err)
+      if (err.response) {
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
 
         Swal.fire({
           icon: 'error',
