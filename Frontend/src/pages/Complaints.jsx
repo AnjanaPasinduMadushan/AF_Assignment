@@ -72,46 +72,71 @@ export default function Complaints() {
   // Add a conditional check to prevent filtering when store.complaints is null
   const filteredComplaints = store.complaints
     ? store.complaints.filter((complaint) =>
-      complaint.title.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+        complaint.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     : [];
 
   return (
-    <><div>
-      <button style={buttonStyle} onClick={() => navigate("/create-complaint")}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" id="plus-circle"><rect width="256" height="256" fill="none"></rect><path d="M128,23.99805a104,104,0,1,0,104,104A104.12041,104.12041,0,0,0,128,23.99805Zm40,112H136v32a8,8,0,1,1-16,0v-32H88a8,8,0,0,1,0-16h32v-32a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z"></path></svg>
-      </button>
-      <br />
-      <h1 style={{ fontFamily: "'League Spartan', sans-serif", fontWeight: 'bold' }}>
-        <center>Complaint List</center>
-      </h1>
-      <div className="px-5 my-2 input-group w-100">
-        <center>
-          <input
-            type="text"
-            placeholder="Search Complaint..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="form-control w-100"
-          /></center>
+    <>
+      <div>
+        <button
+          style={buttonStyle}
+          onClick={() => navigate("/create-complaint")}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 256 256"
+            id="plus-circle"
+          >
+            <rect width="256" height="256" fill="none"></rect>
+            <path d="M128,23.99805a104,104,0,1,0,104,104A104.12041,104.12041,0,0,0,128,23.99805Zm40,112H136v32a8,8,0,1,1-16,0v-32H88a8,8,0,0,1,0-16h32v-32a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z"></path>
+          </svg>
+        </button>
+        <br />
+        <h1
+          style={{
+            fontFamily: "'League Spartan', sans-serif",
+            fontWeight: "bold",
+          }}
+        >
+          <center>Complaint List</center>
+        </h1>
+        <div className="px-5 my-2 input-group w-100">
+          <div style={{ marginTop: "20px" }}>
+            <input
+              type="text"
+              placeholder="Search Complaint..."
+              value={searchTerm}
+              onChange={handleSearch}
+              style={{
+                marginLeft: "870px",
+                padding: "10px",
+                fontSize: "15px",
+                borderRadius: "10px",
+
+                width: "300px",
+                background: "#e6e6e6",
+              }}
+            />
+          </div>
+        </div>
+        <br />
+        {filteredComplaints.map((complaint) => {
+          const formatDate = dateTimeString(complaint.date);
+          return (
+            <Complaint
+              key={complaint._id}
+              complaint={complaint}
+              date={formatDate}
+              id={complaint._id}
+              title={complaint.title}
+              description={complaint.description}
+              image={complaint.image}
+              status={complaint.status}
+            />
+          );
+        })}
       </div>
-      <br />
-      {filteredComplaints.map((complaint) => {
-        const formatDate = dateTimeString(complaint.date);
-        return (
-          <Complaint
-            key={complaint._id}
-            complaint={complaint}
-            date={formatDate}
-            id={complaint._id}
-            title={complaint.title}
-            description={complaint.description}
-            image={complaint.image}
-            status={complaint.status}
-          />
-        );
-      })}
-    </div>
     </>
   );
 }
